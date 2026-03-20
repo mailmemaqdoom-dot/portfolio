@@ -392,9 +392,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
         <div class="ci-text"><div class="ci-label">Phone (India)</div><div class="ci-val">+91 755 027 0450</div></div>
         <span class="ci-arrow">›</span>
       </a>
-      <a class="ci" href="mailto:mailme.maqdoom@gmail.com">
+      <a class="ci" href="/cdn-cgi/l/email-protection#6805090104050d460509190c070705280f05090104460b0705">
         <div class="ci-icon">✉️</div>
-        <div class="ci-text"><div class="ci-label">Email</div><div class="ci-val">mailme.maqdoom@gmail.com</div></div>
+        <div class="ci-text"><div class="ci-label">Email</div><div class="ci-val"><span class="__cf_email__" data-cfemail="82efe3ebeeefe7acefe3f3e6ededefc2e5efe3ebeeace1edef">[email&#160;protected]</span></div></div>
         <span class="ci-arrow">›</span>
       </a>
       <a class="ci" href="https://www.linkedin.com/in/mohamed-magdoom-16jul1991" target="_blank">
@@ -402,9 +402,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
         <div class="ci-text"><div class="ci-label">LinkedIn</div><div class="ci-val">linkedin.com/in/mohamed-magdoom</div></div>
         <span class="ci-arrow">›</span>
       </a>
-      <a class="ci" href="https://mohamedmagdoom.netlify.app" target="_blank">
+      <a class="ci" href="https://mailmemaqdoom-dot.github.io/mohamedmagdoom" target="_blank">
         <div class="ci-icon">🌐</div>
-        <div class="ci-text"><div class="ci-label">Portfolio</div><div class="ci-val">mohamedmagdoom.netlify.app</div></div>
+        <div class="ci-text"><div class="ci-label">Portfolio</div><div class="ci-val">mailmemaqdoom-dot.github.io/mohamedmagdoom</div></div>
         <span class="ci-arrow">›</span>
       </a>
       <div class="ci" onclick="copyLocation()">
@@ -459,7 +459,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
         </div>
       </div>
       <div class="share-url-row">
-        <input class="share-url" id="shareUrl" value="https://mohamedmagdoom.netlify.app/magdoom-card.html" readonly/>
+        <input class="share-url" id="shareUrl" value="https://mailmemaqdoom-dot.github.io/mohamedmagdoom/magdoom-card.html" readonly/>
         <button class="copy-btn" onclick="copyUrl()">Copy Link</button>
       </div>
     </div>
@@ -470,7 +470,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
       <ul class="nfc-steps">
         <li class="nfc-step">
           <div class="ns-num">1</div>
-          <div class="ns-text"><strong>Host this card online</strong> — upload magdoom-card.html to Netlify (free, drag &amp; drop) to get a permanent URL like <em>mohamedmagdoom.netlify.app/card</em></div>
+          <div class="ns-text"><strong>Host this card online</strong> — upload magdoom-card.html to Netlify (free, drag &amp; drop) to get a permanent URL like <em>mailmemaqdoom-dot.github.io/mohamedmagdoom/card</em></div>
         </li>
         <li class="nfc-step">
           <div class="ns-num">2</div>
@@ -494,13 +494,13 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;o
     <!-- FOOTER -->
     <div class="card-footer">
       <span class="cf-brand">Mohamed Magdoom</span>
-      <a class="cf-url" href="https://mohamedmagdoom.netlify.app" target="_blank">mohamedmagdoom.netlify.app</a>
+      <a class="cf-url" href="https://mailmemaqdoom-dot.github.io/mohamedmagdoom" target="_blank">mailmemaqdoom-dot.github.io/mohamedmagdoom</a>
     </div>
 
   </div><!-- /card -->
 </div><!-- /card-wrap -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── QR CODE ─────────────────────────────────────
 const CARD_URL = window.location.href;
 document.getElementById('shareUrl').value = CARD_URL;
@@ -554,7 +554,7 @@ function saveVCard(){
     'TEL;TYPE=CELL,WORK:+260760634300',
     'TEL;TYPE=CELL:+917550270450',
     'EMAIL;TYPE=WORK:mailme.maqdoom@gmail.com',
-    'URL;TYPE=WORK:https://mohamedmagdoom.netlify.app',
+    'URL;TYPE=WORK:https://mailmemaqdoom-dot.github.io/mohamedmagdoom',
     'URL;TYPE=LinkedIn:https://www.linkedin.com/in/mohamed-magdoom-16jul1991',
     'ADR;TYPE=WORK:;;Lusaka;Lusaka Province;;Zambia',
     'NOTE:AGM Sales & Operations | 12+ years | 90 Retail Outlets | 1500+ Team | Zambia & India',
@@ -623,11 +623,4 @@ setTimeout(()=>{
 const card=document.getElementById('mainCard');
 card.addEventListener('mousemove',e=>{
   const r=card.getBoundingClientRect();
-  const x=((e.clientX-r.left)/r.width-.5)*6;
-  const y=((e.clientY-r.top)/r.height-.5)*-6;
-  card.style.transform=`perspective(900px) rotateY(${x}deg) rotateX(${y}deg)`;
-});
-card.addEventListener('mouseleave',()=>card.style.transform='');
-</script>
-</body>
-</html>
+  const x=((
