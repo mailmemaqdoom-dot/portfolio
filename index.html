@@ -20,7 +20,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{overflow-x:hidden}
+html{overflow-x:hidden;scroll-behavior:smooth;scroll-padding-top:80px}
 body{font-family:'DM Sans',sans-serif;overflow-x:hidden;transition:background .5s,color .5s}
 
 /* ═══ DARK THEME (default) ═══ */
@@ -2616,6 +2616,25 @@ body.recruiter-mode .recruiter-mode-bar{display:flex;}
 @media(max-width:768px){
   .feat-banner{padding:20px 16px;flex-direction:column;}
 }
+
+/* ── BUG-F FIX: Section offset for fixed nav ── */
+section[id], div[id], .metrics-band, .skills-band, .retention-band,
+.leadership-scale-band, .footprint-section, .transform-section,
+.case-section, .why-section, .ind-section, .tech-section,
+.cert-section, .video-section, .callback-section, .contact-band {
+  scroll-margin-top: 80px;
+}
+
+/* ── BUG-H FIX: Hero stats 5-column responsive ── */
+@media(max-width:540px) {
+  .hero-stats { gap: 8px; flex-wrap: wrap; }
+  .hst { padding: 0 6px; min-width: 56px; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  .hst-n { font-size: 1.3rem; }
+  .hst-l { font-size: .5rem; }
+}
+@media(max-width:380px) {
+  .hero-tagline { font-size: .8rem; }
+}
 </style>
 
   <!-- SEO: Executive Targeting -->
@@ -3101,7 +3120,7 @@ body.recruiter-mode .recruiter-mode-bar{display:flex;}
   </div>
   <div class="ab-pills">
     <div class="ab-pill"><span class="ab-pill-icon">💼</span> GM · Head Retail · Head Sales &amp; Operations · Country Manager</div>
-    <div class="ab-pill"><span class="ab-pill-icon">🌍</span> Open to GM · Director of Operations · Country Manager · Head of Retail &amp; Sales<br/>Zambia · UAE · GCC · India · Africa · Global</div>
+    <div class="ab-pill"><span class="ab-pill-icon">🌍</span> Open to GM · Director of Operations · Country Manager · Head of Retail &amp; Sales<br>Zambia · UAE · GCC · India · Africa · Global</div>
   </div>
   <a class="ab-cta" href="#contact">Hire Me →</a>
 </div>
@@ -3495,6 +3514,7 @@ body.recruiter-mode .recruiter-mode-bar{display:flex;}
           <div class="ec-contacts">
             <a class="ec-ci" href="tel:+260760634300"><div class="ec-ci-icon">📞</div><div style="flex:1;min-width:0"><div class="ec-ci-lbl">Phone · Zambia</div><div class="ec-ci-val">+260 760 634 300</div></div><span class="ec-ci-arr">›</span></a>
             <a class="ec-ci" href="tel:+917550270450"><div class="ec-ci-icon">📱</div><div style="flex:1;min-width:0"><div class="ec-ci-lbl">Phone · India</div><div class="ec-ci-val">+91 755 027 0450</div></div><span class="ec-ci-arr">›</span></a>
+            <a class="ec-ci" href="mailto:mailme.maqdoom@gmail.com"><div class="ec-ci-icon">✉️</div><div style="flex:1;min-width:0"><div class="ec-ci-lbl">Email</div><div class="ec-ci-val">mailme.maqdoom@gmail.com</div></div><span class="ec-ci-arr">›</span></a>
             <a class="ec-ci" href="/cdn-cgi/l/email-protection#3c515d5550515912515d4d585353517c5b515d5550125f5351"><div class="ec-ci-icon">✉️</div><div style="flex:1;min-width:0"><div class="ec-ci-lbl">Email</div><div class="ec-ci-val"><span class="__cf_email__" data-cfemail="3d505c5451505813505c4c595252507d5a505c5451135e5250">[email&#160;protected]</span></div></div><span class="ec-ci-arr">›</span></a>
             <a class="ec-ci" href="https://linkedin.com/in/mohamed-magdoom" target="_blank"><div class="ec-ci-icon">💼</div><div style="flex:1;min-width:0"><div class="ec-ci-lbl">LinkedIn</div><div class="ec-ci-val">linkedin.com/in/mohamed-magdoom</div></div><span class="ec-ci-arr">›</span></a>
             <a class="ec-ci" href="https://mailmemaqdoom-dot.github.io/mohamedmagdoom" target="_blank"><div class="ec-ci-icon">🌐</div><div style="flex:1;min-width:0"><div class="ec-ci-lbl">Portfolio</div><div class="ec-ci-val">mailmemaqdoom-dot.github.io/mohamedmagdoom</div></div><span class="ec-ci-arr">›</span></a>
@@ -3973,16 +3993,8 @@ function closeMob() {
   if (m) m.classList.remove('open');
 }
 
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      closeMob();
-    }
-  });
-});
+
+
 
 // ════════════════════════════════════════════════════════
 //  SCROLL REVEAL
@@ -6920,22 +6932,8 @@ if (document.readyState === 'loading') {
 })();
 
 // ── SMOOTH SCROLL IMPROVEMENT ─────────────────────────────────────
-(function enhanceSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
-    a.addEventListener('click', function(e) {
-      var target = document.querySelector(this.getAttribute('href'));
-      if (!target) return;
-      e.preventDefault();
-      var navH = (document.getElementById('mainNav') || {}).offsetHeight || 72;
-      var targetY = target.getBoundingClientRect().top + window.pageYOffset - navH - 10;
-      if (typeof gsap !== 'undefined') {
-        gsap.to(window, { scrollTo: targetY, duration: 0.9, ease: 'power2.inOut' });
-      } else {
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-      }
-    });
-  });
-})();
+
+
 
 console.log('Phase 1+2 fixes applied ✅');
 
@@ -7549,24 +7547,52 @@ window.addEventListener('load', function() {
 })();
 
 /* ── 13. SMOOTH SCROLL WITH GSAP ─────────────────────────────────── */
-(function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
-    a.addEventListener('click', function(e) {
-      var href = this.getAttribute('href');
-      if (href === '#') return;
-      var target = document.querySelector(href);
-      if (!target) return;
-      e.preventDefault();
-      var navH = (document.getElementById('mainNav') || {}).offsetHeight || 72;
-      var top = target.getBoundingClientRect().top + window.pageYOffset - navH - 8;
-      if (typeof gsap !== 'undefined' && gsap.utils.toArray) {
-        gsap.to(window, { scrollTo: top, duration:.85, ease:'power2.inOut' });
-      } else {
-        window.scrollTo({ top: top, behavior:'smooth' });
+
+// ── CANONICAL SCROLL HANDLER (single, nav-aware) ──
+(function initCanonicalScroll() {
+  function scrollToSection(href) {
+    if (!href || href === '#') return;
+    var target = document.querySelector(href);
+    if (!target) return;
+    var nav = document.getElementById('mainNav');
+    var navH = nav ? nav.offsetHeight : 80;
+    var top = target.getBoundingClientRect().top + window.pageYOffset - navH - 8;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  }
+
+  document.addEventListener('click', function(e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var href = a.getAttribute('href');
+    if (!href || href === '#') return;
+    e.preventDefault();
+    scrollToSection(href);
+    // Close mobile nav if open
+    var ham = document.getElementById('ham');
+    var mob = document.getElementById('mobNav');
+    if (ham) ham.classList.remove('open');
+    if (mob) mob.classList.remove('open');
+    // Close mobile bottom nav highlight
+    if (typeof mbnActive === 'function') {
+      var mbItems = document.querySelectorAll('.mbn-item');
+      mbItems.forEach(function(item) {
+        item.classList.toggle('active', item.getAttribute('href') === href);
+      });
+    }
+  });
+
+  // Keyboard nav accessibility
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && document.activeElement) {
+      var a = document.activeElement;
+      if (a.tagName === 'A' && a.getAttribute('href') && a.getAttribute('href').startsWith('#')) {
+        e.preventDefault();
+        scrollToSection(a.getAttribute('href'));
       }
-    });
+    }
   });
 })();
+
 
 /* ── 14. ADMIN PANEL: CHATBOT KB EDITOR ──────────────────────────── */
 (function addChatbotKBEditor() {
