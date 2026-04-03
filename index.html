@@ -773,10 +773,13 @@ a{text-decoration:none;color:inherit}
    FADE-IN ANIMATIONS (JS-triggered)
 ═══════════════════════════════════════════════════════ */
 .reveal{
-  opacity:0;transform:translateY(28px);
+  opacity:1;transform:none;
   transition:opacity .7s var(--ease-out),transform .7s var(--ease-out);
 }
 .reveal.visible{opacity:1;transform:none}
+/* Progressive enhancement: only animate when JS is confirmed running */
+html.js-ready .reveal{opacity:0;transform:translateY(28px)}
+html.js-ready .reveal.visible{opacity:1;transform:none}
 .reveal-d1{transition-delay:.06s}
 .reveal-d2{transition-delay:.12s}
 .reveal-d3{transition-delay:.18s}
@@ -1554,4 +1557,236 @@ async function boot(){
       if(r.ok){
         var cloud=await r.json();
         var merged=Object.assign({},cfg,cloud);
-        try{localStorage.setItem("mm_cinematic",
+        try{localStorage.setItem("mm_cinematic", JSON.stringify(merged));}catch(e){}
+        applyContent(merged);
+        return;
+      }
+    }catch(e){}
+  }
+  // Fallback: localStorage → then DEF
+  applyContent(getConfig());
+}
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+(function init(){
+  // 1. Mark JS as active — enables progressive enhancement animations
+  document.documentElement.classList.add("js-ready");
+
+  // 2. Scroll progress bar
+  var prog = document.getElementById("progress");
+  window.addEventListener("scroll", function(){
+    var s = document.documentElement.scrollTop || document.body.scrollTop;
+    var h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    if(prog) prog.style.transform = "scaleX("+(h > 0 ? s/h : 0)+")";
+  }, {passive:true});
+
+  // 3. Nav scroll class
+  var nav = document.getElementById("nav");
+  window.addEventListener("scroll", function(){
+    if(nav) nav.classList.toggle("scrolled", window.scrollY > 40);
+  }, {passive:true});
+
+  // 4. Availability strip fade on scroll
+  var avstrip = document.getElementById("av-strip");
+  window.addEventListener("scroll", function(){
+    if(avstrip) avstrip.style.opacity = window.scrollY > 60 ? "0" : "1";
+  }, {passive:true});
+
+  // 5. IntersectionObserver for reveal animations
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add("visible");
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold: 0.08, rootMargin: "0px 0px -40px 0px"});
+
+  document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+
+  // 6. Hero stat counters
+  function runCounter(el){
+    var target = parseFloat(el.dataset.count) || 0;
+    var suffix = el.dataset.suffix || "";
+    var dur = 1800;
+    var start = performance.now();
+    var big = target >= 1000;
+    function step(now){
+      var p = Math.min((now - start) / dur, 1);
+      var ease = 1 - Math.pow(1-p, 3);
+      var v = Math.round(target * ease);
+      el.textContent = (big && v >= 1000 ? (v/1000).toFixed(1)+"K" : v) + suffix;
+      if(p < 1) requestAnimationFrame(step);
+      else el.textContent = (big && target >= 1000 ? (target/1000).toFixed(1)+"K" : target) + suffix;
+    }
+    requestAnimationFrame(step);
+  }
+  document.querySelectorAll(".hero-stat-v[data-count]").forEach(runCounter);
+
+  // 7. Career tab navigation
+  var navItems = document.querySelectorAll(".career-nav-item");
+  var roles    = document.querySelectorAll(".role");
+  navItems.forEach(function(item){
+    item.addEventListener("click", function(){
+      var target = this.dataset.target;
+      navItems.forEach(function(n){ n.classList.remove("active"); });
+      this.classList.add("active");
+      roles.forEach(function(r){ r.classList.toggle("active", r.id === target); });
+    });
+  });
+  if(roles.length) roles[0].classList.add("active");
+
+  // 8. Custom cursor (desktop only)
+  if(window.matchMedia("(pointer:fine)").matches){
+    var cursor = document.getElementById("cursor");
+    var trail  = document.getElementById("cursor-trail");
+    var mx = 0, my = 0, tx = 0, ty = 0;
+    document.addEventListener("mousemove", function(e){
+      mx = e.clientX; my = e.clientY;
+      if(cursor){ cursor.style.left = mx+"px"; cursor.style.top = my+"px"; }
+    });
+    (function trailLoop(){
+      tx += (mx-tx)*0.1; ty += (my-ty)*0.1;
+      if(trail){ trail.style.left = tx+"px"; trail.style.top = ty+"px"; }
+      requestAnimationFrame(trailLoop);
+    })();
+  }
+
+  // 9. Three.js hero canvas
+  (function heroThree(){
+    var canvas = document.getElementById("hero-canvas");
+    if(!canvas || typeof THREE === "undefined") return;
+    var renderer = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    var scene  = new THREE.Scene();
+    var W = canvas.parentElement.offsetWidth;
+    var H = canvas.parentElement.offsetHeight;
+    var camera = new THREE.PerspectiveCamera(60, W/H, 0.1, 1000);
+    camera.position.z = 28;
+    renderer.setSize(W, H, false);
+    var COUNT = 1800;
+    var pos = new Float32Array(COUNT*3);
+    var vel = [];
+    for(var i=0;i<COUNT;i++){
+      pos[i*3]   = (Math.random()-.5)*120;
+      pos[i*3+1] = (Math.random()-.5)*80;
+      pos[i*3+2] = (Math.random()-.5)*60;
+      vel.push({x:(Math.random()-.5)*.016, y:(Math.random()-.5)*.012});
+    }
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(pos,3));
+    var mat = new THREE.PointsMaterial({color:0xc8a96a, size:0.16, transparent:true, opacity:0.5, sizeAttenuation:true});
+    scene.add(new THREE.Points(geo,mat));
+    var mouse = {x:0,y:0};
+    window.addEventListener("mousemove",function(e){
+      mouse.x=(e.clientX/window.innerWidth-.5)*.6;
+      mouse.y=(e.clientY/window.innerHeight-.5)*.4;
+    });
+    window.addEventListener("resize",function(){
+      var w=canvas.parentElement.offsetWidth, h=canvas.parentElement.offsetHeight;
+      renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+    });
+    var t=0;
+    (function animate(){
+      requestAnimationFrame(animate); t+=.004;
+      var pa=geo.attributes.position.array;
+      for(var i=0;i<COUNT;i++){
+        pa[i*3]+=vel[i].x; pa[i*3+1]+=vel[i].y;
+        if(Math.abs(pa[i*3])>60) vel[i].x*=-1;
+        if(Math.abs(pa[i*3+1])>40) vel[i].y*=-1;
+      }
+      geo.attributes.position.needsUpdate=true;
+      camera.position.x+=(mouse.x*4-camera.position.x)*.04;
+      camera.position.y+=(-mouse.y*3-camera.position.y)*.04;
+      camera.lookAt(0,0,0);
+      renderer.render(scene,camera);
+    })();
+  })();
+
+  // 10. Three.js globe (approach section)
+  (function globeThree(){
+    var canvas = document.getElementById("globe-canvas");
+    if(!canvas || typeof THREE === "undefined") return;
+    var renderer = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    var W = canvas.offsetWidth || 520;
+    var H = canvas.offsetHeight || 520;
+    renderer.setSize(W, H, false);
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(45, W/H, 0.1, 500);
+    camera.position.z = 4.2;
+    var globe = new THREE.Mesh(
+      new THREE.SphereGeometry(1.8,48,32),
+      new THREE.MeshBasicMaterial({color:0xc8a96a, wireframe:true, transparent:true, opacity:0.11})
+    );
+    scene.add(globe);
+    scene.add(new THREE.Mesh(
+      new THREE.SphereGeometry(1.76,32,32),
+      new THREE.MeshBasicMaterial({color:0x080a0f, transparent:true, opacity:0.95})
+    ));
+    function latlon(lat,lon,r){
+      var phi=(90-lat)*Math.PI/180, theta=(lon+180)*Math.PI/180;
+      return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+    }
+    [[14,27,0xc8a96a],[22,79,0xc8a96a],[25,55,0x7799bb]].forEach(function(loc){
+      var v=latlon(loc[0],loc[1],1.82);
+      var d=new THREE.Mesh(new THREE.SphereGeometry(.055,8,8),new THREE.MeshBasicMaterial({color:loc[2]}));
+      d.position.copy(v); scene.add(d);
+    });
+    [[14,27,22,79],[14,27,25,55],[22,79,25,55]].forEach(function(arc){
+      var v1=latlon(arc[0],arc[1],1.86), v2=latlon(arc[2],arc[3],1.86);
+      var mid=v1.clone().add(v2).multiplyScalar(.5).normalize().multiplyScalar(2.4);
+      var curve=new THREE.QuadraticBezierCurve3(v1,mid,v2);
+      var pts=curve.getPoints(40);
+      var g=new THREE.BufferGeometry().setFromPoints(pts);
+      scene.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:0xc8a96a,transparent:true,opacity:0.22})));
+    });
+    window.addEventListener("resize",function(){
+      var w=canvas.offsetWidth,h=canvas.offsetHeight;
+      if(w<1||h<1)return;
+      renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+    });
+    var t2=0,tgt=0,cur=0;
+    window.addEventListener("mousemove",function(e){tgt=(e.clientX/window.innerWidth-.5)*.3;});
+    (function loop(){
+      requestAnimationFrame(loop); t2+=.006; cur+=(tgt-cur)*.02;
+      globe.rotation.y=t2+cur;
+      renderer.render(scene,camera);
+    })();
+  })();
+
+  // 11. Admin panel
+  var adminBtn = document.getElementById("admin-btn");
+  var adminPanel = document.getElementById("admin-panel");
+  if(adminBtn && adminPanel){
+    adminBtn.addEventListener("click",function(){ adminPanel.classList.toggle("open"); });
+    var closeEls = adminPanel.querySelectorAll(".ap-close");
+    closeEls.forEach(function(el){ el.addEventListener("click",function(){ adminPanel.classList.remove("open"); }); });
+  }
+
+  // 12. Set year
+  var yr = document.getElementById("d-year");
+  if(yr) yr.textContent = new Date().getFullYear();
+
+  // 13. Boot content
+  boot();
+})();
+
+/* ═══════════════════════════════════════════════════════
+   FALLBACK SAFETY NET
+   If anything above fails, ensure content is still visible
+═══════════════════════════════════════════════════════ */
+setTimeout(function(){
+  // If js-ready was added but some .reveal elements never got .visible,
+  // force them visible after 2.5s (catches IntersectionObserver edge cases)
+  if(document.documentElement.classList.contains("js-ready")){
+    document.querySelectorAll(".reveal:not(.visible)").forEach(function(el){
+      el.classList.add("visible");
+    });
+  }
+}, 2500);
+</script>
+</body>
+</html>
