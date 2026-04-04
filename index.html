@@ -1038,7 +1038,7 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
     <div class="hero-cta reveal reveal-d3">
       <a href="#career" class="btn btn-primary">View Experience</a>
       <a href="/resume.pdf" class="btn btn-ghost" id="d-cv-hero" download>Download Resume</a>
-      <a href="#" class="btn btn-ghost" id="d-wa-btn" href="https://wa.me/260760634300?text=Hi%20Mohamed%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank">WhatsApp</a>
+      <a class="btn btn-ghost" id="d-wa-btn" href="https://wa.me/260760634300?text=Hi%20Mohamed%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank">WhatsApp</a>
     </div>
     <div class="hero-stats reveal">
       <div class="hero-stat"><div class="hero-stat-v" data-count="240" data-suffix="M">0</div><div class="hero-stat-l">P&amp;L Owned ($M)</div></div>
@@ -1999,13 +1999,7 @@ setTimeout(function(){
 ═══════════════════════════════════════════════════════ -->
 <script>
 
-/* ═══════════════════════════════════════════════════════════════════
-   CINEMATIC SCROLL ANIMATION SYSTEM
-   — Mohamed Magdoom Executive Portfolio —
-   Version: 1.0 | Safe IIFE | No global pollution
-   Injection: paste this <script> block AFTER the existing </script>
-   on line 1994, before the FAB HTML comment block.
-   ═══════════════════════════════════════════════════════════════════ */
+/* CINEMATIC SCROLL ANIMATION SYSTEM — Mohamed Magdoom Portfolio */
 (function cinematicSystem() {
   "use strict";
 
@@ -2659,6 +2653,110 @@ setTimeout(function(){
   window.addEventListener("load", function() {
     ScrollTrigger.refresh();
   });
+
+}());
+
+/* ══════════════════════════════════════════════════════════════════
+   ADMIN PANEL — Belt-and-braces re-wiring with null checks
+   Ensures admin button works even if earlier binding silently failed
+   ══════════════════════════════════════════════════════════════════ */
+(function rewireAdmin() {
+  "use strict";
+
+  function safeEl(id) {
+    return document.getElementById(id);
+  }
+
+  function doWire() {
+    var adminBtn   = safeEl("admin-btn");
+    var adminPanel = safeEl("admin-panel");
+    var apClose1   = safeEl("ap-close1");
+    var apClose2   = safeEl("ap-close2");
+    var apPw       = safeEl("ap-pw");
+    var apUnlock   = safeEl("ap-unlock-btn");
+    var apSave     = safeEl("ap-save-btn");
+    var apLock     = safeEl("ap-lock-wrap");
+    var apEditor   = safeEl("ap-editor");
+    var apErr      = safeEl("ap-err");
+
+    if (!adminBtn || !adminPanel) {
+      return; /* Elements not in DOM yet — bail cleanly */
+    }
+
+    /* Only wire if not already wired (avoid duplicate listeners) */
+    if (adminBtn.dataset.wired === "1") { return; }
+    adminBtn.dataset.wired = "1";
+
+    function openPanel()  { adminPanel.classList.add("open");    }
+    function closePanel() { adminPanel.classList.remove("open"); }
+
+    adminBtn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      adminPanel.classList.toggle("open");
+    });
+
+    if (apClose1) { apClose1.addEventListener("click", closePanel); }
+    if (apClose2) { apClose2.addEventListener("click", closePanel); }
+
+    /* Close on backdrop click */
+    adminPanel.addEventListener("click", function(e) {
+      if (e.target === adminPanel) { closePanel(); }
+    });
+
+    /* Escape key */
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape" && adminPanel.classList.contains("open")) {
+        closePanel();
+      }
+    });
+
+    /* Admin tab switching */
+    document.querySelectorAll(".ap-tab").forEach(function(tab) {
+      if (tab.dataset.tabWired) { return; }
+      tab.dataset.tabWired = "1";
+      tab.addEventListener("click", function() {
+        document.querySelectorAll(".ap-tab").forEach(function(t) {
+          t.classList.remove("on");
+        });
+        document.querySelectorAll(".ap-tc").forEach(function(tc) {
+          tc.classList.remove("on");
+        });
+        tab.classList.add("on");
+        var tc = safeEl("tc-" + tab.dataset.t);
+        if (tc) { tc.classList.add("on"); }
+      });
+    });
+
+    /* Unlock editor */
+    function tryUnlock() {
+      var pw      = apPw ? apPw.value : "";
+      var stored  = (window.__MMConfig && window.__MMConfig.password) || "Magdoom@2024";
+      if (pw === stored) {
+        if (apLock)   { apLock.style.display   = "none";  }
+        if (apEditor) { apEditor.style.display = "block"; }
+      } else {
+        if (apErr) { apErr.style.display = "block"; }
+      }
+    }
+
+    if (apUnlock) {
+      apUnlock.addEventListener("click", tryUnlock);
+    }
+    if (apPw) {
+      apPw.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") { tryUnlock(); }
+      });
+    }
+  }
+
+  /* Run immediately if DOM ready, else wait */
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", doWire);
+  } else {
+    doWire();
+  }
+  /* Also run on load as final safety net */
+  window.addEventListener("load", doWire);
 
 }());
 
