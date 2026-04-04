@@ -1498,224 +1498,200 @@ function countUp(){
   var pts=new THREE.Points(geo,mat);scene.add(pts);
 
   // Grid lines
- document.addEventListener("DOMContentLoaded", function() {
-  /* ═══════════════════════════════════════════════════════
-     ADMIN PANEL
-  ════════════════════════════════════════════════════════ */
-  function closePanel() {
-    var panel = document.getElementById("admin-panel");
-    if(panel) panel.classList.remove("open");
-  }
+ /* ═══════════════════════════════════════════════════════
+   HERO NUMBERS — particle animation + globe
+═══════════════════════════════════════════════════════ */
+document.addEventListener("DOMContentLoaded", function(){
 
-  var adminBtn = document.getElementById("admin-btn");
-  var adminPanel = document.getElementById("admin-panel");
-  var close1 = document.getElementById("ap-close1");
-  var close2 = document.getElementById("ap-close2");
+  // ======== PARTICLES ========
+  const canvas = document.getElementById("hero-canvas");
+  if(canvas && typeof THREE !== "undefined"){
+    const renderer = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, canvas.offsetWidth/canvas.offsetHeight, 0.1, 500);
+    camera.position.z = 4.5;
 
-  if(adminBtn && adminPanel){
-    adminBtn.addEventListener("click", function(){
-      adminPanel.classList.toggle("open");
-    });
-  }
-
-  if(close1) close1.addEventListener("click", closePanel);
-  if(close2) close2.addEventListener("click", closePanel);
-
-  function tryUnlock(){
-    var pw = document.getElementById("ap-pw").value, cfg = getConfig();
-    if(pw === cfg.password){
-      document.getElementById("ap-lock-wrap").style.display = "none";
-      document.getElementById("ap-editor").style.display = "block";
-    } else {
-      document.getElementById("ap-err").style.display = "block";
+    // Particle points
+    const COUNT = 300;
+    const geo = new THREE.BufferGeometry();
+    const pos = new Float32Array(COUNT*3);
+    const vel = [];
+    for(let i=0;i<COUNT;i++){
+      pos[i*3] = (Math.random()-.5)*70;
+      pos[i*3+1] = (Math.random()-.5)*45;
+      pos[i*3+2] = (Math.random()-.5)*20;
+      vel.push({x:(Math.random()-.5)*.02, y:(Math.random()-.5)*.02});
     }
-  }
+    geo.setAttribute("position", new THREE.BufferAttribute(pos,3));
+    const pts = new THREE.Points(geo, new THREE.PointsMaterial({color:0xc8a96a, size:.03, transparent:true, opacity:.25}));
+    scene.add(pts);
 
-  var unlockBtn = document.getElementById("ap-unlock-btn");
-  if(unlockBtn) unlockBtn.addEventListener("click", tryUnlock);
+    // Animation loop
+    let t=0;
+    const mouse = {x:0,y:0};
+    window.addEventListener("mousemove", e => {
+      mouse.x = (e.clientX/innerWidth-.5)*.5;
+      mouse.y = (e.clientY/innerHeight-.5)*.4;
+    }, {passive:true});
 
-  var pwInput = document.getElementById("ap-pw");
-  if(pwInput) pwInput.addEventListener("keydown", function(e){
-    if(e.key === "Enter") tryUnlock();
-  });
+    function resize(){
+      const p = canvas.parentElement;
+      renderer.setSize(p.offsetWidth, p.offsetHeight, false);
+      camera.aspect = p.offsetWidth/p.offsetHeight;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    new ResizeObserver(resize).observe(canvas.parentElement);
 
-  document.querySelectorAll(".ap-tab").forEach(function(t){
-    t.addEventListener("click", function(){
-      document.querySelectorAll(".ap-tab,.ap-tc").forEach(function(x){x.classList.remove("on");});
-      t.classList.add("on");
-      var tc = document.getElementById("tc-"+t.dataset.t);
-      if(tc) tc.classList.add("on");
-    });
-  });
-
-  var saveBtn = document.getElementById("ap-save-btn");
-  if(saveBtn){
-    saveBtn.addEventListener("click", async function(){
-      var btn = saveBtn, msg = document.getElementById("ap-msg");
-      btn.disabled = true; btn.textContent = "Saving…";
-      msg.className = "ap-msg"; msg.style.display = "none";
-
-      function v(id){ var e = document.getElementById(id); return e ? e.value.trim() : ""; }
-
-      var workerUrl = v("f-worker"), pw = v("f-pw") || getConfig().password;
-      var data = {
-        name:v("f-name"), role:v("f-role"), sig:v("f-sig"), phil:v("f-phil"), av:v("f-av"),
-        email:v("f-email"), phone:v("f-phone"), loc:v("f-loc"), wa:v("f-wa"), li:v("f-li"), cv:v("f-cv"),
-        s1v:v("f-s1v"), s1l:v("f-s1l"), s2v:v("f-s2v"), s2l:v("f-s2l"),
-        s3v:v("f-s3v"), s3l:v("f-s3l"), s4v:v("f-s4v"), s4l:v("f-s4l"),
-        password:getConfig().password, workerUrl:workerUrl
-      };
-      applyData(data);
-      try{ localStorage.setItem("mm_cinematic", JSON.stringify(data)); } catch(e){}
-
-      if(workerUrl){
-        var ok = await (async function(){
-          try{
-            var r = await fetch(workerUrl+"/content", {
-              method:"POST",
-              headers:{"Content-Type":"application/json","X-Admin-Password":pw},
-              body:JSON.stringify(data)
-            });
-            return r.ok;
-          } catch(e){ return false; }
-        })();
-        if(ok){
-          msg.textContent = "✓ Saved to cloud — all visitors see this instantly.";
-          msg.className = "ap-msg ok";
-          showBadge("✓ Saved to cloud");
-        } else {
-          msg.textContent = "⚠ Cloud save failed. Check Worker URL. Saved locally as fallback.";
-          msg.className = "ap-msg err";
-          showBadge("⚠ Cloud save failed", true);
-        }
-      } else {
-        msg.textContent = "⚠ Saved locally only. Add Cloudflare Worker URL in Links tab for permanent saves.";
-        msg.className = "ap-msg err";
-        showBadge("⚠ Local only — add Worker URL", true);
+    (function anim(){
+      requestAnimationFrame(anim);
+      t += .003;
+      const a = geo.attributes.position.array;
+      for(let i=0;i<COUNT;i++){
+        a[i*3] += vel[i].x;
+        a[i*3+1] += vel[i].y;
+        if(Math.abs(a[i*3])>70) vel[i].x*=-1;
+        if(Math.abs(a[i*3+1])>45) vel[i].y*=-1;
       }
-
-      btn.disabled = false;
-      btn.textContent = "💾 Save All Changes";
-    });
+      geo.attributes.position.needsUpdate=true;
+      camera.position.x += (mouse.x*5 - camera.position.x)*.04;
+      camera.position.y += (-mouse.y*4 - camera.position.y)*.04;
+      camera.lookAt(0,0,0);
+      pts.rotation.y = t*.04;
+      renderer.render(scene, camera);
+    })();
   }
+
+  // ======== GLOBE ========
+  const globeCanvas = document.getElementById("globe-canvas");
+  if(globeCanvas && typeof THREE !== "undefined"){
+    const renderer = new THREE.WebGLRenderer({canvas:globeCanvas, alpha:true, antialias:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, globeCanvas.offsetWidth/globeCanvas.offsetHeight, .1, 500);
+    camera.position.z = 4.5;
+    renderer.setSize(globeCanvas.offsetWidth, globeCanvas.offsetHeight, false);
+
+    // Wireframe globe
+    const globe = new THREE.Mesh(new THREE.SphereGeometry(1.8,48,32), new THREE.MeshBasicMaterial({color:0xc8a96a, wireframe:true, transparent:true, opacity:.1}));
+    scene.add(globe);
+    scene.add(new THREE.Mesh(new THREE.SphereGeometry(1.76,32,32), new THREE.MeshBasicMaterial({color:0x080a0f, transparent:true, opacity:.95})));
+
+    function latLon(lat,lon,r){
+      const phi = (90-lat)*Math.PI/180;
+      const theta = (lon+180)*Math.PI/180;
+      return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+    }
+
+    const locs = [{lat:14,lon:27,c:0xc8a96a,s:.05},{lat:22,lon:79,c:0xc8a96a,s:.04},{lat:25,lon:55,c:0x6aabb4,s:.035}];
+    const rings = [];
+    locs.forEach(loc=>{
+      const v = latLon(loc.lat, loc.lon, 1.82);
+      const dot = new THREE.Mesh(new THREE.SphereGeometry(loc.s,8,8), new THREE.MeshBasicMaterial({color:loc.c}));
+      dot.position.copy(v); scene.add(dot);
+      const ring = new THREE.Mesh(new THREE.RingGeometry(loc.s*1.5, loc.s*2.5,12), new THREE.MeshBasicMaterial({color:loc.c, transparent:true, opacity:.4, side:THREE.DoubleSide}));
+      ring.position.copy(v); ring.lookAt(new THREE.Vector3(0,0,0)); ring.userData.pulse = Math.random()*Math.PI*2;
+      scene.add(ring); rings.push(ring);
+    });
+
+    window.addEventListener("mousemove", e => { targetRot = (e.clientX/innerWidth-.5)*.3; });
+    let t2=0, targetRot=0, curRot=0;
+
+    function resizeGlobe(){
+      const w2=globeCanvas.offsetWidth,h2=globeCanvas.offsetHeight;
+      if(w2<1||h2<1) return;
+      renderer.setSize(w2,h2,false);
+      camera.aspect = w2/h2; camera.updateProjectionMatrix();
+    }
+    resizeGlobe();
+    new ResizeObserver(resizeGlobe).observe(globeCanvas);
+
+    (function loop(){
+      requestAnimationFrame(loop);
+      t2+=.005; curRot+=(targetRot-curRot)*.02;
+      globe.rotation.y = t2+curRot;
+      rings.forEach(r=>{
+        r.userData.pulse+=.04;
+        r.material.opacity = .2 + .3*Math.abs(Math.sin(r.userData.pulse));
+        const s=1+.25*Math.abs(Math.sin(r.userData.pulse));
+        r.scale.setScalar(s); r.rotation.y = globe.rotation.y;
+      });
+      renderer.render(scene, camera);
+    })();
+  }
+
+  // ======== ADMIN PANEL ========
+  (function(){
+    // Close panel
+    function closePanel(){ const panel = document.getElementById("admin-panel"); if(panel) panel.classList.remove("open"); }
+    const adminBtn = document.getElementById("admin-btn");
+    if(adminBtn) adminBtn.addEventListener("click", ()=>{ const panel = document.getElementById("admin-panel"); if(panel) panel.classList.toggle("open"); });
+
+    ["ap-close1","ap-close2"].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.addEventListener("click", closePanel);
+    });
+
+    function tryUnlock(){
+      const pw = document.getElementById("ap-pw")?.value || "";
+      const cfg = getConfig();
+      if(pw === cfg.password){
+        const wrap=document.getElementById("ap-lock-wrap");
+        const editor=document.getElementById("ap-editor");
+        if(wrap) wrap.style.display="none";
+        if(editor) editor.style.display="block";
+      } else {
+        const err=document.getElementById("ap-err"); if(err) err.style.display="block";
+      }
+    }
+    const unlockBtn = document.getElementById("ap-unlock-btn");
+    if(unlockBtn) unlockBtn.addEventListener("click", tryUnlock);
+    const apPw = document.getElementById("ap-pw");
+    if(apPw) apPw.addEventListener("keydown", e=>{if(e.key==="Enter") tryUnlock();});
+
+    // Tabs
+    document.querySelectorAll(".ap-tab").forEach(tab=>{
+      tab.addEventListener("click", function(){
+        document.querySelectorAll(".ap-tab,.ap-tc").forEach(x=>x.classList.remove("on"));
+        tab.classList.add("on");
+        const tc = document.getElementById("tc-"+tab.dataset.t);
+        if(tc) tc.classList.add("on");
+      });
+    });
+
+    // Save
+    const saveBtn = document.getElementById("ap-save-btn");
+    if(saveBtn){
+      saveBtn.addEventListener("click", async function(){
+        saveBtn.disabled = true; saveBtn.textContent = "Saving…";
+        const msg=document.getElementById("ap-msg"); if(msg){ msg.style.display="none"; msg.className="ap-msg"; }
+
+        function v(id){ return document.getElementById(id)?.value.trim()||""; }
+        const cfg = getConfig();
+        const workerUrl = v("f-worker");
+        const pw = v("f-pw")||cfg.password;
+        const data = {
+          name:v("f-name"), role:v("f-role"), sig:v("f-sig"), phil:v("f-phil"), av:v("f-av"),
+          email:v("f-email"), phone:v("f-phone"), loc:v("f-loc"), wa:v("f-wa"), li:v("f-li"), cv:v("f-cv"),
+          s1v:v("f-s1v"), s1l:v("f-s1l"), s2v:v("f-s2v"), s2l:v("f-s2l"),
+          s3v:v("f-s3v"), s3l:v("f-s3l"), s4v:v("f-s4v"), s4l:v("f-s4l"),
+          password: cfg.password, workerUrl:workerUrl
+        };
+        applyData(data);
+        try{ localStorage.setItem("mm_cinematic", JSON.stringify(data)); } catch(e){}
+
+        if(workerUrl){
+          let ok=false;
+          try{
+            const r = await fetch(workerUrl+"/content",{method:"POST",headers:{"Content-Type":"application/json","X-Admin-Password":pw},body:JSON.stringify(data)});
+            ok = r.ok;
+          } catch(e){ ok=false; }
+          if(msg){ msg.textContent = ok ? "✓ Saved to cloud — all visitors see this instantly." : "⚠ Cloud save failed. Saved locally as fallback."; msg.className = ok?"ap-msg ok":"ap-msg err"; msg.style.display="block"; showBadge(ok?"✓ Saved to cloud":"⚠ Cloud save failed",!ok); }
+        } else if(msg){ msg.textContent="⚠ Saved locally only. Add Worker URL for cloud."; msg.className="ap-msg err"; msg.style.display="block"; showBadge("⚠ Local only — add Worker URL",true);}
+        saveBtn.disabled=false; saveBtn.textContent="💾 Save All Changes";
+      });
+    }
+
+  })();
+
 });
-<!-- ═══════════════════════════════════════════════════════
-     SPEED-DIAL FLOATING ACTION BUTTONS
-═══════════════════════════════════════════════════════ -->
-<div id="fab-wrap">
-  <!-- FAB menu items (shown when open) -->
-  <div id="fab-menu" role="menu">
-
-    <div class="fab-item">
-      <span class="fab-item-lbl">Portfolio</span>
-      <a class="fab-item-btn" href="https://mohamedmagdoom.pages.dev" target="_blank" title="Portfolio" role="menuitem">🌐</a>
-    </div>
-
-    <div class="fab-item">
-      <span class="fab-item-lbl">Digital Card</span>
-      <button class="fab-item-btn" id="card-btn" title="Digital Business Card" role="menuitem">💳</button>
-    </div>
-
-    <div class="fab-item">
-      <span class="fab-item-lbl">Chat with AI</span>
-      <button class="fab-item-btn" id="chat-btn" title="AI Assistant" role="menuitem">🤖</button>
-    </div>
-
-    <div class="fab-item">
-      <span class="fab-item-lbl">WhatsApp</span>
-      <a class="fab-item-btn" href="https://wa.me/260760634300?text=Hi%20Mohamed%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank" title="WhatsApp" role="menuitem">💬</a>
-    </div>
-
-    <div class="fab-item">
-      <span class="fab-item-lbl">LinkedIn</span>
-      <a class="fab-item-btn" href="https://linkedin.com/in/mohamed-magdoom" target="_blank" title="LinkedIn" role="menuitem">in</a>
-    </div>
-
-  </div>
-
-  <!-- Main toggle -->
-  <button id="fab-toggle" aria-label="Quick actions" aria-expanded="false" aria-controls="fab-menu">⚡</button>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     DIGITAL BUSINESS CARD MODAL
-═══════════════════════════════════════════════════════ -->
-<div id="bcard-modal" role="dialog" aria-label="Digital Business Card" aria-modal="true">
-  <div class="bcard">
-
-    <!-- Header -->
-    <div class="bcard-header">
-      <button id="bcard-close" aria-label="Close card">✕</button>
-      <h2>Mohamed <span>Magdoom</span></h2>
-      <div class="bcard-title">Fuel Retail &amp; Multi-Site Operations Executive</div>
-      <div class="bcard-kpis">
-        <div class="bcard-kpi"><div class="bcard-kpi-val">$240M</div><div class="bcard-kpi-lbl">P&amp;L</div></div>
-        <div class="bcard-kpi"><div class="bcard-kpi-val">90+</div><div class="bcard-kpi-lbl">Stations</div></div>
-        <div class="bcard-kpi"><div class="bcard-kpi-val">1,500+</div><div class="bcard-kpi-lbl">People</div></div>
-        <div class="bcard-kpi"><div class="bcard-kpi-val">12+</div><div class="bcard-kpi-lbl">Years</div></div>
-      </div>
-    </div>
-
-    <!-- QR / scan area -->
-    <div class="bcard-qr-area">
-      <div id="bcard-qr" title="Scan to visit portfolio"></div>
-    </div>
-
-    <!-- Contact details -->
-    <div class="bcard-body">
-      <div class="bcard-contact-row">
-        <span class="bcard-contact-icon">📧</span>
-        <a href="mailto:mohamed.magdoom@gmail.com">mohamed.magdoom@gmail.com</a>
-      </div>
-      <div class="bcard-contact-row">
-        <span class="bcard-contact-icon">📱</span>
-        <span>+260 760 634 300 &nbsp;·&nbsp; +91 7550 270 450</span>
-      </div>
-      <div class="bcard-contact-row">
-        <span class="bcard-contact-icon">💼</span>
-        <a href="https://linkedin.com/in/mohamed-magdoom" target="_blank">linkedin.com/in/mohamed-magdoom</a>
-      </div>
-      <div class="bcard-contact-row">
-        <span class="bcard-contact-icon">📍</span>
-        <span>Lusaka, Zambia · Open to relocation globally</span>
-      </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="bcard-actions">
-      <button class="bcard-btn bcard-btn-primary" id="bcard-dl">⬇ Save Contact (.vcf)</button>
-      <button class="bcard-btn" id="bcard-copy">Copy Link</button>
-    </div>
-
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     AI CHAT WIDGET
-═══════════════════════════════════════════════════════ -->
-<div id="chat-panel" role="dialog" aria-label="Chat with Mohamed's assistant" aria-modal="true">
-
-  <div class="chat-header">
-    <div class="chat-header-info">
-      <div class="chat-avatar">M</div>
-      <div class="chat-header-text">
-        <h4>Portfolio Assistant</h4>
-        <p>Ask about Mohamed's career</p>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <div class="chat-dot"></div>
-      <button id="chat-close" aria-label="Close chat">✕</button>
-    </div>
-  </div>
-
-  <div id="chat-msgs" aria-live="polite" aria-label="Chat messages"></div>
-
-  <div class="chat-input-row">
-    <input id="chat-input" type="text" placeholder="Ask about P&amp;L, career, experience…" autocomplete="off" aria-label="Chat message">
-    <button id="chat-send" aria-label="Send message">➤</button>
-  </div>
-
-</div>
-</body>
-</html>
