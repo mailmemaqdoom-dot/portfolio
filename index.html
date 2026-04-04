@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mohamed Magdoom | Fuel Retail &amp; Operations Executive | GM · COO · Country Manager</title>
+<title>Mohamed Magdoom | Fuel Retail &amp; Operations Executive | GM · Head of Sales · Head of Operations</title>
 <meta name="description" content="USD 240M P&L · 90 Stations · 1,500+ People · Sub-Saharan Africa, GCC &amp; Asia. GM · Country Manager · COO. Revenue growth + cost discipline at scale.">
 <meta property="og:title" content="Mohamed Magdoom — Fuel Retail &amp; Multi-Site Operations Executive">
 <meta property="og:description" content="USD 240M P&L. 90 stations. 1,500+ people. Revenue growth and cost discipline delivered simultaneously at scale.">
@@ -1004,7 +1004,7 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
 <div id="cursor-trail"></div>
 
 <!-- Availability strip -->
-<div id="av-strip"><span id="d-av">🟢 Available for GM · Country Manager · COO · Head of Operations — Sub-Saharan Africa · GCC · UAE · Global</span></div>
+<div id="av-strip"><span id="d-av">🟢 GM · Head of Sales · Head of Operations · Business Development — Sub-Saharan Africa · GCC · UAE · Global</span></div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -1065,7 +1065,7 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
           <p id="d-phil">"I stay close enough to the business to know when the numbers are lying."</p>
         </div>
         <div class="tag-row reveal">
-          <span class="tag">GM · COO · Country Manager</span>
+          <span class="tag">GM · Head of Sales · Head of Operations</span>
           <span class="tag">Sub-Saharan Africa</span>
           <span class="tag">GCC · UAE</span>
           <span class="tag">Open to Relocation Globally</span>
@@ -1075,7 +1075,7 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
         <p class="about-conviction reveal"><em>Revenue growth and cost discipline</em> are not sequential mandates — they are the same decision, made simultaneously. That is the operating model that produced USD 36M in growth and USD 3.6M+ in annual savings in the same 24-month window.</p>
         <p class="about-conviction-sub reveal reveal-d1">The 30% OPEX reduction and USD 36M revenue uplift happened in parallel — not in sequence. Most operators treat them as either/or. The numbers show what happens when you refuse that trade-off.</p>
         <div class="about-philosophy reveal reveal-d2" style="margin-top:36px">
-          <p>I lead by staying near the problem, making the call early, and building teams that maintain standards when I am not in the room. Targeting GM, Country Manager, and COO roles across Sub-Saharan Africa, the GCC, UAE, and global markets where both sides of the business must be owned and delivered at once.</p>
+          <p>I lead by staying near the problem, making the call early, and building teams that maintain standards when I am not in the room. Targeting GM, Head of Sales, Head of Operations, and Business Development roles across Sub-Saharan Africa, the GCC, UAE, and global markets where both sides of the business must be owned and delivered at once.</p>
         </div>
       </div>
     </div>
@@ -1268,7 +1268,7 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
       <div>
         <div class="eyebrow reveal">Available for the Right Mandate</div>
         <h2 class="contact-title reveal reveal-d1">Let's talk about<br>your next <em>operation.</em></h2>
-        <p class="contact-sub reveal reveal-d2">Targeting GM, Country Manager, COO, and Head of Operations roles where the mandate is full P&amp;L accountability, operational scale, and commercial delivery — simultaneously. Sub-Saharan Africa, UAE, GCC, and global markets.</p>
+        <p class="contact-sub reveal reveal-d2">Targeting GM, Head of Sales, Head of Operations, and Business Development roles where the mandate is full P&amp;L accountability, operational scale, and commercial delivery — simultaneously. Targeting GM, Head of Sales, Head of Operations, and Business Development roles across Sub-Saharan Africa, UAE, GCC, and global markets.</p>
       </div>
       <div class="reveal reveal-d1">
         <div class="contact-items">
@@ -1822,8 +1822,7 @@ setTimeout(function(){
       'ADR:;;Lusaka;Zambia',
       'NOTE:USD 240M P&L · 90 Stations · 1500+ People',
       'END:VCARD'
-    ].join('
-');
+    ].join('\r\n');
     var blob = new Blob([vc],{type:'text/vcard'});
     var a    = document.createElement('a');
     a.href   = URL.createObjectURL(blob);
@@ -2060,7 +2059,7 @@ setTimeout(function(){
     <div class="bcard-body">
       <div class="bcard-contact-row">
         <span class="bcard-contact-icon">📧</span>
-        <a href="mailto:mohamed.magdoom@gmail.com">mohamed.magdoom@gmail.com</a>
+        <a href="/cdn-cgi/l/email-protection#1b7674737a767e7f35767a7c7f7474765b7c767a727735787476"><span class="__cf_email__" data-cfemail="5f3230373e323a3b71323e383b3030321f38323e3633713c3032">[email&#160;protected]</span></a>
       </div>
       <div class="bcard-contact-row">
         <span class="bcard-contact-icon">📱</span>
@@ -2107,10 +2106,50 @@ setTimeout(function(){
   <div id="chat-msgs" aria-live="polite" aria-label="Chat messages"></div>
 
   <div class="chat-input-row">
-    <input id="chat-input" type="text" placeholder="Ask about P&amp;L, career, experience…" autocomplete="off" aria-label="Chat message">
+        <input id="chat-input" type="text" placeholder="Ask about experience, achievements, contact…" autocomplete="off" aria-label="Chat message">
     <button id="chat-send" aria-label="Send message">➤</button>
   </div>
 
 </div>
+
+/* ═══════════════════════════════════════════════════════
+   HERO COUNTER FIX — Direct DOM-ready trigger
+   Reads data-count from HTML attributes (not from applyData)
+   Ensures counters animate on page load regardless of JS timing
+═══════════════════════════════════════════════════════ */
+(function() {
+  function runCounters() {
+    document.querySelectorAll('.hero-stat-v[data-count]').forEach(function(el) {
+      var target = parseFloat(el.dataset.count) || 0;
+      var suffix = el.dataset.suffix || '';
+      var big    = target >= 1000;
+      var dur    = 1800;
+      var start  = performance.now();
+      function step(now) {
+        var p    = Math.min((now - start) / dur, 1);
+        var ease = 1 - Math.pow(1 - p, 4);
+        var v    = Math.round(target * ease);
+        el.textContent = (big && v >= 1000 ? (v / 1000).toFixed(1) + 'K' : v) + suffix;
+        if (p < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = (big && target >= 1000 ? (target / 1000).toFixed(1) + 'K' : target) + suffix;
+        }
+      }
+      requestAnimationFrame(step);
+    });
+  }
+  // Fire immediately if DOM is ready, otherwise wait
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runCounters);
+  } else {
+    runCounters();
+  }
+  // Also re-run after applyData may have changed data-count values
+  window.addEventListener('load', function() {
+    setTimeout(runCounters, 100);
+  });
+})();
+
 </body>
 </html>
