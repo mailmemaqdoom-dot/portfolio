@@ -1994,6 +1994,678 @@ setTimeout(function(){
 </script>
 
 <!-- ═══════════════════════════════════════════════════════
+     CINEMATIC SCROLL ANIMATION SYSTEM
+     Injected after main script block — safe IIFE, no conflicts
+═══════════════════════════════════════════════════════ -->
+<script>
+
+/* ═══════════════════════════════════════════════════════════════════
+   CINEMATIC SCROLL ANIMATION SYSTEM
+   — Mohamed Magdoom Executive Portfolio —
+   Version: 1.0 | Safe IIFE | No global pollution
+   Injection: paste this <script> block AFTER the existing </script>
+   on line 1994, before the FAB HTML comment block.
+   ═══════════════════════════════════════════════════════════════════ */
+(function cinematicSystem() {
+  "use strict";
+
+  /* ── Guard: require GSAP + ScrollTrigger ─────────────────────── */
+  if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
+    return;
+  }
+
+  /* ── Respect reduced-motion preference ───────────────────────── */
+  var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReduced) { return; }
+
+  /* ── Mobile guard: skip heavy parallax on small screens ─────── */
+  var isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+  /* ── Register plugin (safe to call multiple times) ───────────── */
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ══════════════════════════════════════════════════════════════
+     1. HERO — Cinematic depth on scroll
+     Existing: hero-name scale + hero-inner y (in initGSAP)
+     New: particle canvas parallax + stat counter shimmer
+     ══════════════════════════════════════════════════════════════ */
+  if (!isMobile) {
+    /* Canvas slow drift (bg layer) */
+    gsap.to("#hero-canvas", {
+      yPercent: 18,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#hero",
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.4
+      }
+    });
+
+    /* Hero tag — slightly faster than canvas (fg layer) */
+    gsap.to(".hero-tag", {
+      yPercent: -12,
+      opacity: 0,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#hero",
+        start: "top top",
+        end: "60% top",
+        scrub: 1
+      }
+    });
+
+    /* Stats row — pull forward on scroll (foreground layer) */
+    gsap.to(".hero-stats", {
+      yPercent: 22,
+      opacity: 0,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#hero",
+        start: "30% top",
+        end: "bottom top",
+        scrub: 0.8
+      }
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     2. ABOUT — Staggered paragraph depth reveal
+     ══════════════════════════════════════════════════════════════ */
+  gsap.from(".about-text p", {
+    y: 40,
+    opacity: 0,
+    duration: 1.1,
+    stagger: 0.18,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: "#about",
+      start: "top 72%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  gsap.from(".about-right p", {
+    y: 30,
+    opacity: 0,
+    duration: 1.0,
+    stagger: 0.15,
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: ".about-right",
+      start: "top 78%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* Tag pills — spring in */
+  gsap.from(".tag", {
+    scale: 0.78,
+    opacity: 0,
+    duration: 0.55,
+    stagger: 0.08,
+    ease: "back.out(1.7)",
+    scrollTrigger: {
+      trigger: ".tag-row",
+      start: "top 85%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+     3. PERFORMANCE INDICATORS — Cinematic KPI focus zoom
+        Each card enters with a scale-from-below, then the
+        .perf-val number counts up when its card becomes visible.
+     ══════════════════════════════════════════════════════════════ */
+
+  /* Override existing plain stagger with a cinematic depth entry */
+  gsap.from(".perf-card", {
+    y: 60,
+    scale: 0.92,
+    opacity: 0,
+    duration: 0.9,
+    stagger: {
+      each: 0.1,
+      from: "start"
+    },
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: "#performance",
+      start: "top 70%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* KPI value zoom pulse when card enters */
+  gsap.from(".perf-val", {
+    scale: 0.7,
+    opacity: 0,
+    duration: 0.7,
+    stagger: 0.1,
+    ease: "back.out(2)",
+    scrollTrigger: {
+      trigger: "#performance",
+      start: "top 68%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* ── KPI Count-up animation (scroll-triggered, not on load) ─── */
+  (function initKPICountUp() {
+    /* Map of display text → numeric target + format function */
+    var kpiMap = [
+      { text: "USD 240M", target: 240,  prefix: "USD ",  suffix: "M"  },
+      { text: "USD 36M",  target: 36,   prefix: "USD ",  suffix: "M"  },
+      { text: "30%",      target: 30,   prefix: "",      suffix: "%"  },
+      { text: "17.5%",    target: 17.5, prefix: "",      suffix: "%"  },
+      { text: "58%",      target: 58,   prefix: "",      suffix: "%"  },
+      { text: "16",       target: 16,   prefix: "",      suffix: ""   },
+      { text: "40%",      target: 40,   prefix: "",      suffix: "%"  },
+      { text: "6 Mo.",    target: 6,    prefix: "",      suffix: " Mo."}
+    ];
+
+    document.querySelectorAll(".perf-val").forEach(function(el, idx) {
+      var kpi = kpiMap[idx];
+      if (!kpi) { return; }
+
+      /* Stash original display text, show it until trigger fires */
+      var original = el.textContent.trim();
+      var triggered = false;
+
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top 85%",
+        onEnter: function() {
+          if (triggered) { return; }
+          triggered = true;
+
+          var start  = performance.now();
+          var dur    = 1600; /* ms */
+          var isDecimal = (kpi.target % 1 !== 0);
+
+          function tick(now) {
+            var elapsed = now - start;
+            var progress = Math.min(elapsed / dur, 1);
+            /* Expo ease-out */
+            var eased = progress === 1
+              ? 1
+              : 1 - Math.pow(2, -10 * progress);
+            var val = kpi.target * eased;
+            el.textContent = kpi.prefix +
+              (isDecimal ? val.toFixed(1) : Math.round(val)) +
+              kpi.suffix;
+            if (progress < 1) {
+              requestAnimationFrame(tick);
+            } else {
+              el.textContent = original; /* Restore exact original */
+            }
+          }
+          requestAnimationFrame(tick);
+        }
+      });
+    });
+  }());
+
+  /* ══════════════════════════════════════════════════════════════
+     4. BUSINESS IMPACT — Sequential one-at-a-time reveal
+        Each impact-row appears as previous finishes → timeline feel
+     ══════════════════════════════════════════════════════════════ */
+  gsap.from(".impact-row", {
+    x: -48,
+    opacity: 0,
+    duration: 0.85,
+    stagger: {
+      each: 0.22,
+      from: "start"
+    },
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: "#impact",
+      start: "top 72%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* Impact number — scale in for emphasis */
+  gsap.from(".impact-num", {
+    scale: 0,
+    opacity: 0,
+    duration: 0.6,
+    stagger: 0.22,
+    ease: "back.out(2.5)",
+    scrollTrigger: {
+      trigger: "#impact",
+      start: "top 72%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* Headline text slide */
+  gsap.from(".impact-headline", {
+    y: 20,
+    opacity: 0,
+    duration: 0.7,
+    stagger: 0.22,
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: "#impact",
+      start: "top 70%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+     5. CAREER — Scroll-driven role focus system
+        Active role = full opacity + slight scale
+        Inactive roles = dimmed
+     ══════════════════════════════════════════════════════════════ */
+  (function initCareerFocus() {
+    var roles = document.querySelectorAll(".role");
+    if (!roles.length) { return; }
+
+    /* Initial state: first role full, others pre-dimmed */
+    gsap.set(roles, { opacity: 0.35, scale: 0.98 });
+    gsap.set(roles[0], { opacity: 1, scale: 1 });
+
+    roles.forEach(function(role, i) {
+      ScrollTrigger.create({
+        trigger: role,
+        start: "top 55%",
+        end: "bottom 45%",
+        onEnter: function() { focusRole(i); },
+        onEnterBack: function() { focusRole(i); }
+      });
+    });
+
+    function focusRole(activeIdx) {
+      roles.forEach(function(r, i) {
+        gsap.to(r, {
+          opacity: i === activeIdx ? 1 : 0.32,
+          scale:   i === activeIdx ? 1 : 0.98,
+          duration: 0.5,
+          ease: "power2.out"
+        });
+      });
+      /* Sync nav dots if career-nav-item elements exist */
+      document.querySelectorAll(".career-nav-item").forEach(function(item, i) {
+        item.classList.toggle("active", i === activeIdx);
+      });
+    }
+  }());
+
+  /* Career section entry — roles cascade in */
+  gsap.from(".role", {
+    y: 50,
+    opacity: 0,
+    duration: 0.9,
+    stagger: 0.18,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: "#career",
+      start: "top 75%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+     6. STRATEGIC DECISIONS — Card flip-in sequence
+     ══════════════════════════════════════════════════════════════ */
+  gsap.from(".dec-card", {
+    y: 50,
+    rotateX: 8,
+    opacity: 0,
+    duration: 0.85,
+    stagger: 0.16,
+    ease: "power3.out",
+    transformOrigin: "top center",
+    scrollTrigger: {
+      trigger: "#decisions",
+      start: "top 73%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  gsap.from(".dec-num", {
+    scale: 0,
+    opacity: 0,
+    duration: 0.5,
+    stagger: 0.16,
+    ease: "back.out(3)",
+    scrollTrigger: {
+      trigger: "#decisions",
+      start: "top 73%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+     7. APPROACH — Principle items typewriter-stagger
+     ══════════════════════════════════════════════════════════════ */
+  gsap.from(".principle", {
+    x: -32,
+    opacity: 0,
+    duration: 0.75,
+    stagger: 0.14,
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: ".principles",
+      start: "top 78%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* Quote line — gold emphasis scale */
+  gsap.from(".approach-quote", {
+    scale: 0.96,
+    opacity: 0,
+    duration: 1.2,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: "#approach",
+      start: "top 70%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+     8. CAPABILITIES — Grid cluster reveal
+     ══════════════════════════════════════════════════════════════ */
+  gsap.from(".cap", {
+    y: 40,
+    scale: 0.95,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.12,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: "#capabilities",
+      start: "top 74%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  gsap.from(".cap-h", {
+    y: 16,
+    opacity: 0,
+    duration: 0.6,
+    stagger: 0.12,
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: "#capabilities",
+      start: "top 73%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+     9. JOURNEY — Timeline scroll storytelling
+     ══════════════════════════════════════════════════════════════ */
+  gsap.from(".tl-item", {
+    y: 36,
+    opacity: 0,
+    duration: 0.85,
+    stagger: 0.2,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: "#journey",
+      start: "top 76%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* Timeline dot — pulse in */
+  gsap.from(".tl-dot", {
+    scale: 0,
+    opacity: 0,
+    duration: 0.5,
+    stagger: 0.2,
+    ease: "elastic.out(1.2, 0.5)",
+    scrollTrigger: {
+      trigger: "#journey",
+      start: "top 76%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+     10. PROJECTS — Numbered entry
+     ══════════════════════════════════════════════════════════════ */
+  gsap.from(".proj", {
+    y: 44,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.15,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: "#projects",
+      start: "top 76%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+     11. SECTION EYEBROWS — Universal micro-stagger
+         Targets .eyebrow across all sections
+     ══════════════════════════════════════════════════════════════ */
+  gsap.from(".eyebrow", {
+    y: 20,
+    opacity: 0,
+    duration: 0.7,
+    letterSpacing: "0.4em",
+    ease: "power2.out",
+    stagger: 0,
+    scrollTrigger: {
+      trigger: ".eyebrow",
+      start: "top 82%",
+      toggleActions: "play none none none",
+      /* Each eyebrow gets its own trigger via batch */
+    }
+  });
+
+  /* Batch eyebrows for per-element triggers */
+  ScrollTrigger.batch(".eyebrow", {
+    start: "top 84%",
+    onEnter: function(els) {
+      gsap.to(els, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power2.out",
+        overwrite: true
+      });
+    },
+    onLeaveBack: function(els) {
+      gsap.set(els, { opacity: 0, y: 20 });
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+     12. PARALLAX LAYERS — 3 depth tiers on non-mobile
+     ══════════════════════════════════════════════════════════════ */
+  if (!isMobile) {
+    /* Bg tier — section heading displays (slow) */
+    document.querySelectorAll(".scene .display").forEach(function(el) {
+      gsap.to(el, {
+        yPercent: -6,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el.closest(".scene"),
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 2
+        }
+      });
+    });
+
+    /* Mid tier — perf cards, impact rows (normal) */
+    document.querySelectorAll(".perf-card, .dec-card").forEach(function(el) {
+      gsap.to(el, {
+        yPercent: -3,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.2
+        }
+      });
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     13. HOVER MICRO-INTERACTIONS
+         Gold shimmer on KPI cards, lift on impact rows,
+         emphasis pulse on decision cards
+     ══════════════════════════════════════════════════════════════ */
+  (function initHoverMicro() {
+    /* Perf cards — scale + glow lift */
+    document.querySelectorAll(".perf-card").forEach(function(el) {
+      el.addEventListener("mouseenter", function() {
+        gsap.to(el, {
+          y: -6,
+          scale: 1.025,
+          duration: 0.35,
+          ease: "power2.out"
+        });
+        gsap.to(el.querySelector(".perf-val"), {
+          scale: 1.06,
+          color: "#d4b87a",
+          duration: 0.3,
+          ease: "power2.out"
+        });
+      });
+      el.addEventListener("mouseleave", function() {
+        gsap.to(el, {
+          y: 0,
+          scale: 1,
+          duration: 0.4,
+          ease: "power2.out"
+        });
+        gsap.to(el.querySelector(".perf-val"), {
+          scale: 1,
+          color: "",
+          duration: 0.3,
+          ease: "power2.out"
+        });
+      });
+    });
+
+    /* Impact rows — slide right + highlight */
+    document.querySelectorAll(".impact-row").forEach(function(el) {
+      el.addEventListener("mouseenter", function() {
+        gsap.to(el, {
+          x: 6,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+        gsap.to(el.querySelector(".impact-num"), {
+          scale: 1.1,
+          duration: 0.3,
+          ease: "back.out(2)"
+        });
+      });
+      el.addEventListener("mouseleave", function() {
+        gsap.to(el, {
+          x: 0,
+          duration: 0.35,
+          ease: "power2.out"
+        });
+        gsap.to(el.querySelector(".impact-num"), {
+          scale: 1,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+      });
+    });
+
+    /* Decision cards — depth press */
+    document.querySelectorAll(".dec-card").forEach(function(el) {
+      el.addEventListener("mouseenter", function() {
+        gsap.to(el, {
+          y: -8,
+          scale: 1.02,
+          duration: 0.35,
+          ease: "power2.out"
+        });
+      });
+      el.addEventListener("mouseleave", function() {
+        gsap.to(el, {
+          y: 0,
+          scale: 1,
+          duration: 0.4,
+          ease: "power2.out"
+        });
+      });
+    });
+
+    /* Principle items — slide right emphasis */
+    document.querySelectorAll(".principle").forEach(function(el) {
+      el.addEventListener("mouseenter", function() {
+        gsap.to(el.querySelector(".p-label"), {
+          color: "#c8a96a",
+          x: 4,
+          duration: 0.25,
+          ease: "power2.out"
+        });
+      });
+      el.addEventListener("mouseleave", function() {
+        gsap.to(el.querySelector(".p-label"), {
+          color: "",
+          x: 0,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+      });
+    });
+  }());
+
+  /* ══════════════════════════════════════════════════════════════
+     14. CONTACT — Final scene entry
+     ══════════════════════════════════════════════════════════════ */
+  gsap.from("#contact .contact-grid > div", {
+    y: 40,
+    opacity: 0,
+    duration: 0.9,
+    stagger: 0.2,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: "#contact",
+      start: "top 78%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+     15. GLOBAL — Section heading display lines
+         Every .display gets a clip-from-bottom entry
+     ══════════════════════════════════════════════════════════════ */
+  ScrollTrigger.batch(".display", {
+    start: "top 80%",
+    onEnter: function(batch) {
+      gsap.from(batch, {
+        y: 40,
+        opacity: 0,
+        duration: 0.9,
+        stagger: 0.1,
+        ease: "power3.out",
+        overwrite: "auto"
+      });
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+     Safety: refresh ScrollTrigger after all images/fonts load
+     ══════════════════════════════════════════════════════════════ */
+  window.addEventListener("load", function() {
+    ScrollTrigger.refresh();
+  });
+
+}());
+
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════════
      SPEED-DIAL FLOATING ACTION BUTTONS
 ═══════════════════════════════════════════════════════ -->
 <div id="fab-wrap">
