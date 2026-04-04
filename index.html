@@ -1498,502 +1498,203 @@ function countUp(){
   var pts=new THREE.Points(geo,mat);scene.add(pts);
 
   // Grid lines
-  var lg=new THREE.BufferGeometry(),lv=[];
-  for(var j=0;j<20;j++){var x1=(Math.random()-.5)*110,y1=(Math.random()-.5)*75;lv.push(x1,y1,0,x1+(Math.random()-.5)*28,y1+(Math.random()-.5)*18,0);}
-  lg.setAttribute("position",new THREE.BufferAttribute(new Float32Array(lv),3));
-  scene.add(new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0xc8a96a,transparent:true,opacity:.06})));
-
-  var mouse={x:0,y:0};
-  window.addEventListener("mousemove",function(e){mouse.x=(e.clientX/innerWidth-.5)*.5;mouse.y=(e.clientY/innerHeight-.5)*.4;},{passive:true});
-
-  function resize(){var p=canvas.parentElement;renderer.setSize(p.offsetWidth,p.offsetHeight,false);camera.aspect=p.offsetWidth/p.offsetHeight;camera.updateProjectionMatrix();}
-  resize();new ResizeObserver(resize).observe(canvas.parentElement);
-
-  var t=0;
-  (function anim(){requestAnimationFrame(anim);t+=.003;
-    var a=geo.attributes.position.array;
-    for(var i=0;i<COUNT;i++){a[i*3]+=vel[i].x;a[i*3+1]+=vel[i].y;if(Math.abs(a[i*3])>70)vel[i].x*=-1;if(Math.abs(a[i*3+1])>45)vel[i].y*=-1;}
-    geo.attributes.position.needsUpdate=true;
-    camera.position.x+=(mouse.x*5-camera.position.x)*.04;
-    camera.position.y+=(-mouse.y*4-camera.position.y)*.04;camera.lookAt(0,0,0);
-    pts.rotation.y=t*.04;renderer.render(scene,camera);
-  })();
-})();
-
-/* ═══════════════════════════════════════════════════════
-   THREE.JS — GLOBE (operational footprint)
+ /* ═══════════════════════════════════════════════════════
+   HERO NUMBERS — particle animation + globe
 ═══════════════════════════════════════════════════════ */
-(function initGlobe(){
-  var canvas=document.getElementById("globe-canvas");
-  if(!canvas||typeof THREE==="undefined")return;
-  var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  var scene=new THREE.Scene(),w=canvas.offsetWidth||500,h=canvas.offsetHeight||500;
-  var camera=new THREE.PerspectiveCamera(45,w/h,.1,500);camera.position.z=4.5;
-  renderer.setSize(w,h,false);
+document.addEventListener("DOMContentLoaded", function(){
 
-  // Wireframe globe
-  var globe=new THREE.Mesh(new THREE.SphereGeometry(1.8,48,32),new THREE.MeshBasicMaterial({color:0xc8a96a,wireframe:true,transparent:true,opacity:.1}));
-  scene.add(globe);
-  scene.add(new THREE.Mesh(new THREE.SphereGeometry(1.76,32,32),new THREE.MeshBasicMaterial({color:0x080a0f,transparent:true,opacity:.95})));
+  // ======== PARTICLES ========
+  const canvas = document.getElementById("hero-canvas");
+  if(canvas && typeof THREE !== "undefined"){
+    const renderer = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, canvas.offsetWidth/canvas.offsetHeight, 0.1, 500);
+    camera.position.z = 4.5;
 
-  function latLon(lat,lon,r){var phi=(90-lat)*Math.PI/180,theta=(lon+180)*Math.PI/180;return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(theta),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(theta));}
+    // Particle points
+    const COUNT = 300;
+    const geo = new THREE.BufferGeometry();
+    const pos = new Float32Array(COUNT*3);
+    const vel = [];
+    for(let i=0;i<COUNT;i++){
+      pos[i*3] = (Math.random()-.5)*70;
+      pos[i*3+1] = (Math.random()-.5)*45;
+      pos[i*3+2] = (Math.random()-.5)*20;
+      vel.push({x:(Math.random()-.5)*.02, y:(Math.random()-.5)*.02});
+    }
+    geo.setAttribute("position", new THREE.BufferAttribute(pos,3));
+    const pts = new THREE.Points(geo, new THREE.PointsMaterial({color:0xc8a96a, size:.03, transparent:true, opacity:.25}));
+    scene.add(pts);
 
-  var locs=[{lat:14,lon:27,c:0xc8a96a,s:.05},{lat:22,lon:79,c:0xc8a96a,s:.04},{lat:25,lon:55,c:0x6aabb4,s:.035}];
-  var rings=[];
-  locs.forEach(function(loc){
-    var v=latLon(loc.lat,loc.lon,1.82);
-    var dot=new THREE.Mesh(new THREE.SphereGeometry(loc.s,8,8),new THREE.MeshBasicMaterial({color:loc.c}));dot.position.copy(v);scene.add(dot);
-    var ring=new THREE.Mesh(new THREE.RingGeometry(loc.s*1.5,loc.s*2.5,12),new THREE.MeshBasicMaterial({color:loc.c,transparent:true,opacity:.4,side:THREE.DoubleSide}));
-    ring.position.copy(v);ring.lookAt(new THREE.Vector3(0,0,0));ring.userData.pulse=Math.random()*Math.PI*2;
-    scene.add(ring);rings.push(ring);
-  });
+    // Animation loop
+    let t=0;
+    const mouse = {x:0,y:0};
+    window.addEventListener("mousemove", e => {
+      mouse.x = (e.clientX/innerWidth-.5)*.5;
+      mouse.y = (e.clientY/innerHeight-.5)*.4;
+    }, {passive:true});
 
-  function addArc(a,b,c){var v1=latLon(a[0],a[1],1.85),v2=latLon(b[0],b[1],1.85),mid=v1.clone().add(v2).multiplyScalar(.5).normalize().multiplyScalar(2.25);
-    var curve=new THREE.QuadraticBezierCurve3(v1,mid,v2),pts=curve.getPoints(40),g=new THREE.BufferGeometry().setFromPoints(pts);
-    scene.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:c,transparent:true,opacity:.2})));}
-  addArc([14,27],[22,79],0xc8a96a);addArc([14,27],[25,55],0x6aabb4);addArc([22,79],[25,55],0x6aabb4);
+    function resize(){
+      const p = canvas.parentElement;
+      renderer.setSize(p.offsetWidth, p.offsetHeight, false);
+      camera.aspect = p.offsetWidth/p.offsetHeight;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    new ResizeObserver(resize).observe(canvas.parentElement);
 
-  var sa=new Float32Array(300*3);for(var i=0;i<300;i++){var r=2.5+Math.random()*1.5,p=Math.random()*Math.PI*2,theta=Math.random()*Math.PI;sa[i*3]=r*Math.sin(theta)*Math.cos(p);sa[i*3+1]=r*Math.cos(theta);sa[i*3+2]=r*Math.sin(theta)*Math.sin(p);}
-  var sg=new THREE.BufferGeometry();sg.setAttribute("position",new THREE.BufferAttribute(sa,3));
-  scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0x8899aa,size:.015,transparent:true,opacity:.35})));
-
-  function resize(){var w2=canvas.offsetWidth,h2=canvas.offsetHeight;if(w2<1||h2<1)return;renderer.setSize(w2,h2,false);camera.aspect=w2/h2;camera.updateProjectionMatrix();}
-  resize();new ResizeObserver(resize).observe(canvas);
-
-  var t=0,targetRot=0,curRot=0;
-  window.addEventListener("mousemove",function(e){targetRot=(e.clientX/innerWidth-.5)*.3;});
-  (function loop(){requestAnimationFrame(loop);t+=.005;curRot+=(targetRot-curRot)*.02;
-    globe.rotation.y=t+curRot;
-    rings.forEach(function(r){r.userData.pulse+=.04;r.material.opacity=.2+.3*Math.abs(Math.sin(r.userData.pulse));var s=1+.25*Math.abs(Math.sin(r.userData.pulse));r.scale.setScalar(s);r.rotation.y=globe.rotation.y;});
-    renderer.render(scene,camera);
-  })();
-})();
-
-/* ═══════════════════════════════════════════════════════
-   GSAP SCROLL ANIMATIONS
-═══════════════════════════════════════════════════════ */
-(function initGSAP(){
-  if(typeof gsap==="undefined"||typeof ScrollTrigger==="undefined")return;
-  gsap.registerPlugin(ScrollTrigger);
-
-  // Hero name depth effect on scroll
-  gsap.to(".hero-name,.hero-name-alt",{
-    scale:.97,opacity:.6,
-    scrollTrigger:{trigger:"#hero",start:"top top",end:"bottom top",scrub:1}
-  });
-  gsap.to(".hero-inner",{
-    y:-60,
-    scrollTrigger:{trigger:"#hero",start:"top top",end:"bottom top",scrub:1}
-  });
-
-  // Performance cards stagger
-  gsap.fromTo(".perf-card",{y:40,opacity:0},{y:0,opacity:1,stagger:.08,duration:.8,ease:"power2.out",
-    scrollTrigger:{trigger:"#performance",start:"top 75%"}});
-
-  // Impact rows
-  gsap.fromTo(".impact-row",{x:-24,opacity:0},{x:0,opacity:1,stagger:.1,duration:.7,ease:"power2.out",
-    scrollTrigger:{trigger:"#impact",start:"top 75%"}});
-
-  // Decision cards
-  gsap.fromTo(".dec-card",{y:30,opacity:0},{y:0,opacity:1,stagger:.1,duration:.7,ease:"power2.out",
-    scrollTrigger:{trigger:"#decisions",start:"top 75%"}});
-
-  // Timeline items
-  gsap.fromTo(".tl-item",{y:20,opacity:0},{y:0,opacity:1,stagger:.1,duration:.6,ease:"power2.out",
-    scrollTrigger:{trigger:"#journey",start:"top 75%"}});
-
-  // Projects
-  gsap.fromTo(".proj",{y:24,opacity:0},{y:0,opacity:1,stagger:.1,duration:.6,ease:"power2.out",
-    scrollTrigger:{trigger:"#projects",start:"top 75%"}});
-
-  // Capabilities
-  gsap.fromTo(".cap",{y:24,opacity:0},{y:0,opacity:1,stagger:.08,duration:.6,ease:"power2.out",
-    scrollTrigger:{trigger:"#capabilities",start:"top 75%"}});
-
-  // Cinematic zoom into sections (subtle)
-  document.querySelectorAll(".scene").forEach(function(section){
-    gsap.fromTo(section.querySelector(".container")||section,{scale:.99,opacity:.85},{scale:1,opacity:1,duration:1,ease:"power1.out",
-      scrollTrigger:{trigger:section,start:"top 80%",toggleActions:"play none none reverse"}});
-  });
-})();
-
-/* ═══════════════════════════════════════════════════════
-   SCROLL EFFECTS — NAV, PROGRESS, AVAIL STRIP
-═══════════════════════════════════════════════════════ */
-window.addEventListener("scroll",function(){
-  var y=scrollY,h=document.body.scrollHeight-innerHeight;
-  document.getElementById("progress").style.transform="scaleX("+(y/h)+")";
-  document.getElementById("nav").classList.toggle("scrolled",y>24);
-  var strip=document.getElementById("av-strip");if(strip)strip.style.opacity=y>60?"0":"1";
-},{passive:true});
-
-/* ═══════════════════════════════════════════════════════
-   INTERSECTION OBSERVER — REVEAL ELEMENTS
-═══════════════════════════════════════════════════════ */
-var io=new IntersectionObserver(function(entries){
-  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("visible");io.unobserve(e.target);}});
-},{threshold:.07,rootMargin:"0px 0px -40px 0px"});
-document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
-
-/* ═══════════════════════════════════════════════════════
-   CUSTOM CURSOR
-═══════════════════════════════════════════════════════ */
-(function(){
-  var cur=document.getElementById("cursor"),trail=document.getElementById("cursor-trail");
-  if(!cur||!trail)return;
-  var mx=0,my=0,tx=0,ty=0;
-  window.addEventListener("mousemove",function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx+"px";cur.style.top=my+"px";});
-  (function loop(){requestAnimationFrame(loop);tx+=(mx-tx)*.1;ty+=(my-ty)*.1;trail.style.left=tx+"px";trail.style.top=ty+"px";})();
-  document.querySelectorAll("a,button,.perf-card,.impact-row,.dec-card,.role,.tl-item").forEach(function(el){
-    el.addEventListener("mouseenter",function(){cur.style.width="16px";cur.style.height="16px";trail.style.width="60px";trail.style.height="60px";});
-    el.addEventListener("mouseleave",function(){cur.style.width="8px";cur.style.height="8px";trail.style.width="40px";trail.style.height="40px";});
-  });
-})();
-
-/* ═══════════════════════════════════════════════════════
-   CAREER NAV (sticky sidebar active state)
-═══════════════════════════════════════════════════════ */
-(function(){
-  var navItems=document.querySelectorAll(".career-nav-item");
-  var roles=["r1","r2","r3","r4"];
-  navItems.forEach(function(item){
-    item.addEventListener("click",function(){
-      var target=document.getElementById(item.dataset.target);
-      if(target)target.scrollIntoView({behavior:"smooth",block:"start"});
-    });
-  });
-  var roleEls=roles.map(function(id){return document.getElementById(id);});
-  window.addEventListener("scroll",function(){
-    var active=0;
-    roleEls.forEach(function(el,i){if(el&&el.getBoundingClientRect().top<200)active=i;});
-    navItems.forEach(function(item,i){item.classList.toggle("active",i===active);});
-  },{passive:true});
-})();
-
-/* ═══════════════════════════════════════════════════════
-   ADMIN PANEL
-═══════════════════════════════════════════════════════ */
-function closePanel(){document.getElementById("admin-panel").classList.remove("open");}
-document.getElementById("admin-btn").addEventListener("click",function(){document.getElementById("admin-panel").classList.toggle("open");});
-document.getElementById("ap-close1").addEventListener("click",closePanel);
-document.getElementById("ap-close2").addEventListener("click",closePanel);
-
-function tryUnlock(){
-  var pw=document.getElementById("ap-pw").value,cfg=getConfig();
-  if(pw===cfg.password){
-    document.getElementById("ap-lock-wrap").style.display="none";
-    document.getElementById("ap-editor").style.display="block";
-  }else{document.getElementById("ap-err").style.display="block";}
-}
-document.getElementById("ap-unlock-btn").addEventListener("click",tryUnlock);
-document.getElementById("ap-pw").addEventListener("keydown",function(e){if(e.key==="Enter")tryUnlock();});
-
-document.querySelectorAll(".ap-tab").forEach(function(t){
-  t.addEventListener("click",function(){
-    document.querySelectorAll(".ap-tab,.ap-tc").forEach(function(x){x.classList.remove("on");});
-    t.classList.add("on");
-    var tc=document.getElementById("tc-"+t.dataset.t);if(tc)tc.classList.add("on");
-  });
-});
-
-document.getElementById("ap-save-btn").addEventListener("click",async function(){
-  var btn=document.getElementById("ap-save-btn"),msg=document.getElementById("ap-msg");
-  btn.disabled=true;btn.textContent="Saving…";
-  msg.className="ap-msg";msg.style.display="none";
-  function v(id){var e=document.getElementById(id);return e?e.value.trim():"";}
-  var workerUrl=v("f-worker"),pw=v("f-pw")||getConfig().password;
-  var data={
-    name:v("f-name"),role:v("f-role"),sig:v("f-sig"),phil:v("f-phil"),av:v("f-av"),
-    email:v("f-email"),phone:v("f-phone"),loc:v("f-loc"),wa:v("f-wa"),li:v("f-li"),cv:v("f-cv"),
-    s1v:v("f-s1v"),s1l:v("f-s1l"),s2v:v("f-s2v"),s2l:v("f-s2l"),
-    s3v:v("f-s3v"),s3l:v("f-s3l"),s4v:v("f-s4v"),s4l:v("f-s4l"),
-    password:getConfig().password,workerUrl:workerUrl
-  };
-  applyData(data);
-  try{localStorage.setItem("mm_cinematic",JSON.stringify(data));}catch(e){}
-  if(workerUrl){
-    var ok=await(async function(){
-      try{var r=await fetch(workerUrl+"/content",{method:"POST",headers:{"Content-Type":"application/json","X-Admin-Password":pw},body:JSON.stringify(data)});return r.ok;}catch(e){return false;}
+    (function anim(){
+      requestAnimationFrame(anim);
+      t += .003;
+      const a = geo.attributes.position.array;
+      for(let i=0;i<COUNT;i++){
+        a[i*3] += vel[i].x;
+        a[i*3+1] += vel[i].y;
+        if(Math.abs(a[i*3])>70) vel[i].x*=-1;
+        if(Math.abs(a[i*3+1])>45) vel[i].y*=-1;
+      }
+      geo.attributes.position.needsUpdate=true;
+      camera.position.x += (mouse.x*5 - camera.position.x)*.04;
+      camera.position.y += (-mouse.y*4 - camera.position.y)*.04;
+      camera.lookAt(0,0,0);
+      pts.rotation.y = t*.04;
+      renderer.render(scene, camera);
     })();
-    if(ok){msg.textContent="\u2713 Saved to cloud \u2014 all visitors see this instantly.";msg.className="ap-msg ok";showBadge("\u2713 Saved to cloud");}
-    else{msg.textContent="\u26a0 Cloud save failed. Check Worker URL. Saved locally as fallback.";msg.className="ap-msg err";showBadge("\u26a0 Cloud save failed",true);}
-  }else{
-    msg.textContent="\u26a0 Saved locally only. Add Cloudflare Worker URL in Links tab for permanent saves.";
-    msg.className="ap-msg err";showBadge("\u26a0 Local only \u2014 add Worker URL",true);
   }
-  btn.disabled=false;btn.textContent="\uD83D\uDCBE Save All Changes";
-});
 
-/* ═══════════════════════════════════════════════════════
-   BADGE
-═══════════════════════════════════════════════════════ */
-function showBadge(msg,err){
-  var b=document.getElementById("badge");
-  b.textContent=msg;
-  b.style.cssText="position:fixed;bottom:80px;right:28px;z-index:800;padding:9px 16px;font-size:.64rem;font-weight:500;letter-spacing:.06em;pointer-events:none;font-family:'Cormorant Garamond',serif;border:1px solid "+(err?"rgba(248,113,113,.3)":"rgba(200,169,106,.3)")+";background:"+(err?"rgba(248,113,113,.08)":"rgba(200,169,106,.08)")+";color:"+(err?"#f87171":"#c8a96a")+";";
-  b.className="show";clearTimeout(b._t);
-  b._t=setTimeout(function(){b.className="";},5000);
-}
+  // ======== GLOBE ========
+  const globeCanvas = document.getElementById("globe-canvas");
+  if(globeCanvas && typeof THREE !== "undefined"){
+    const renderer = new THREE.WebGLRenderer({canvas:globeCanvas, alpha:true, antialias:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, globeCanvas.offsetWidth/globeCanvas.offsetHeight, .1, 500);
+    camera.position.z = 4.5;
+    renderer.setSize(globeCanvas.offsetWidth, globeCanvas.offsetHeight, false);
 
-/* ═══════════════════════════════════════════════════════
-   CONFIG LOAD
-═══════════════════════════════════════════════════════ */
-function getConfig(){
-  var saved={};
-  try{var s=localStorage.getItem("mm_cinematic");if(s)saved=JSON.parse(s);}catch(e){}
-  return Object.assign({},DEF,CFG,saved);
-}
+    // Wireframe globe
+    const globe = new THREE.Mesh(new THREE.SphereGeometry(1.8,48,32), new THREE.MeshBasicMaterial({color:0xc8a96a, wireframe:true, transparent:true, opacity:.1}));
+    scene.add(globe);
+    scene.add(new THREE.Mesh(new THREE.SphereGeometry(1.76,32,32), new THREE.MeshBasicMaterial({color:0x080a0f, transparent:true, opacity:.95})));
 
-/* ═══════════════════════════════════════════════════════
-   BOOT — load from Worker or localStorage fallback
-═══════════════════════════════════════════════════════ */
-async function boot(){
-  var cfg=getConfig();
-  if(cfg.workerUrl){
-    try{
-      var r=await fetch(cfg.workerUrl+"/content",{cache:"no-cache"});
-      if(r.ok){
-        var cloud=await r.json();
-        var merged=Object.assign({},cfg,cloud);
-        try{localStorage.setItem("mm_cinematic",JSON.stringify(merged));}catch(e){}
-        applyData(merged);
-        console.log("[Portfolio] \u2713 Loaded from Cloudflare KV");
-        return;
-      }
-    }catch(e){}
-  }
-  applyData(cfg);
-}
-
-document.getElementById("d-year").textContent=new Date().getFullYear();
-boot();
-
-/* ═══════════════════════════════════════════════════════
-   APPLY CONTENT — alias for backwards compatibility
-   (boot() calls applyContent; original used applyData)
-═══════════════════════════════════════════════════════ */
-function applyContent(d){ applyData(d); }
-
-/* ═══════════════════════════════════════════════════════
-   PROGRESSIVE ENHANCEMENT — mark JS as ready
-═══════════════════════════════════════════════════════ */
-document.documentElement.classList.add('js-ready');
-
-/* ═══════════════════════════════════════════════════════
-   FALLBACK SAFETY — force-reveal after 2.5s
-═══════════════════════════════════════════════════════ */
-setTimeout(function(){
-  document.querySelectorAll('.reveal:not(.visible)').forEach(function(el){
-    el.classList.add('visible');
-  });
-}, 2500);
-
-/* ═══════════════════════════════════════════════════════
-   DIGITAL BUSINESS CARD
-═══════════════════════════════════════════════════════ */
-(function initCard(){
-  var btn  = document.getElementById('card-btn');
-  var card = document.getElementById('bcard-modal');
-  var close= document.getElementById('bcard-close');
-  var dlBtn= document.getElementById('bcard-dl');
-  var copyBtn = document.getElementById('bcard-copy');
-  if(!btn||!card) return;
-
-  btn.addEventListener('click', function(){
-    card.classList.toggle('open');
-    if(card.classList.contains('open')) buildQR();
-  });
-  if(close) close.addEventListener('click', function(){ card.classList.remove('open'); });
-  card.addEventListener('click', function(e){ if(e.target===card) card.classList.remove('open'); });
-
-  // vCard download
-  if(dlBtn) dlBtn.addEventListener('click', function(){
-    var cfg = getConfig();
-    var vc  = [
-      'BEGIN:VCARD','VERSION:3.0',
-      'FN:Mohamed Magdoom',
-      'TITLE:Fuel Retail & Multi-Site Operations Executive',
-      'ORG:Mount Meru Petroleum Limited',
-      'TEL;TYPE=CELL:+260760634300',
-      'TEL;TYPE=CELL:+917550270450',
-      'EMAIL:'+( cfg.email||'mohamed.magdoom@gmail.com'),
-      'URL:'+(cfg.li||'https://linkedin.com/in/mohamed-magdoom'),
-      'ADR:;;Lusaka;Zambia',
-      'NOTE:USD 240M P&L · 90 Stations · 1500+ People',
-      'END:VCARD'
-    ].join('
-');
-    var blob = new Blob([vc],{type:'text/vcard'});
-    var a    = document.createElement('a');
-    a.href   = URL.createObjectURL(blob);
-    a.download='Mohamed_Magdoom.vcf';
-    a.click();
-  });
-
-  // Copy link
-  if(copyBtn) copyBtn.addEventListener('click', function(){
-    navigator.clipboard.writeText('https://mohamedmagdoom.pages.dev')
-      .then(function(){ copyBtn.textContent='✓ Copied!'; setTimeout(function(){ copyBtn.textContent='Copy Link'; },2000); })
-      .catch(function(){ copyBtn.textContent='Copy: mohamedmagdoom.pages.dev'; });
-  });
-
-  // Simple QR (text fallback — no external lib needed)
-  function buildQR(){
-    var el = document.getElementById('bcard-qr');
-    if(!el||el.dataset.built) return;
-    el.dataset.built = '1';
-    // Display URL as styled text block (no external QR lib dependency)
-    el.innerHTML = '<div style="font-size:.55rem;letter-spacing:.04em;word-break:break-all;color:#c8a96a;padding:8px;border:1px solid rgba(200,169,106,.3);line-height:1.6">mohamedmagdoom<br>.pages.dev</div>';
-  }
-})();
-
-/* ═══════════════════════════════════════════════════════
-   SPEED-DIAL FLOATING BUTTONS
-═══════════════════════════════════════════════════════ */
-(function initFAB(){
-  var toggle = document.getElementById('fab-toggle');
-  var menu   = document.getElementById('fab-menu');
-  if(!toggle||!menu) return;
-  var open = false;
-  toggle.addEventListener('click', function(){
-    open = !open;
-    menu.classList.toggle('open', open);
-    toggle.setAttribute('aria-expanded', open);
-    toggle.innerHTML = open ? '✕' : '⚡';
-  });
-  // Close on outside click
-  document.addEventListener('click', function(e){
-    if(open && !toggle.contains(e.target) && !menu.contains(e.target)){
-      open = false;
-      menu.classList.remove('open');
-      toggle.innerHTML = '⚡';
+    function latLon(lat,lon,r){
+      const phi = (90-lat)*Math.PI/180;
+      const theta = (lon+180)*Math.PI/180;
+      return new THREE.Vector3(-r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
     }
-  });
-})();
 
-/* ═══════════════════════════════════════════════════════
-   AI CHAT WIDGET
-═══════════════════════════════════════════════════════ */
-(function initChat(){
-  var btn   = document.getElementById('chat-btn');
-  var panel = document.getElementById('chat-panel');
-  var close = document.getElementById('chat-close');
-  var input = document.getElementById('chat-input');
-  var send  = document.getElementById('chat-send');
-  var msgs  = document.getElementById('chat-msgs');
-  if(!btn||!panel) return;
+    const locs = [{lat:14,lon:27,c:0xc8a96a,s:.05},{lat:22,lon:79,c:0xc8a96a,s:.04},{lat:25,lon:55,c:0x6aabb4,s:.035}];
+    const rings = [];
+    locs.forEach(loc=>{
+      const v = latLon(loc.lat, loc.lon, 1.82);
+      const dot = new THREE.Mesh(new THREE.SphereGeometry(loc.s,8,8), new THREE.MeshBasicMaterial({color:loc.c}));
+      dot.position.copy(v); scene.add(dot);
+      const ring = new THREE.Mesh(new THREE.RingGeometry(loc.s*1.5, loc.s*2.5,12), new THREE.MeshBasicMaterial({color:loc.c, transparent:true, opacity:.4, side:THREE.DoubleSide}));
+      ring.position.copy(v); ring.lookAt(new THREE.Vector3(0,0,0)); ring.userData.pulse = Math.random()*Math.PI*2;
+      scene.add(ring); rings.push(ring);
+    });
 
-  // Persona context
-  var CONTEXT = [
-    'You are Mohamed Magdoom\'s portfolio assistant. Answer questions about his career, experience, and background concisely and professionally.',
-    'Key facts: USD 240M P&L, 90 retail stations, 20M litres/month, 1500+ employees, 12+ years, Mount Meru Petroleum Zambia (current), Reliance BP India (6 years), Papa Johns Saudi Arabia, McDonalds India.',
-    'He targets GM, Country Manager, COO roles in Sub-Saharan Africa, GCC, UAE. Email: mohamed.magdoom@gmail.com. LinkedIn: linkedin.com/in/mohamed-magdoom.',
-    'Keep answers under 3 sentences. Be factual. If asked anything unrelated to Mohamed or his career, politely redirect.'
-  ].join(' ');
+    window.addEventListener("mousemove", e => { targetRot = (e.clientX/innerWidth-.5)*.3; });
+    let t2=0, targetRot=0, curRot=0;
 
-  var history = [];
-
-  btn.addEventListener('click', function(){
-    panel.classList.toggle('open');
-    if(panel.classList.contains('open') && msgs.children.length === 0){
-      addMsg('assistant', 'Hi! I can answer questions about Mohamed\'s career, experience, and background. What would you like to know?');
+    function resizeGlobe(){
+      const w2=globeCanvas.offsetWidth,h2=globeCanvas.offsetHeight;
+      if(w2<1||h2<1) return;
+      renderer.setSize(w2,h2,false);
+      camera.aspect = w2/h2; camera.updateProjectionMatrix();
     }
-  });
-  if(close) close.addEventListener('click', function(){ panel.classList.remove('open'); });
+    resizeGlobe();
+    new ResizeObserver(resizeGlobe).observe(globeCanvas);
 
-  function addMsg(role, text){
-    var d = document.createElement('div');
-    d.className = 'cmsg cmsg-' + role;
-    d.textContent = text;
-    msgs.appendChild(d);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  function addTyping(){
-    var d = document.createElement('div');
-    d.className = 'cmsg cmsg-assistant cmsg-typing';
-    d.id = 'typing-indicator';
-    d.innerHTML = '<span></span><span></span><span></span>';
-    msgs.appendChild(d);
-    msgs.scrollTop = msgs.scrollHeight;
-    return d;
-  }
-
-  async function sendMsg(){
-    var text = (input.value||'').trim();
-    if(!text) return;
-    input.value = '';
-    send.disabled = true;
-    addMsg('user', text);
-    history.push({role:'user', content:text});
-    var typing = addTyping();
-
-    try{
-      var resp = await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({
-          model:'claude-sonnet-4-20250514',
-          max_tokens:300,
-          system: CONTEXT,
-          messages: history.slice(-6)
-        })
+    (function loop(){
+      requestAnimationFrame(loop);
+      t2+=.005; curRot+=(targetRot-curRot)*.02;
+      globe.rotation.y = t2+curRot;
+      rings.forEach(r=>{
+        r.userData.pulse+=.04;
+        r.material.opacity = .2 + .3*Math.abs(Math.sin(r.userData.pulse));
+        const s=1+.25*Math.abs(Math.sin(r.userData.pulse));
+        r.scale.setScalar(s); r.rotation.y = globe.rotation.y;
       });
-      typing.remove();
-      if(resp.ok){
-        var data = await resp.json();
-        var reply = (data.content&&data.content[0]&&data.content[0].text)||'I\'m sorry, I couldn\'t process that.';
-        history.push({role:'assistant', content:reply});
-        addMsg('assistant', reply);
+      renderer.render(scene, camera);
+    })();
+  }
+
+  // ======== ADMIN PANEL ========
+  (function(){
+    // Close panel
+    function closePanel(){ const panel = document.getElementById("admin-panel"); if(panel) panel.classList.remove("open"); }
+    const adminBtn = document.getElementById("admin-btn");
+    if(adminBtn) adminBtn.addEventListener("click", ()=>{ const panel = document.getElementById("admin-panel"); if(panel) panel.classList.toggle("open"); });
+
+    ["ap-close1","ap-close2"].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.addEventListener("click", closePanel);
+    });
+
+    function tryUnlock(){
+      const pw = document.getElementById("ap-pw")?.value || "";
+      const cfg = getConfig();
+      if(pw === cfg.password){
+        const wrap=document.getElementById("ap-lock-wrap");
+        const editor=document.getElementById("ap-editor");
+        if(wrap) wrap.style.display="none";
+        if(editor) editor.style.display="block";
       } else {
-        // Graceful offline fallback — answer from hardcoded knowledge
-        fallbackAnswer(text, typing);
+        const err=document.getElementById("ap-err"); if(err) err.style.display="block";
       }
-    }catch(e){
-      typing.remove();
-      fallbackAnswer(text);
     }
-    send.disabled = false;
-    input.focus();
-  }
+    const unlockBtn = document.getElementById("ap-unlock-btn");
+    if(unlockBtn) unlockBtn.addEventListener("click", tryUnlock);
+    const apPw = document.getElementById("ap-pw");
+    if(apPw) apPw.addEventListener("keydown", e=>{if(e.key==="Enter") tryUnlock();});
 
-  // Offline fallback — keyword-based smart replies
-  function fallbackAnswer(q){
-    var lower = q.toLowerCase();
-    var answer;
-    if(/p.?l|revenue|240|profit|financ/.test(lower))
-      answer = 'Mohamed owns a USD 240M annual P&L at Mount Meru Petroleum — full OPEX/CAPEX accountability across 90 retail stations and 20 million litres per month.';
-    else if(/team|people|employee|staff|1500/.test(lower))
-      answer = 'He leads 1,500+ people across Operations, Sales, Finance, HR, and Compliance — maintaining 100% regulatory compliance throughout.';
-    else if(/market.share|17/.test(lower))
-      answer = 'He held 17.5% retail market share for 32 consecutive months — the longest sustained record in territory history, built through commercial strategy, not pricing.';
-    else if(/opex|cost|saving|30%|reduction/.test(lower))
-      answer = 'He achieved a 30% OPEX reduction saving USD 3.6M+ annually — renegotiated 15+ vendor contracts, rebuilt SOPs, and deployed process automation across all 90 stations.';
-    else if(/zambia|india|saudi|country|location|where/.test(lower))
-      answer = 'Mohamed is based in Lusaka, Zambia. His career spans Zambia (Mount Meru Petroleum), India (Reliance BP, McDonald\'s), and Saudi Arabia (Papa John\'s) — 3 countries across 12+ years.';
-    else if(/role|title|position|job/.test(lower))
-      answer = 'His current role is Head of Sales & Operations (AGM Level) at Mount Meru Petroleum Limited. He targets GM, Country Manager, and COO roles across Sub-Saharan Africa, GCC, and UAE.';
-    else if(/contact|email|reach|linkedin|phone/.test(lower))
-      answer = 'You can reach Mohamed at mohamed.magdoom@gmail.com, +260 760 634 300, or via LinkedIn: linkedin.com/in/mohamed-magdoom.';
-    else if(/fleet|card|b2b/.test(lower))
-      answer = 'He built the B2B Fleet Card Programme from zero — full go-to-market owned — generating a 30% fuel sales increase within 6 months of launch.';
-    else if(/education|degree|university/.test(lower))
-      answer = 'Mohamed holds a BSc in Hospitality & Hotel Administration (First Class, 75%) from Tamil Nadu Open University and a Diploma in Hotel Management (Distinction, 85%) from EMPEE Institute — both 2012.';
-    else
-      answer = 'I\'m Mohamed\'s portfolio assistant. You can ask me about his career experience, key achievements, P&L ownership, team leadership, or how to contact him.';
-    addMsg('assistant', answer);
-    history.push({role:'assistant', content:answer});
-  }
+    // Tabs
+    document.querySelectorAll(".ap-tab").forEach(tab=>{
+      tab.addEventListener("click", function(){
+        document.querySelectorAll(".ap-tab,.ap-tc").forEach(x=>x.classList.remove("on"));
+        tab.classList.add("on");
+        const tc = document.getElementById("tc-"+tab.dataset.t);
+        if(tc) tc.classList.add("on");
+      });
+    });
 
-  send.addEventListener('click', sendMsg);
-  input.addEventListener('keydown', function(e){
-    if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMsg(); }
-  });
-})();
+    // Save
+    const saveBtn = document.getElementById("ap-save-btn");
+    if(saveBtn){
+      saveBtn.addEventListener("click", async function(){
+        saveBtn.disabled = true; saveBtn.textContent = "Saving…";
+        const msg=document.getElementById("ap-msg"); if(msg){ msg.style.display="none"; msg.className="ap-msg"; }
 
-</script>
+        function v(id){ return document.getElementById(id)?.value.trim()||""; }
+        const cfg = getConfig();
+        const workerUrl = v("f-worker");
+        const pw = v("f-pw")||cfg.password;
+        const data = {
+          name:v("f-name"), role:v("f-role"), sig:v("f-sig"), phil:v("f-phil"), av:v("f-av"),
+          email:v("f-email"), phone:v("f-phone"), loc:v("f-loc"), wa:v("f-wa"), li:v("f-li"), cv:v("f-cv"),
+          s1v:v("f-s1v"), s1l:v("f-s1l"), s2v:v("f-s2v"), s2l:v("f-s2l"),
+          s3v:v("f-s3v"), s3l:v("f-s3l"), s4v:v("f-s4v"), s4l:v("f-s4l"),
+          password: cfg.password, workerUrl:workerUrl
+        };
+        applyData(data);
+        try{ localStorage.setItem("mm_cinematic", JSON.stringify(data)); } catch(e){}
 
+        if(workerUrl){
+          let ok=false;
+          try{
+            const r = await fetch(workerUrl+"/content",{method:"POST",headers:{"Content-Type":"application/json","X-Admin-Password":pw},body:JSON.stringify(data)});
+            ok = r.ok;
+          } catch(e){ ok=false; }
+          if(msg){ msg.textContent = ok ? "✓ Saved to cloud — all visitors see this instantly." : "⚠ Cloud save failed. Saved locally as fallback."; msg.className = ok?"ap-msg ok":"ap-msg err"; msg.style.display="block"; showBadge(ok?"✓ Saved to cloud":"⚠ Cloud save failed",!ok); }
+        } else if(msg){ msg.textContent="⚠ Saved locally only. Add Worker URL for cloud."; msg.className="ap-msg err"; msg.style.display="block"; showBadge("⚠ Local only — add Worker URL",true);}
+        saveBtn.disabled=false; saveBtn.textContent="💾 Save All Changes";
+      });
+    }
+
+  })();
+
+});
 <!-- ═══════════════════════════════════════════════════════
      SPEED-DIAL FLOATING ACTION BUTTONS
 ═══════════════════════════════════════════════════════ -->
