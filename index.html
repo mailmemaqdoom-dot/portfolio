@@ -1810,31 +1810,27 @@ setTimeout(function(){
   // vCard download
   if(dlBtn) dlBtn.addEventListener('click', function(){
     var cfg = getConfig();
-    var vc  = [
-      'BEGIN:VCARD','VERSION:3.0',
+    var vc = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
       'FN:Mohamed Magdoom',
       'TITLE:Fuel Retail & Multi-Site Operations Executive',
       'ORG:Mount Meru Petroleum Limited',
       'TEL;TYPE=CELL:+260760634300',
       'TEL;TYPE=CELL:+917550270450',
-      'EMAIL:'+( cfg.email||'mohamed.magdoom@gmail.com'),
-      var vc = [
-  'BEGIN:VCARD',
-  'VERSION:3.0',
-  'FN:Mohamed Magdoom',
-  'ORG:Mount Meru Zambia Limited',
-  'TITLE:Assistant General Manager',
-  'URL:'+(cfg.li||'https://linkedin.com/in/mohamed-magdoom'),
-  'ADR:;;Lusaka;Zambia',
-  'NOTE:USD 240M P&L · 90 Stations · 1500+ People',
-  'END:VCARD'
-].join('');   // ✅ Removed the extra quote and parenthesis
+      'EMAIL:' + (cfg.email || 'mohamed.magdoom@gmail.com'),
+      'URL:' + (cfg.li || 'https://linkedin.com/in/mohamed-magdoom'),
+      'ADR:;;Lusaka;Zambia',
+      'NOTE:USD 240M P&L · 90 Stations · 1500+ People',
+      'END:VCARD'
+    ].join('');   // ✅ join array into string
 
-var blob = new Blob([vc], {type:'text/vcard'});
-var a = document.createElement('a');
-a.href = URL.createObjectURL(blob);
-a.download = 'Mohamed_Magdoom.vcf';
-a.click();
+    var blob = new Blob([vc], {type:'text/vcard'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'Mohamed_Magdoom.vcf';
+    a.click();
+});
 
   // Copy link
   if(copyBtn) copyBtn.addEventListener('click', function(){
