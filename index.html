@@ -3,25 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mohamed Magdoom | Fuel Retail &amp; Operations Executive | GM · Head of Sales · Head of Operations</title>
-<meta name="description" content="USD 240M P&L · 90 Stations · 1,500+ People · Sub-Saharan Africa, GCC &amp; Asia. GM · Country Manager · COO. Revenue growth + cost discipline at scale.">
-<meta property="og:title" content="Mohamed Magdoom — Fuel Retail &amp; Multi-Site Operations Executive">
-<meta property="og:description" content="USD 240M P&L. 90 stations. 1,500+ people. Revenue growth and cost discipline delivered simultaneously at scale.">
+<title>Mohamed Magdoom | Fuel Retail &amp; Operations Executive | GM &middot; Head of Sales &middot; Head of Operations</title>
+<meta name="description" content="USD 240M P&amp;L &middot; 90 Stations &middot; 1,500+ People &middot; Sub-Saharan Africa &amp; Asia.">
+<meta property="og:title" content="Mohamed Magdoom &mdash; Fuel Retail &amp; Multi-Site Operations Executive">
 <meta property="og:url" content="https://mohamedmagdoom.pages.dev">
 <meta name="theme-color" content="#080a0f">
-
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
-
-<!-- Three.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<!-- GSAP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
 <style>
+
 /* ═══════════════════════════════════════════════════════
    RESET & BASE
 ═══════════════════════════════════════════════════════ */
@@ -671,102 +665,51 @@ a{text-decoration:none;color:inherit}
 /* ═══════════════════════════════════════════════════════
    ADMIN BUTTON + PANEL (preserved from existing site)
 ═══════════════════════════════════════════════════════ */
-#admin-btn{
-  position:fixed;bottom:28px;right:28px;z-index:600;
-  width:44px;height:44px;border-radius:50%;
-  background:rgba(200,169,106,.12);border:1px solid var(--gold-dim);
-  color:var(--gold);font-size:.9rem;cursor:pointer;
-  backdrop-filter:blur(8px);
-  transition:all .2s;
-}
+
 #admin-btn:hover{background:var(--gold);color:var(--bg);transform:scale(1.1)}
 
 /* Admin panel */
-#admin-panel{
-  position:fixed;top:0;right:-460px;width:440px;max-width:100vw;
-  height:100dvh;background:var(--bg2);border-left:1px solid var(--rule);
-  z-index:700;overflow-y:auto;
-  transition:right .38s cubic-bezier(.4,0,.2,1);
-  box-shadow:-16px 0 60px rgba(0,0,0,.6);
-}
-#admin-panel.open{right:0}
-.ap-hd{
-  padding:18px 22px;border-bottom:1px solid var(--rule);
-  display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;background:var(--bg2);z-index:1;
-}
-.ap-title{font-family:var(--font-display);font-size:.8rem;font-weight:400;letter-spacing:.06em;color:var(--gold)}
-.ap-close{background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-muted);transition:color .2s}
+
+
+
+
+
 .ap-close:hover{color:var(--text)}
-.ap-lock{padding:48px 24px;text-align:center}
+
 .ap-lock h3{font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text);margin-bottom:10px}
 .ap-lock p{font-size:.74rem;color:var(--text-muted);line-height:1.65;margin-bottom:24px}
-.ap-input{
-  width:100%;font-family:inherit;font-size:.8rem;color:var(--text);
-  background:rgba(255,255,255,.04);border:1px solid var(--rule);
-  padding:11px 14px;margin-bottom:10px;transition:border .2s;
-}
+
 .ap-input:focus{outline:none;border-color:var(--gold)}
 .ap-input::placeholder{color:var(--text-muted)}
-.ap-btn{
-  width:100%;padding:12px;font-family:var(--font-display);
-  font-size:.7rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;
-  background:var(--gold);color:var(--bg);border:none;cursor:pointer;
-  transition:background .2s;
-}
+
 .ap-btn:hover{background:#d4b87a}
-.ap-err{font-size:.68rem;color:#f87171;display:none;margin-top:8px;text-align:center}
-.ap-editor{display:none}
-.ap-tabs{display:flex;border-bottom:1px solid var(--rule);overflow-x:auto}
-.ap-tab{
-  padding:11px 16px;font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--text-muted);border:none;background:none;cursor:pointer;
-  border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;
-}
+
+
+
+
 .ap-tab.on{color:var(--gold);border-bottom-color:var(--gold)}
-.ap-body{padding:20px 22px}
-.ap-tc{display:none}.ap-tc.on{display:block}
-.ap-section{margin-bottom:20px}
-.ap-slbl{
-  font-size:.56rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:10px;padding-bottom:7px;
-  border-bottom:1px solid var(--rule);opacity:.8;
-}
-.ap-field{margin-bottom:10px}
-.ap-lbl{font-size:.64rem;font-weight:500;color:var(--text-muted);display:block;margin-bottom:4px}
-.ap-in,.ap-ta{
-  width:100%;font-family:inherit;font-size:.76rem;color:var(--text);
-  background:rgba(255,255,255,.04);border:1px solid var(--rule);
-  padding:8px 10px;transition:border .2s;
-}
+
+.ap-tc.on{display:block}
+
+
+
+
+.ap-in,
 .ap-in:focus,.ap-ta:focus{outline:none;border-color:var(--gold)}
-.ap-ta{min-height:70px;resize:vertical}
+
 .ap-g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.ap-save-btn{
-  width:100%;padding:13px;background:var(--gold);color:var(--bg);
-  border:none;font-family:var(--font-display);font-size:.68rem;font-weight:400;
-  letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:8px;transition:background .2s;
-}
+
 .ap-save-btn:hover{background:#d4b87a}
 .ap-save-btn:disabled{background:#333;cursor:not-allowed}
-.ap-msg{font-size:.68rem;text-align:center;padding:8px;margin-top:8px;display:none}
+
 .ap-msg.ok{background:rgba(74,222,128,.1);color:#4ade80;display:block;border:1px solid rgba(74,222,128,.15)}
 .ap-msg.err{background:rgba(248,113,113,.1);color:#f87171;display:block;border:1px solid rgba(248,113,113,.15)}
-.ap-worker-note{
-  font-size:.64rem;color:var(--text-muted);line-height:1.65;
-  padding:10px;background:rgba(200,169,106,.05);
-  border:1px solid var(--rule);margin-bottom:12px;
-}
+
 
 /* ═══════════════════════════════════════════════════════
    SAVE BADGE
 ═══════════════════════════════════════════════════════ */
-#badge{
-  position:fixed;bottom:80px;right:28px;z-index:800;
-  padding:9px 16px;font-size:.64rem;font-weight:500;letter-spacing:.06em;
-  pointer-events:none;opacity:0;transition:opacity .4s;
-  font-family:var(--font-display);border:1px solid transparent;
-}
+
 #badge.show{opacity:1}
 
 /* ═══════════════════════════════════════════════════════
@@ -805,7 +748,7 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
    SPEED-DIAL FLOATING ACTION BUTTONS
 ═══════════════════════════════════════════════════════ */
 #fab-wrap{
-  position:fixed;bottom:28px;right:28px;z-index:700;
+  position:fixed;bottom:28px;right:28px;z-index:9999;
   display:flex;flex-direction:column;align-items:flex-end;gap:12px;
 }
 #fab-toggle{
@@ -992,21 +935,74 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
 }
 #chat-send:hover{background:#d4b87a}
 #chat-send:disabled{background:var(--rule);cursor:not-allowed}
+
+
+/* FAB */
+#fab-wrap{position:fixed;bottom:28px;right:28px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+#fab-toggle{width:48px;height:48px;border-radius:50%;background:var(--gold);color:var(--bg);border:none;cursor:pointer;font-size:1.1rem;box-shadow:0 4px 20px rgba(200,169,106,.35);transition:transform .2s;display:flex;align-items:center;justify-content:center;font-weight:600}
+#fab-toggle:hover{transform:scale(1.1)}
+#fab-menu{display:flex;flex-direction:column;align-items:flex-end;gap:10px;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .25s,transform .25s}
+#fab-menu.open{opacity:1;transform:none;pointer-events:auto}
+.fab-item{display:flex;align-items:center;gap:10px}
+.fab-item-lbl{background:rgba(12,14,22,.92);color:var(--gold);font-size:.62rem;font-weight:500;letter-spacing:.08em;padding:5px 12px;border:1px solid rgba(200,169,106,.25);white-space:nowrap;opacity:0;transform:translateX(8px);transition:opacity .2s,transform .2s}
+#fab-menu.open .fab-item-lbl{opacity:1;transform:none}
+.fab-item-btn{width:40px;height:40px;border-radius:50%;background:var(--bg1);border:1px solid rgba(200,169,106,.25);color:var(--gold);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s;text-decoration:none;line-height:1}
+.fab-item-btn:hover{background:var(--gold);color:var(--bg);transform:scale(1.1)}
+#bcard-modal{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;background:rgba(5,5,8,.85);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .3s}
+#bcard-modal.open{opacity:1;pointer-events:auto}
+.bcard{background:var(--bg1);border:1px solid rgba(200,169,106,.25);width:min(420px,90vw);overflow:hidden;transform:translateY(16px);transition:transform .3s;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+#bcard-modal.open .bcard{transform:none}
+.bcard-header{background:linear-gradient(135deg,#0f1a14,var(--bg1));padding:32px 28px 24px;border-bottom:1px solid rgba(200,169,106,.15);position:relative}
+.bcard-header h2{font-family:var(--font-display);font-size:1.8rem;font-weight:400;color:var(--text);margin-bottom:4px}
+.bcard-header h2 span{color:var(--gold)}
+.bcard-title{font-size:.72rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;opacity:.8;margin-bottom:18px}
+.bcard-kpis{display:flex;gap:24px;margin-top:16px}
+.bcard-kpi{text-align:center}
+.bcard-kpi-val{font-family:var(--font-display);font-size:1.4rem;color:var(--gold);line-height:1}
+.bcard-kpi-lbl{font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-top:3px}
+.bcard-body{padding:20px 28px}
+.bcard-contact-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule);font-size:.8rem}
+.bcard-contact-row:last-child{border-bottom:none}
+.bcard-contact-icon{color:var(--gold);width:18px;flex-shrink:0}
+.bcard-contact-row a,.bcard-contact-row span{color:var(--text-muted);text-decoration:none}
+.bcard-contact-row a:hover{color:var(--gold)}
+.bcard-actions{display:flex;gap:10px;padding:16px 28px 24px;border-top:1px solid var(--rule)}
+.bcard-btn{flex:1;padding:10px;border:1px solid rgba(200,169,106,.25);background:transparent;color:var(--gold);font-family:inherit;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.bcard-btn:hover{background:var(--gold);color:var(--bg)}
+.bcard-btn-primary{background:var(--gold);color:var(--bg)}
+.bcard-btn-primary:hover{background:#d4b87a}
+#bcard-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text-dim);font-size:1rem;cursor:pointer;padding:4px 8px}
+#chat-panel{position:fixed;bottom:84px;right:28px;z-index:9997;width:min(360px,90vw);background:var(--bg1);border:1px solid rgba(200,169,106,.25);box-shadow:0 16px 60px rgba(0,0,0,.5);transform:translateY(16px) scale(.97);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;display:flex;flex-direction:column;max-height:480px}
+#chat-panel.open{opacity:1;transform:none;pointer-events:auto}
+.chat-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--rule);background:var(--bg2);flex-shrink:0}
+.chat-header-info{display:flex;align-items:center;gap:10px}
+.chat-avatar{width:32px;height:32px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.9rem;color:var(--bg);font-weight:700}
+.chat-header-text h4{font-size:.78rem;font-weight:600;color:var(--text);margin:0;line-height:1.2}
+.chat-header-text p{font-size:.6rem;color:var(--gold);margin:0;letter-spacing:.06em}
+.chat-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;flex-shrink:0}
+#chat-close{background:none;border:none;color:var(--text-dim);font-size:.9rem;cursor:pointer;padding:4px}
+#chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:120px}
+.cmsg{max-width:85%;padding:9px 13px;font-size:.78rem;line-height:1.55;border-radius:2px}
+.cmsg-user{align-self:flex-end;background:var(--gold);color:var(--bg);font-weight:500}
+.cmsg-assistant{align-self:flex-start;background:var(--bg2);color:var(--text-muted);border:1px solid var(--rule)}
+.cmsg-typing{display:flex;gap:5px;align-items:center;padding:12px 14px}
+.cmsg-typing span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:tdot 1.2s ease-in-out infinite;opacity:.4}
+.cmsg-typing span:nth-child(2){animation-delay:.2s}
+.cmsg-typing span:nth-child(3){animation-delay:.4s}
+@keyframes tdot{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+.chat-input-row{display:flex;border-top:1px solid var(--rule);flex-shrink:0}
+#chat-input{flex:1;background:var(--bg2);border:none;outline:none;color:var(--text);font-family:inherit;font-size:.78rem;padding:12px 16px;height:48px}
+#chat-input::placeholder{color:var(--text-dim)}
+#chat-send{width:48px;background:var(--gold);border:none;color:var(--bg);cursor:pointer;font-size:1rem;transition:background .2s;flex-shrink:0}
+#chat-send:hover{background:#d4b87a}
+#chat-send:disabled{background:var(--rule);cursor:not-allowed}
 </style>
 </head>
 <body>
-
-<!-- Scroll progress bar -->
 <div id="progress"></div>
-
-<!-- Custom cursor -->
 <div id="cursor"></div>
 <div id="cursor-trail"></div>
-
-<!-- Availability strip -->
-<div id="av-strip"><span id="d-av">🟢 GM · Head of Sales · Head of Operations · Business Development — Sub-Saharan Africa · GCC · UAE · Global</span></div>
-
-<!-- NAV -->
+<div id="av-strip"><span id="d-av">&#127994; GM &middot; Head of Sales &middot; Head of Operations &middot; Business Development &mdash; Sub-Saharan Africa &middot; GCC &middot; UAE &middot; Global</span></div>
 <nav id="nav">
   <a href="#hero" class="nav-logo">Magdoom</a>
   <ul class="nav-links">
@@ -1019,10 +1015,6 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
   </ul>
   <a href="/resume.pdf" class="nav-cv" id="d-cv-nav" download>Download CV</a>
 </nav>
-
-<!-- ═══════════════════════════════════════════════════════
-     HERO
-═══════════════════════════════════════════════════════ -->
 <section id="hero" class="scene">
   <canvas id="hero-canvas" aria-hidden="true"></canvas>
   <div class="container hero-inner">
@@ -1048,10 +1040,6 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
     </div>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════════════════════════
-     ABOUT
-═══════════════════════════════════════════════════════ -->
 <section id="about" class="section scene">
   <div class="container">
     <div class="eyebrow reveal">Operating Philosophy</div>
@@ -1081,10 +1069,6 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
     </div>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════════════════════════
-     PERFORMANCE INDICATORS
-═══════════════════════════════════════════════════════ -->
 <section id="performance" class="section scene">
   <div class="container">
     <div class="eyebrow reveal">Scale &amp; Impact at a Glance</div>
@@ -1101,10 +1085,6 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
     </div>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════════════════════════
-     SELECTED BUSINESS IMPACT
-═══════════════════════════════════════════════════════ -->
 <section id="impact" class="section scene">
   <div class="container">
     <div class="eyebrow reveal">Decisions That Moved the Business</div>
@@ -1119,10 +1099,6 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
     </div>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════════════════════════
-     CAREER EXPERIENCE
-═══════════════════════════════════════════════════════ -->
 <section id="career" class="section scene">
   <div class="container">
     <div class="eyebrow reveal">12 Years · 3 Countries · 3 Industries</div>
@@ -1175,10 +1151,6 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
     </div>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════════════════════════
-     STRATEGIC DECISIONS
-═══════════════════════════════════════════════════════ -->
 <section id="decisions" class="section scene">
   <div class="container">
     <div class="eyebrow reveal">Executive Judgment in Practice</div>
@@ -1190,10 +1162,6 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
     </div>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════════════════════════
-     APPROACH + GLOBE
-═══════════════════════════════════════════════════════ -->
 <section id="approach" class="section scene">
   <canvas id="globe-canvas" aria-hidden="true"></canvas>
   <div class="container">
@@ -1212,10 +1180,6 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
     </div>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════════════════════════
-     CAPABILITIES
-═══════════════════════════════════════════════════════ -->
 <section id="capabilities" class="section scene">
   <div class="container">
     <div class="eyebrow reveal">Functional Depth Across Three Disciplines</div>
@@ -1227,10 +1191,6 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
     </div>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════════════════════════
-     JOURNEY (TIMELINE)
-═══════════════════════════════════════════════════════ -->
 <section id="journey" class="section scene">
   <div class="container">
     <div class="eyebrow reveal">Progression of Scale &amp; Responsibility</div>
@@ -1243,10 +1203,6 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
     </div>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════════════════════════
-     TRANSFORMATION PROJECTS
-═══════════════════════════════════════════════════════ -->
 <section id="projects" class="section scene">
   <div class="container">
     <div class="eyebrow reveal">Enterprise-Scale Execution</div>
@@ -1258,10 +1214,6 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
     </div>
   </div>
 </section>
-
-<!-- ═══════════════════════════════════════════════════════
-     CONTACT
-═══════════════════════════════════════════════════════ -->
 <section id="contact" class="section">
   <div class="container">
     <div class="contact-grid">
@@ -1290,85 +1242,62 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
   </div>
 </section>
 
-<!-- Admin button -->
-<button id="admin-btn" title="Admin Panel" aria-label="Open admin panel">✏️</button>
-
-<!-- Admin panel -->
-<div id="admin-panel" role="dialog" aria-label="Content Editor">
-  <div id="ap-lock-wrap">
-    <div class="ap-hd"><span class="ap-title">Admin Access</span><button class="ap-close" id="ap-close1" aria-label="Close">✕</button></div>
-    <div class="ap-lock">
-      <h3>Content Editor</h3>
-      <p>Enter your password to edit site content. Add a Cloudflare Worker URL in the Links tab for permanent saves visible to all visitors.</p>
-      <input type="password" class="ap-input" id="ap-pw" placeholder="Password" autocomplete="current-password">
-      <button class="ap-btn" id="ap-unlock-btn">Unlock Editor</button>
-      <div class="ap-err" id="ap-err">Incorrect password.</div>
-    </div>
+<!-- FLOATING UI — before scripts so getElementById works when JS runs -->
+<div id="fab-wrap">
+  <div id="fab-menu" role="menu">
+    <div class="fab-item"><span class="fab-item-lbl">Portfolio</span><a class="fab-item-btn" href="https://mohamedmagdoom.pages.dev" target="_blank" title="Portfolio" role="menuitem">&#127760;</a></div>
+    <div class="fab-item"><span class="fab-item-lbl">Digital Card</span><button class="fab-item-btn" id="card-btn" title="Business Card" role="menuitem">&#128179;</button></div>
+    <div class="fab-item"><span class="fab-item-lbl">AI Chat</span><button class="fab-item-btn" id="chat-btn" title="AI Assistant" role="menuitem">&#129302;</button></div>
+    <div class="fab-item"><span class="fab-item-lbl">WhatsApp</span><a class="fab-item-btn" href="https://wa.me/260760634300?text=Hi%20Mohamed%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank" title="WhatsApp" role="menuitem">&#128172;</a></div>
+    <div class="fab-item"><span class="fab-item-lbl">LinkedIn</span><a class="fab-item-btn" href="https://linkedin.com/in/mohamed-magdoom" target="_blank" title="LinkedIn" role="menuitem">in</a></div>
   </div>
-  <div class="ap-editor" id="ap-editor">
-    <div class="ap-hd"><span class="ap-title">Content Editor</span><button class="ap-close" id="ap-close2">✕</button></div>
-    <div class="ap-tabs">
-      <button class="ap-tab on" data-t="basic">Basic</button>
-      <button class="ap-tab" data-t="contact">Contact</button>
-      <button class="ap-tab" data-t="stats">Stats</button>
-      <button class="ap-tab" data-t="links">Links</button>
+  <button id="fab-toggle" aria-label="Quick actions" aria-expanded="false" aria-controls="fab-menu">&#9889;</button>
+</div>
+
+<div id="bcard-modal" role="dialog" aria-label="Digital Business Card" aria-modal="true">
+  <div class="bcard">
+    <div class="bcard-header">
+      <button id="bcard-close" aria-label="Close">&#10005;</button>
+      <h2>Mohamed <span>Magdoom</span></h2>
+      <div class="bcard-title">Fuel Retail &amp; Multi-Site Operations Executive</div>
+      <div class="bcard-kpis">
+        <div class="bcard-kpi"><div class="bcard-kpi-val">$240M</div><div class="bcard-kpi-lbl">P&amp;L</div></div>
+        <div class="bcard-kpi"><div class="bcard-kpi-val">90+</div><div class="bcard-kpi-lbl">Stations</div></div>
+        <div class="bcard-kpi"><div class="bcard-kpi-val">1,500+</div><div class="bcard-kpi-lbl">People</div></div>
+        <div class="bcard-kpi"><div class="bcard-kpi-val">12+</div><div class="bcard-kpi-lbl">Years</div></div>
+      </div>
     </div>
-    <div class="ap-body">
-      <div class="ap-tc on" id="tc-basic">
-        <div class="ap-section"><div class="ap-slbl">Identity</div>
-          <div class="ap-field"><label class="ap-lbl">Full Name</label><input class="ap-in" id="f-name"></div>
-          <div class="ap-field"><label class="ap-lbl">Role Line</label><input class="ap-in" id="f-role"></div>
-          <div class="ap-field"><label class="ap-lbl">Availability Badge</label><input class="ap-in" id="f-av"></div>
-        </div>
-        <div class="ap-section"><div class="ap-slbl">Hero Text</div>
-          <div class="ap-field"><label class="ap-lbl">Signature Quote (hero)</label><textarea class="ap-ta" id="f-sig"></textarea></div>
-          <div class="ap-field"><label class="ap-lbl">Philosophy Line (approach)</label><textarea class="ap-ta" id="f-phil"></textarea></div>
-        </div>
-      </div>
-      <div class="ap-tc" id="tc-contact">
-        <div class="ap-section"><div class="ap-slbl">Contact</div>
-          <div class="ap-field"><label class="ap-lbl">Email</label><input class="ap-in" id="f-email"></div>
-          <div class="ap-field"><label class="ap-lbl">Phone</label><input class="ap-in" id="f-phone"></div>
-          <div class="ap-field"><label class="ap-lbl">Location</label><input class="ap-in" id="f-loc"></div>
-          <div class="ap-field"><label class="ap-lbl">WhatsApp (digits)</label><input class="ap-in" id="f-wa"></div>
-          <div class="ap-field"><label class="ap-lbl">LinkedIn URL</label><input class="ap-in" id="f-li"></div>
-        </div>
-      </div>
-      <div class="ap-tc" id="tc-stats">
-        <div class="ap-section"><div class="ap-slbl">Hero Stats</div>
-          <div class="ap-g2">
-            <div class="ap-field"><label class="ap-lbl">Stat 1 Value</label><input class="ap-in" id="f-s1v"></div>
-            <div class="ap-field"><label class="ap-lbl">Stat 1 Label</label><input class="ap-in" id="f-s1l"></div>
-            <div class="ap-field"><label class="ap-lbl">Stat 2 Value</label><input class="ap-in" id="f-s2v"></div>
-            <div class="ap-field"><label class="ap-lbl">Stat 2 Label</label><input class="ap-in" id="f-s2l"></div>
-            <div class="ap-field"><label class="ap-lbl">Stat 3 Value</label><input class="ap-in" id="f-s3v"></div>
-            <div class="ap-field"><label class="ap-lbl">Stat 3 Label</label><input class="ap-in" id="f-s3l"></div>
-            <div class="ap-field"><label class="ap-lbl">Stat 4 Value</label><input class="ap-in" id="f-s4v"></div>
-            <div class="ap-field"><label class="ap-lbl">Stat 4 Label</label><input class="ap-in" id="f-s4l"></div>
-          </div>
-        </div>
-      </div>
-      <div class="ap-tc" id="tc-links">
-        <div class="ap-section"><div class="ap-slbl">Links</div>
-          <div class="ap-field"><label class="ap-lbl">Resume / CV URL</label><input class="ap-in" id="f-cv"></div>
-        </div>
-        <div class="ap-section"><div class="ap-slbl">Cloud Backend (Permanent Saves)</div>
-          <div class="ap-worker-note">Deploy the included worker.js to Cloudflare Workers (free), then paste the Worker URL below. Saves will be permanent and visible to all visitors instantly.</div>
-          <div class="ap-field"><label class="ap-lbl">Cloudflare Worker URL</label><input class="ap-in" id="f-worker" placeholder="https://magdoom-api.xxx.workers.dev"></div>
-          <div class="ap-field"><label class="ap-lbl">Admin Password (confirm)</label><input class="ap-in" id="f-pw" type="password"></div>
-        </div>
-      </div>
-      <button class="ap-save-btn" id="ap-save-btn">💾 Save All Changes</button>
-      <div class="ap-msg" id="ap-msg"></div>
+    <div class="bcard-body">
+      <div class="bcard-contact-row"><span class="bcard-contact-icon">&#128231;</span><a href="mailto:mohamed.magdoom@gmail.com">mohamed.magdoom@gmail.com</a></div>
+      <div class="bcard-contact-row"><span class="bcard-contact-icon">&#128241;</span><span>+260 760 634 300 &nbsp;&middot;&nbsp; +91 7550 270 450</span></div>
+      <div class="bcard-contact-row"><span class="bcard-contact-icon">&#128188;</span><a href="https://linkedin.com/in/mohamed-magdoom" target="_blank">linkedin.com/in/mohamed-magdoom</a></div>
+      <div class="bcard-contact-row"><span class="bcard-contact-icon">&#128205;</span><span>Lusaka, Zambia &middot; Open to relocation globally</span></div>
+    </div>
+    <div class="bcard-actions">
+      <button class="bcard-btn bcard-btn-primary" id="bcard-dl">&#11015; Save Contact (.vcf)</button>
+      <button class="bcard-btn" id="bcard-copy">Copy Link</button>
     </div>
   </div>
 </div>
 
-<!-- Save badge -->
-<div id="badge"></div>
-
-<!-- THREE.JS + GSAP + LOGIC -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<div id="chat-panel" role="dialog" aria-label="Portfolio Assistant" aria-modal="true">
+  <div class="chat-header">
+    <div class="chat-header-info">
+      <div class="chat-avatar">M</div>
+      <div class="chat-header-text"><h4>Portfolio Assistant</h4><p>Ask about Mohamed&#8217;s career</p></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="chat-dot"></div>
+      <button id="chat-close" aria-label="Close chat">&#10005;</button>
+    </div>
+  </div>
+  <div id="chat-msgs" aria-live="polite"></div>
+  <div class="chat-input-row">
+    <input id="chat-input" type="text" placeholder="Ask about career, achievements&#8230;" autocomplete="off" aria-label="Chat message">
+    <button id="chat-send" aria-label="Send">&#10148;</button>
+  </div>
+</div>
+<script>
 
 /* ═══════════════════════════════════════════════════════
    CONFIG — CLOUDFLARE WORKER BACKEND
@@ -1394,10 +1323,10 @@ var DEF = {
   wa:"260760634300",
   li:"https://linkedin.com/in/mohamed-magdoom",
   cv:"/resume.pdf",
-  s1v:"240",s1l:"Annual P&L ($M)",
-  s2v:"90",s2l:"Stations",
-  s3v:"1500",s3l:"Employees",
-  s4v:"12",s4l:"Years",
+  s1v:"240",s1l:"P&L Owned ($M)",
+  s2v:"90",s2l:"Retail Stations",
+  s3v:"1500",s3l:"People Led",
+  s4v:"12",s4l:"Years Delivering",
 };
 
 /* ═══════════════════════════════════════════════════════
@@ -1672,71 +1601,6 @@ document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
 })();
 
 /* ═══════════════════════════════════════════════════════
-   ADMIN PANEL
-═══════════════════════════════════════════════════════ */
-function closePanel(){document.getElementById("admin-panel").classList.remove("open");}
-document.getElementById("admin-btn").addEventListener("click",function(){document.getElementById("admin-panel").classList.toggle("open");});
-document.getElementById("ap-close1").addEventListener("click",closePanel);
-document.getElementById("ap-close2").addEventListener("click",closePanel);
-
-function tryUnlock(){
-  var pw=document.getElementById("ap-pw").value,cfg=getConfig();
-  if(pw===cfg.password){
-    document.getElementById("ap-lock-wrap").style.display="none";
-    document.getElementById("ap-editor").style.display="block";
-  }else{document.getElementById("ap-err").style.display="block";}
-}
-document.getElementById("ap-unlock-btn").addEventListener("click",tryUnlock);
-document.getElementById("ap-pw").addEventListener("keydown",function(e){if(e.key==="Enter")tryUnlock();});
-
-document.querySelectorAll(".ap-tab").forEach(function(t){
-  t.addEventListener("click",function(){
-    document.querySelectorAll(".ap-tab,.ap-tc").forEach(function(x){x.classList.remove("on");});
-    t.classList.add("on");
-    var tc=document.getElementById("tc-"+t.dataset.t);if(tc)tc.classList.add("on");
-  });
-});
-
-document.getElementById("ap-save-btn").addEventListener("click",async function(){
-  var btn=document.getElementById("ap-save-btn"),msg=document.getElementById("ap-msg");
-  btn.disabled=true;btn.textContent="Saving…";
-  msg.className="ap-msg";msg.style.display="none";
-  function v(id){var e=document.getElementById(id);return e?e.value.trim():"";}
-  var workerUrl=v("f-worker"),pw=v("f-pw")||getConfig().password;
-  var data={
-    name:v("f-name"),role:v("f-role"),sig:v("f-sig"),phil:v("f-phil"),av:v("f-av"),
-    email:v("f-email"),phone:v("f-phone"),loc:v("f-loc"),wa:v("f-wa"),li:v("f-li"),cv:v("f-cv"),
-    s1v:v("f-s1v"),s1l:v("f-s1l"),s2v:v("f-s2v"),s2l:v("f-s2l"),
-    s3v:v("f-s3v"),s3l:v("f-s3l"),s4v:v("f-s4v"),s4l:v("f-s4l"),
-    password:getConfig().password,workerUrl:workerUrl
-  };
-  applyData(data);
-  try{localStorage.setItem("mm_cinematic",JSON.stringify(data));}catch(e){}
-  if(workerUrl){
-    var ok=await(async function(){
-      try{var r=await fetch(workerUrl+"/content",{method:"POST",headers:{"Content-Type":"application/json","X-Admin-Password":pw},body:JSON.stringify(data)});return r.ok;}catch(e){return false;}
-    })();
-    if(ok){msg.textContent="\u2713 Saved to cloud \u2014 all visitors see this instantly.";msg.className="ap-msg ok";showBadge("\u2713 Saved to cloud");}
-    else{msg.textContent="\u26a0 Cloud save failed. Check Worker URL. Saved locally as fallback.";msg.className="ap-msg err";showBadge("\u26a0 Cloud save failed",true);}
-  }else{
-    msg.textContent="\u26a0 Saved locally only. Add Cloudflare Worker URL in Links tab for permanent saves.";
-    msg.className="ap-msg err";showBadge("\u26a0 Local only \u2014 add Worker URL",true);
-  }
-  btn.disabled=false;btn.textContent="\uD83D\uDCBE Save All Changes";
-});
-
-/* ═══════════════════════════════════════════════════════
-   BADGE
-═══════════════════════════════════════════════════════ */
-function showBadge(msg,err){
-  var b=document.getElementById("badge");
-  b.textContent=msg;
-  b.style.cssText="position:fixed;bottom:80px;right:28px;z-index:800;padding:9px 16px;font-size:.64rem;font-weight:500;letter-spacing:.06em;pointer-events:none;font-family:'Cormorant Garamond',serif;border:1px solid "+(err?"rgba(248,113,113,.3)":"rgba(200,169,106,.3)")+";background:"+(err?"rgba(248,113,113,.08)":"rgba(200,169,106,.08)")+";color:"+(err?"#f87171":"#c8a96a")+";";
-  b.className="show";clearTimeout(b._t);
-  b._t=setTimeout(function(){b.className="";},5000);
-}
-
-/* ═══════════════════════════════════════════════════════
    CONFIG LOAD
 ═══════════════════════════════════════════════════════ */
 function getConfig(){
@@ -1769,1157 +1633,308 @@ async function boot(){
 document.getElementById("d-year").textContent=new Date().getFullYear();
 boot();
 
-/* ═══════════════════════════════════════════════════════
-   APPLY CONTENT — alias for backwards compatibility
-   (boot() calls applyContent; original used applyData)
-═══════════════════════════════════════════════════════ */
-function applyContent(d){ applyData(d); }
-
-/* ═══════════════════════════════════════════════════════
-   PROGRESSIVE ENHANCEMENT — mark JS as ready
-═══════════════════════════════════════════════════════ */
-document.documentElement.classList.add('js-ready');
-
-/* ═══════════════════════════════════════════════════════
-   FALLBACK SAFETY — force-reveal after 2.5s
-═══════════════════════════════════════════════════════ */
-setTimeout(function(){
-  document.querySelectorAll('.reveal:not(.visible)').forEach(function(el){
-    el.classList.add('visible');
-  });
-}, 2500);
-
-/* ═══════════════════════════════════════════════════════
-   DIGITAL BUSINESS CARD
-═══════════════════════════════════════════════════════ */
-(function initCard(){
-  var btn  = document.getElementById('card-btn');
-  var card = document.getElementById('bcard-modal');
-  var close= document.getElementById('bcard-close');
-  var dlBtn= document.getElementById('bcard-dl');
-  var copyBtn = document.getElementById('bcard-copy');
-  if(!btn||!card) return;
-
-  btn.addEventListener('click', function(){
-    card.classList.toggle('open');
-    if(card.classList.contains('open')) buildQR();
-  });
-  if(close) close.addEventListener('click', function(){ card.classList.remove('open'); });
-  card.addEventListener('click', function(e){ if(e.target===card) card.classList.remove('open'); });
-
-  // vCard download
-  if(dlBtn) dlBtn.addEventListener('click', function(){
-    var cfg = getConfig();
-    var vc  = [
-      'BEGIN:VCARD','VERSION:3.0',
-      'FN:Mohamed Magdoom',
-      'TITLE:Fuel Retail & Multi-Site Operations Executive',
-      'ORG:Mount Meru Petroleum Limited',
-      'TEL;TYPE=CELL:+260760634300',
-      'TEL;TYPE=CELL:+917550270450',
-      'EMAIL:'+( cfg.email||'mohamed.magdoom@gmail.com'),
-      'URL:'+(cfg.li||'https://linkedin.com/in/mohamed-magdoom'),
-      'ADR:;;Lusaka;Zambia',
-      'NOTE:USD 240M P&L · 90 Stations · 1500+ People',
-      'END:VCARD'
-    ].join('\r\n');
-    var blob = new Blob([vc],{type:'text/vcard'});
-    var a    = document.createElement('a');
-    a.href   = URL.createObjectURL(blob);
-    a.download='Mohamed_Magdoom.vcf';
-    a.click();
-  });
-
-  // Copy link
-  if(copyBtn) copyBtn.addEventListener('click', function(){
-    navigator.clipboard.writeText('https://mohamedmagdoom.pages.dev')
-      .then(function(){ copyBtn.textContent='✓ Copied!'; setTimeout(function(){ copyBtn.textContent='Copy Link'; },2000); })
-      .catch(function(){ copyBtn.textContent='Copy: mohamedmagdoom.pages.dev'; });
-  });
-
-  // Simple QR (text fallback — no external lib needed)
-  function buildQR(){
-    var el = document.getElementById('bcard-qr');
-    if(!el||el.dataset.built) return;
-    el.dataset.built = '1';
-    // Display URL as styled text block (no external QR lib dependency)
-    el.innerHTML = '<div style="font-size:.55rem;letter-spacing:.04em;word-break:break-all;color:#c8a96a;padding:8px;border:1px solid rgba(200,169,106,.3);line-height:1.6">mohamedmagdoom<br>.pages.dev</div>';
-  }
-})();
-
-/* ═══════════════════════════════════════════════════════
-   SPEED-DIAL FLOATING BUTTONS
-═══════════════════════════════════════════════════════ */
-(function initFAB(){
-  var toggle = document.getElementById('fab-toggle');
-  var menu   = document.getElementById('fab-menu');
-  if(!toggle||!menu) return;
-  var open = false;
-  toggle.addEventListener('click', function(){
-    open = !open;
-    menu.classList.toggle('open', open);
-    toggle.setAttribute('aria-expanded', open);
-    toggle.innerHTML = open ? '✕' : '⚡';
-  });
-  // Close on outside click
-  document.addEventListener('click', function(e){
-    if(open && !toggle.contains(e.target) && !menu.contains(e.target)){
-      open = false;
-      menu.classList.remove('open');
-      toggle.innerHTML = '⚡';
-    }
-  });
-})();
-
-/* ═══════════════════════════════════════════════════════
-   AI CHAT WIDGET
-═══════════════════════════════════════════════════════ */
-(function initChat(){
-  var btn   = document.getElementById('chat-btn');
-  var panel = document.getElementById('chat-panel');
-  var close = document.getElementById('chat-close');
-  var input = document.getElementById('chat-input');
-  var send  = document.getElementById('chat-send');
-  var msgs  = document.getElementById('chat-msgs');
-  if(!btn||!panel) return;
-
-  // Persona context
-  var CONTEXT = [
-    'You are Mohamed Magdoom\'s portfolio assistant. Answer questions about his career, experience, and background concisely and professionally.',
-    'Key facts: USD 240M P&L, 90 retail stations, 20M litres/month, 1500+ employees, 12+ years, Mount Meru Petroleum Zambia (current), Reliance BP India (6 years), Papa Johns Saudi Arabia, McDonalds India.',
-    'He targets GM, Country Manager, COO roles in Sub-Saharan Africa, GCC, UAE. Email: mohamed.magdoom@gmail.com. LinkedIn: linkedin.com/in/mohamed-magdoom.',
-    'Keep answers under 3 sentences. Be factual. If asked anything unrelated to Mohamed or his career, politely redirect.'
-  ].join(' ');
-
-  var history = [];
-
-  btn.addEventListener('click', function(){
-    panel.classList.toggle('open');
-    if(panel.classList.contains('open') && msgs.children.length === 0){
-      addMsg('assistant', 'Hi! I can answer questions about Mohamed\'s career, experience, and background. What would you like to know?');
-    }
-  });
-  if(close) close.addEventListener('click', function(){ panel.classList.remove('open'); });
-
-  function addMsg(role, text){
-    var d = document.createElement('div');
-    d.className = 'cmsg cmsg-' + role;
-    d.textContent = text;
-    msgs.appendChild(d);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  function addTyping(){
-    var d = document.createElement('div');
-    d.className = 'cmsg cmsg-assistant cmsg-typing';
-    d.id = 'typing-indicator';
-    d.innerHTML = '<span></span><span></span><span></span>';
-    msgs.appendChild(d);
-    msgs.scrollTop = msgs.scrollHeight;
-    return d;
-  }
-
-  async function sendMsg(){
-    var text = (input.value||'').trim();
-    if(!text) return;
-    input.value = '';
-    send.disabled = true;
-    addMsg('user', text);
-    history.push({role:'user', content:text});
-    var typing = addTyping();
-
-    try{
-      var resp = await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({
-          model:'claude-sonnet-4-20250514',
-          max_tokens:300,
-          system: CONTEXT,
-          messages: history.slice(-6)
-        })
-      });
-      typing.remove();
-      if(resp.ok){
-        var data = await resp.json();
-        var reply = (data.content&&data.content[0]&&data.content[0].text)||'I\'m sorry, I couldn\'t process that.';
-        history.push({role:'assistant', content:reply});
-        addMsg('assistant', reply);
-      } else {
-        // Graceful offline fallback — answer from hardcoded knowledge
-        fallbackAnswer(text, typing);
-      }
-    }catch(e){
-      typing.remove();
-      fallbackAnswer(text);
-    }
-    send.disabled = false;
-    input.focus();
-  }
-
-  // Offline fallback — keyword-based smart replies
-  function fallbackAnswer(q){
-    var lower = q.toLowerCase();
-    var answer;
-    if(/p.?l|revenue|240|profit|financ/.test(lower))
-      answer = 'Mohamed owns a USD 240M annual P&L at Mount Meru Petroleum — full OPEX/CAPEX accountability across 90 retail stations and 20 million litres per month.';
-    else if(/team|people|employee|staff|1500/.test(lower))
-      answer = 'He leads 1,500+ people across Operations, Sales, Finance, HR, and Compliance — maintaining 100% regulatory compliance throughout.';
-    else if(/market.share|17/.test(lower))
-      answer = 'He held 17.5% retail market share for 32 consecutive months — the longest sustained record in territory history, built through commercial strategy, not pricing.';
-    else if(/opex|cost|saving|30%|reduction/.test(lower))
-      answer = 'He achieved a 30% OPEX reduction saving USD 3.6M+ annually — renegotiated 15+ vendor contracts, rebuilt SOPs, and deployed process automation across all 90 stations.';
-    else if(/zambia|india|saudi|country|location|where/.test(lower))
-      answer = 'Mohamed is based in Lusaka, Zambia. His career spans Zambia (Mount Meru Petroleum), India (Reliance BP, McDonald\'s), and Saudi Arabia (Papa John\'s) — 3 countries across 12+ years.';
-    else if(/role|title|position|job/.test(lower))
-      answer = 'His current role is Head of Sales & Operations (AGM Level) at Mount Meru Petroleum Limited. He targets GM, Country Manager, and COO roles across Sub-Saharan Africa, GCC, and UAE.';
-    else if(/contact|email|reach|linkedin|phone/.test(lower))
-      answer = 'You can reach Mohamed at mohamed.magdoom@gmail.com, +260 760 634 300, or via LinkedIn: linkedin.com/in/mohamed-magdoom.';
-    else if(/fleet|card|b2b/.test(lower))
-      answer = 'He built the B2B Fleet Card Programme from zero — full go-to-market owned — generating a 30% fuel sales increase within 6 months of launch.';
-    else if(/education|degree|university/.test(lower))
-      answer = 'Mohamed holds a BSc in Hospitality & Hotel Administration (First Class, 75%) from Tamil Nadu Open University and a Diploma in Hotel Management (Distinction, 85%) from EMPEE Institute — both 2012.';
-    else
-      answer = 'I\'m Mohamed\'s portfolio assistant. You can ask me about his career experience, key achievements, P&L ownership, team leadership, or how to contact him.';
-    addMsg('assistant', answer);
-    history.push({role:'assistant', content:answer});
-  }
-
-  send.addEventListener('click', sendMsg);
-  input.addEventListener('keydown', function(e){
-    if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMsg(); }
-  });
-})();
+document.documentElement.classList.add("js-ready");
 
 </script>
-
-<!-- ═══════════════════════════════════════════════════════
-     CINEMATIC SCROLL ANIMATION SYSTEM
-     Injected after main script block — safe IIFE, no conflicts
-═══════════════════════════════════════════════════════ -->
 <script>
 
-/* CINEMATIC SCROLL ANIMATION SYSTEM — Mohamed Magdoom Portfolio */
-(function cinematicSystem() {
+/* CINEMATIC SCROLL ANIMATIONS */
+(function cinematicSystem(){
   "use strict";
-
-  /* ── Guard: require GSAP + ScrollTrigger ─────────────────────── */
-  if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
-    return;
-  }
-
-  /* ── Respect reduced-motion preference ───────────────────────── */
-  var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (prefersReduced) { return; }
-
-  /* ── Mobile guard: skip heavy parallax on small screens ─────── */
-  var isMobile = window.matchMedia("(max-width: 768px)").matches;
-
-  /* ── Register plugin (safe to call multiple times) ───────────── */
+  if(typeof gsap==="undefined"||typeof ScrollTrigger==="undefined")return;
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  var mb=window.matchMedia("(max-width:768px)").matches;
   gsap.registerPlugin(ScrollTrigger);
 
-  /* ══════════════════════════════════════════════════════════════
-     1. HERO — Cinematic depth on scroll
-     Existing: hero-name scale + hero-inner y (in initGSAP)
-     New: particle canvas parallax + stat counter shimmer
-     ══════════════════════════════════════════════════════════════ */
-  if (!isMobile) {
-    /* Canvas slow drift (bg layer) */
-    gsap.to("#hero-canvas", {
-      yPercent: 18,
-      ease: "none",
-      scrollTrigger: {
-        trigger: "#hero",
-        start: "top top",
-        end: "bottom top",
-        scrub: 1.4
-      }
-    });
-
-    /* Hero tag — slightly faster than canvas (fg layer) */
-    gsap.to(".hero-tag", {
-      yPercent: -12,
-      opacity: 0,
-      ease: "none",
-      scrollTrigger: {
-        trigger: "#hero",
-        start: "top top",
-        end: "60% top",
-        scrub: 1
-      }
-    });
-
-    /* Stats row — pull forward on scroll (foreground layer) */
-    gsap.to(".hero-stats", {
-      yPercent: 22,
-      opacity: 0,
-      ease: "none",
-      scrollTrigger: {
-        trigger: "#hero",
-        start: "30% top",
-        end: "bottom top",
-        scrub: 0.8
-      }
-    });
+  /* Hero parallax */
+  if(!mb){
+    gsap.to("#hero-canvas",{yPercent:18,ease:"none",scrollTrigger:{trigger:"#hero",start:"top top",end:"bottom top",scrub:1.4}});
+    gsap.to(".hero-tag",{yPercent:-12,opacity:0,ease:"none",scrollTrigger:{trigger:"#hero",start:"top top",end:"60% top",scrub:1}});
+    gsap.to(".hero-stats",{yPercent:22,opacity:0,ease:"none",scrollTrigger:{trigger:"#hero",start:"30% top",end:"bottom top",scrub:0.8}});
+    gsap.to(".hero-name,.hero-name-alt",{scale:.97,opacity:.6,scrollTrigger:{trigger:"#hero",start:"top top",end:"bottom top",scrub:1}});
+    gsap.to(".hero-inner",{y:-60,scrollTrigger:{trigger:"#hero",start:"top top",end:"bottom top",scrub:1}});
   }
 
-  /* ══════════════════════════════════════════════════════════════
-     2. ABOUT — Staggered paragraph depth reveal
-     ══════════════════════════════════════════════════════════════ */
-  gsap.from(".about-text p", {
-    y: 40,
-    opacity: 0,
-    duration: 1.1,
-    stagger: 0.18,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: "#about",
-      start: "top 72%",
-      toggleActions: "play none none none"
-    }
+  /* About */
+  gsap.from(".about-text p",{y:40,opacity:0,duration:1.1,stagger:.18,ease:"power3.out",scrollTrigger:{trigger:"#about",start:"top 72%",toggleActions:"play none none none"}});
+  gsap.from(".about-right p",{y:30,opacity:0,duration:1,stagger:.15,ease:"power2.out",scrollTrigger:{trigger:".about-right",start:"top 78%",toggleActions:"play none none none"}});
+  gsap.from(".tag",{scale:.78,opacity:0,duration:.55,stagger:.08,ease:"back.out(1.7)",scrollTrigger:{trigger:".tag-row",start:"top 85%",toggleActions:"play none none none"}});
+
+  /* Performance KPI zoom */
+  gsap.from(".perf-card",{y:60,scale:.92,opacity:0,duration:.9,stagger:{each:.1,from:"start"},ease:"power3.out",scrollTrigger:{trigger:"#performance",start:"top 70%",toggleActions:"play none none none"}});
+  gsap.from(".perf-val",{scale:.7,opacity:0,duration:.7,stagger:.1,ease:"back.out(2)",scrollTrigger:{trigger:"#performance",start:"top 68%",toggleActions:"play none none none"}});
+
+  /* KPI count-up (scroll-triggered, not on load) */
+  var kpiMap=[
+    {txt:"USD 240M",v:240,p:"USD ",s:"M"},
+    {txt:"USD 36M", v:36, p:"USD ",s:"M"},
+    {txt:"30%",     v:30, p:"",   s:"%"},
+    {txt:"17.5%",   v:17.5,p:"", s:"%"},
+    {txt:"58%",     v:58, p:"",  s:"%"},
+    {txt:"16",      v:16, p:"",  s:""},
+    {txt:"40%",     v:40, p:"",  s:"%"},
+    {txt:"6 Mo.",   v:6,  p:"",  s:" Mo."}
+  ];
+  document.querySelectorAll(".perf-val").forEach(function(el,i){
+    var k=kpiMap[i]; if(!k) return;
+    var orig=el.textContent.trim(), done=false;
+    ScrollTrigger.create({trigger:el,start:"top 85%",onEnter:function(){
+      if(done)return; done=true;
+      var t0=performance.now(), dur=1600, dec=(k.v%1!==0);
+      function tick(now){
+        var p=Math.min((now-t0)/dur,1), e=p===1?1:1-Math.pow(2,-10*p), v=k.v*e;
+        el.textContent=k.p+(dec?v.toFixed(1):Math.round(v))+k.s;
+        if(p<1)requestAnimationFrame(tick); else el.textContent=orig;
+      }
+      requestAnimationFrame(tick);
+    }});
   });
 
-  gsap.from(".about-right p", {
-    y: 30,
-    opacity: 0,
-    duration: 1.0,
-    stagger: 0.15,
-    ease: "power2.out",
-    scrollTrigger: {
-      trigger: ".about-right",
-      start: "top 78%",
-      toggleActions: "play none none none"
+  /* Business Impact sequential */
+  gsap.from(".impact-row",{x:-48,opacity:0,duration:.85,stagger:{each:.22,from:"start"},ease:"power3.out",scrollTrigger:{trigger:"#impact",start:"top 72%",toggleActions:"play none none none"}});
+  gsap.from(".impact-num",{scale:0,opacity:0,duration:.6,stagger:.22,ease:"back.out(2.5)",scrollTrigger:{trigger:"#impact",start:"top 72%",toggleActions:"play none none none"}});
+  gsap.from(".impact-headline",{y:20,opacity:0,duration:.7,stagger:.22,ease:"power2.out",scrollTrigger:{trigger:"#impact",start:"top 70%",toggleActions:"play none none none"}});
+
+  /* Career role focus */
+  (function(){
+    var roles=document.querySelectorAll(".role"); if(!roles.length)return;
+    gsap.set(roles,{opacity:.32,scale:.98}); gsap.set(roles[0],{opacity:1,scale:1});
+    function focus(ai){
+      roles.forEach(function(r,i){gsap.to(r,{opacity:i===ai?1:.32,scale:i===ai?1:.98,duration:.5,ease:"power2.out"});});
+      document.querySelectorAll(".career-nav-item").forEach(function(n,i){n.classList.toggle("active",i===ai);});
     }
-  });
-
-  /* Tag pills — spring in */
-  gsap.from(".tag", {
-    scale: 0.78,
-    opacity: 0,
-    duration: 0.55,
-    stagger: 0.08,
-    ease: "back.out(1.7)",
-    scrollTrigger: {
-      trigger: ".tag-row",
-      start: "top 85%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  /* ══════════════════════════════════════════════════════════════
-     3. PERFORMANCE INDICATORS — Cinematic KPI focus zoom
-        Each card enters with a scale-from-below, then the
-        .perf-val number counts up when its card becomes visible.
-     ══════════════════════════════════════════════════════════════ */
-
-  /* Override existing plain stagger with a cinematic depth entry */
-  gsap.from(".perf-card", {
-    y: 60,
-    scale: 0.92,
-    opacity: 0,
-    duration: 0.9,
-    stagger: {
-      each: 0.1,
-      from: "start"
-    },
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: "#performance",
-      start: "top 70%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  /* KPI value zoom pulse when card enters */
-  gsap.from(".perf-val", {
-    scale: 0.7,
-    opacity: 0,
-    duration: 0.7,
-    stagger: 0.1,
-    ease: "back.out(2)",
-    scrollTrigger: {
-      trigger: "#performance",
-      start: "top 68%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  /* ── KPI Count-up animation (scroll-triggered, not on load) ─── */
-  (function initKPICountUp() {
-    /* Map of display text → numeric target + format function */
-    var kpiMap = [
-      { text: "USD 240M", target: 240,  prefix: "USD ",  suffix: "M"  },
-      { text: "USD 36M",  target: 36,   prefix: "USD ",  suffix: "M"  },
-      { text: "30%",      target: 30,   prefix: "",      suffix: "%"  },
-      { text: "17.5%",    target: 17.5, prefix: "",      suffix: "%"  },
-      { text: "58%",      target: 58,   prefix: "",      suffix: "%"  },
-      { text: "16",       target: 16,   prefix: "",      suffix: ""   },
-      { text: "40%",      target: 40,   prefix: "",      suffix: "%"  },
-      { text: "6 Mo.",    target: 6,    prefix: "",      suffix: " Mo."}
-    ];
-
-    document.querySelectorAll(".perf-val").forEach(function(el, idx) {
-      var kpi = kpiMap[idx];
-      if (!kpi) { return; }
-
-      /* Stash original display text, show it until trigger fires */
-      var original = el.textContent.trim();
-      var triggered = false;
-
-      ScrollTrigger.create({
-        trigger: el,
-        start: "top 85%",
-        onEnter: function() {
-          if (triggered) { return; }
-          triggered = true;
-
-          var start  = performance.now();
-          var dur    = 1600; /* ms */
-          var isDecimal = (kpi.target % 1 !== 0);
-
-          function tick(now) {
-            var elapsed = now - start;
-            var progress = Math.min(elapsed / dur, 1);
-            /* Expo ease-out */
-            var eased = progress === 1
-              ? 1
-              : 1 - Math.pow(2, -10 * progress);
-            var val = kpi.target * eased;
-            el.textContent = kpi.prefix +
-              (isDecimal ? val.toFixed(1) : Math.round(val)) +
-              kpi.suffix;
-            if (progress < 1) {
-              requestAnimationFrame(tick);
-            } else {
-              el.textContent = original; /* Restore exact original */
-            }
-          }
-          requestAnimationFrame(tick);
-        }
-      });
+    roles.forEach(function(role,i){
+      ScrollTrigger.create({trigger:role,start:"top 55%",end:"bottom 45%",
+        onEnter:function(){focus(i);}, onEnterBack:function(){focus(i);}});
     });
   }());
+  gsap.from(".role",{y:50,opacity:0,duration:.9,stagger:.18,ease:"power3.out",scrollTrigger:{trigger:"#career",start:"top 75%",toggleActions:"play none none none"}});
 
-  /* ══════════════════════════════════════════════════════════════
-     4. BUSINESS IMPACT — Sequential one-at-a-time reveal
-        Each impact-row appears as previous finishes → timeline feel
-     ══════════════════════════════════════════════════════════════ */
-  gsap.from(".impact-row", {
-    x: -48,
-    opacity: 0,
-    duration: 0.85,
-    stagger: {
-      each: 0.22,
-      from: "start"
-    },
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: "#impact",
-      start: "top 72%",
-      toggleActions: "play none none none"
-    }
-  });
+  /* Decisions */
+  gsap.from(".dec-card",{y:50,rotateX:8,opacity:0,duration:.85,stagger:.16,ease:"power3.out",transformOrigin:"top center",scrollTrigger:{trigger:"#decisions",start:"top 73%",toggleActions:"play none none none"}});
+  gsap.from(".dec-num",{scale:0,opacity:0,duration:.5,stagger:.16,ease:"back.out(3)",scrollTrigger:{trigger:"#decisions",start:"top 73%",toggleActions:"play none none none"}});
 
-  /* Impact number — scale in for emphasis */
-  gsap.from(".impact-num", {
-    scale: 0,
-    opacity: 0,
-    duration: 0.6,
-    stagger: 0.22,
-    ease: "back.out(2.5)",
-    scrollTrigger: {
-      trigger: "#impact",
-      start: "top 72%",
-      toggleActions: "play none none none"
-    }
-  });
+  /* Approach */
+  gsap.from(".principle",{x:-32,opacity:0,duration:.75,stagger:.14,ease:"power2.out",scrollTrigger:{trigger:".principles",start:"top 78%",toggleActions:"play none none none"}});
+  gsap.from(".approach-quote",{scale:.96,opacity:0,duration:1.2,ease:"power3.out",scrollTrigger:{trigger:"#approach",start:"top 70%",toggleActions:"play none none none"}});
 
-  /* Headline text slide */
-  gsap.from(".impact-headline", {
-    y: 20,
-    opacity: 0,
-    duration: 0.7,
-    stagger: 0.22,
-    ease: "power2.out",
-    scrollTrigger: {
-      trigger: "#impact",
-      start: "top 70%",
-      toggleActions: "play none none none"
-    }
-  });
+  /* Capabilities */
+  gsap.from(".cap",{y:40,scale:.95,opacity:0,duration:.8,stagger:.12,ease:"power3.out",scrollTrigger:{trigger:"#capabilities",start:"top 74%",toggleActions:"play none none none"}});
+  gsap.from(".cap-h",{y:16,opacity:0,duration:.6,stagger:.12,ease:"power2.out",scrollTrigger:{trigger:"#capabilities",start:"top 73%",toggleActions:"play none none none"}});
 
-  /* ══════════════════════════════════════════════════════════════
-     5. CAREER — Scroll-driven role focus system
-        Active role = full opacity + slight scale
-        Inactive roles = dimmed
-     ══════════════════════════════════════════════════════════════ */
-  (function initCareerFocus() {
-    var roles = document.querySelectorAll(".role");
-    if (!roles.length) { return; }
+  /* Journey */
+  gsap.from(".tl-item",{y:36,opacity:0,duration:.85,stagger:.2,ease:"power3.out",scrollTrigger:{trigger:"#journey",start:"top 76%",toggleActions:"play none none none"}});
+  gsap.from(".tl-dot",{scale:0,opacity:0,duration:.5,stagger:.2,ease:"elastic.out(1.2,.5)",scrollTrigger:{trigger:"#journey",start:"top 76%",toggleActions:"play none none none"}});
 
-    /* Initial state: first role full, others pre-dimmed */
-    gsap.set(roles, { opacity: 0.35, scale: 0.98 });
-    gsap.set(roles[0], { opacity: 1, scale: 1 });
+  /* Projects + Contact */
+  gsap.from(".proj",{y:44,opacity:0,duration:.8,stagger:.15,ease:"power3.out",scrollTrigger:{trigger:"#projects",start:"top 76%",toggleActions:"play none none none"}});
+  gsap.from("#contact .contact-grid > div",{y:40,opacity:0,duration:.9,stagger:.2,ease:"power3.out",scrollTrigger:{trigger:"#contact",start:"top 78%",toggleActions:"play none none none"}});
 
-    roles.forEach(function(role, i) {
-      ScrollTrigger.create({
-        trigger: role,
-        start: "top 55%",
-        end: "bottom 45%",
-        onEnter: function() { focusRole(i); },
-        onEnterBack: function() { focusRole(i); }
-      });
-    });
-
-    function focusRole(activeIdx) {
-      roles.forEach(function(r, i) {
-        gsap.to(r, {
-          opacity: i === activeIdx ? 1 : 0.32,
-          scale:   i === activeIdx ? 1 : 0.98,
-          duration: 0.5,
-          ease: "power2.out"
-        });
-      });
-      /* Sync nav dots if career-nav-item elements exist */
-      document.querySelectorAll(".career-nav-item").forEach(function(item, i) {
-        item.classList.toggle("active", i === activeIdx);
-      });
-    }
-  }());
-
-  /* Career section entry — roles cascade in */
-  gsap.from(".role", {
-    y: 50,
-    opacity: 0,
-    duration: 0.9,
-    stagger: 0.18,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: "#career",
-      start: "top 75%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  /* ══════════════════════════════════════════════════════════════
-     6. STRATEGIC DECISIONS — Card flip-in sequence
-     ══════════════════════════════════════════════════════════════ */
-  gsap.from(".dec-card", {
-    y: 50,
-    rotateX: 8,
-    opacity: 0,
-    duration: 0.85,
-    stagger: 0.16,
-    ease: "power3.out",
-    transformOrigin: "top center",
-    scrollTrigger: {
-      trigger: "#decisions",
-      start: "top 73%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  gsap.from(".dec-num", {
-    scale: 0,
-    opacity: 0,
-    duration: 0.5,
-    stagger: 0.16,
-    ease: "back.out(3)",
-    scrollTrigger: {
-      trigger: "#decisions",
-      start: "top 73%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  /* ══════════════════════════════════════════════════════════════
-     7. APPROACH — Principle items typewriter-stagger
-     ══════════════════════════════════════════════════════════════ */
-  gsap.from(".principle", {
-    x: -32,
-    opacity: 0,
-    duration: 0.75,
-    stagger: 0.14,
-    ease: "power2.out",
-    scrollTrigger: {
-      trigger: ".principles",
-      start: "top 78%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  /* Quote line — gold emphasis scale */
-  gsap.from(".approach-quote", {
-    scale: 0.96,
-    opacity: 0,
-    duration: 1.2,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: "#approach",
-      start: "top 70%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  /* ══════════════════════════════════════════════════════════════
-     8. CAPABILITIES — Grid cluster reveal
-     ══════════════════════════════════════════════════════════════ */
-  gsap.from(".cap", {
-    y: 40,
-    scale: 0.95,
-    opacity: 0,
-    duration: 0.8,
-    stagger: 0.12,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: "#capabilities",
-      start: "top 74%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  gsap.from(".cap-h", {
-    y: 16,
-    opacity: 0,
-    duration: 0.6,
-    stagger: 0.12,
-    ease: "power2.out",
-    scrollTrigger: {
-      trigger: "#capabilities",
-      start: "top 73%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  /* ══════════════════════════════════════════════════════════════
-     9. JOURNEY — Timeline scroll storytelling
-     ══════════════════════════════════════════════════════════════ */
-  gsap.from(".tl-item", {
-    y: 36,
-    opacity: 0,
-    duration: 0.85,
-    stagger: 0.2,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: "#journey",
-      start: "top 76%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  /* Timeline dot — pulse in */
-  gsap.from(".tl-dot", {
-    scale: 0,
-    opacity: 0,
-    duration: 0.5,
-    stagger: 0.2,
-    ease: "elastic.out(1.2, 0.5)",
-    scrollTrigger: {
-      trigger: "#journey",
-      start: "top 76%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  /* ══════════════════════════════════════════════════════════════
-     10. PROJECTS — Numbered entry
-     ══════════════════════════════════════════════════════════════ */
-  gsap.from(".proj", {
-    y: 44,
-    opacity: 0,
-    duration: 0.8,
-    stagger: 0.15,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: "#projects",
-      start: "top 76%",
-      toggleActions: "play none none none"
-    }
-  });
-
-  /* ══════════════════════════════════════════════════════════════
-     11. SECTION EYEBROWS — Universal micro-stagger
-         Targets .eyebrow across all sections
-     ══════════════════════════════════════════════════════════════ */
-  gsap.from(".eyebrow", {
-    y: 20,
-    opacity: 0,
-    duration: 0.7,
-    letterSpacing: "0.4em",
-    ease: "power2.out",
-    stagger: 0,
-    scrollTrigger: {
-      trigger: ".eyebrow",
-      start: "top 82%",
-      toggleActions: "play none none none",
-      /* Each eyebrow gets its own trigger via batch */
-    }
-  });
-
-  /* Batch eyebrows for per-element triggers */
-  ScrollTrigger.batch(".eyebrow", {
-    start: "top 84%",
-    onEnter: function(els) {
-      gsap.to(els, {
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        ease: "power2.out",
-        overwrite: true
-      });
-    },
-    onLeaveBack: function(els) {
-      gsap.set(els, { opacity: 0, y: 20 });
-    }
-  });
-
-  /* ══════════════════════════════════════════════════════════════
-     12. PARALLAX LAYERS — 3 depth tiers on non-mobile
-     ══════════════════════════════════════════════════════════════ */
-  if (!isMobile) {
-    /* Bg tier — section heading displays (slow) */
-    document.querySelectorAll(".scene .display").forEach(function(el) {
-      gsap.to(el, {
-        yPercent: -6,
-        ease: "none",
-        scrollTrigger: {
-          trigger: el.closest(".scene"),
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 2
-        }
-      });
-    });
-
-    /* Mid tier — perf cards, impact rows (normal) */
-    document.querySelectorAll(".perf-card, .dec-card").forEach(function(el) {
-      gsap.to(el, {
-        yPercent: -3,
-        ease: "none",
-        scrollTrigger: {
-          trigger: el,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1.2
-        }
-      });
+  /* Desktop parallax bg layer */
+  if(!mb){
+    document.querySelectorAll(".scene .display").forEach(function(el){
+      gsap.to(el,{yPercent:-6,ease:"none",scrollTrigger:{trigger:el.closest(".scene"),start:"top bottom",end:"bottom top",scrub:2}});
     });
   }
 
-  /* ══════════════════════════════════════════════════════════════
-     13. HOVER MICRO-INTERACTIONS
-         Gold shimmer on KPI cards, lift on impact rows,
-         emphasis pulse on decision cards
-     ══════════════════════════════════════════════════════════════ */
-  (function initHoverMicro() {
-    /* Perf cards — scale + glow lift */
-    document.querySelectorAll(".perf-card").forEach(function(el) {
-      el.addEventListener("mouseenter", function() {
-        gsap.to(el, {
-          y: -6,
-          scale: 1.025,
-          duration: 0.35,
-          ease: "power2.out"
-        });
-        gsap.to(el.querySelector(".perf-val"), {
-          scale: 1.06,
-          color: "#d4b87a",
-          duration: 0.3,
-          ease: "power2.out"
-        });
-      });
-      el.addEventListener("mouseleave", function() {
-        gsap.to(el, {
-          y: 0,
-          scale: 1,
-          duration: 0.4,
-          ease: "power2.out"
-        });
-        gsap.to(el.querySelector(".perf-val"), {
-          scale: 1,
-          color: "",
-          duration: 0.3,
-          ease: "power2.out"
-        });
-      });
-    });
-
-    /* Impact rows — slide right + highlight */
-    document.querySelectorAll(".impact-row").forEach(function(el) {
-      el.addEventListener("mouseenter", function() {
-        gsap.to(el, {
-          x: 6,
-          duration: 0.3,
-          ease: "power2.out"
-        });
-        gsap.to(el.querySelector(".impact-num"), {
-          scale: 1.1,
-          duration: 0.3,
-          ease: "back.out(2)"
-        });
-      });
-      el.addEventListener("mouseleave", function() {
-        gsap.to(el, {
-          x: 0,
-          duration: 0.35,
-          ease: "power2.out"
-        });
-        gsap.to(el.querySelector(".impact-num"), {
-          scale: 1,
-          duration: 0.3,
-          ease: "power2.out"
-        });
-      });
-    });
-
-    /* Decision cards — depth press */
-    document.querySelectorAll(".dec-card").forEach(function(el) {
-      el.addEventListener("mouseenter", function() {
-        gsap.to(el, {
-          y: -8,
-          scale: 1.02,
-          duration: 0.35,
-          ease: "power2.out"
-        });
-      });
-      el.addEventListener("mouseleave", function() {
-        gsap.to(el, {
-          y: 0,
-          scale: 1,
-          duration: 0.4,
-          ease: "power2.out"
-        });
-      });
-    });
-
-    /* Principle items — slide right emphasis */
-    document.querySelectorAll(".principle").forEach(function(el) {
-      el.addEventListener("mouseenter", function() {
-        gsap.to(el.querySelector(".p-label"), {
-          color: "#c8a96a",
-          x: 4,
-          duration: 0.25,
-          ease: "power2.out"
-        });
-      });
-      el.addEventListener("mouseleave", function() {
-        gsap.to(el.querySelector(".p-label"), {
-          color: "",
-          x: 0,
-          duration: 0.3,
-          ease: "power2.out"
-        });
-      });
-    });
-  }());
-
-  /* ══════════════════════════════════════════════════════════════
-     14. CONTACT — Final scene entry
-     ══════════════════════════════════════════════════════════════ */
-  gsap.from("#contact .contact-grid > div", {
-    y: 40,
-    opacity: 0,
-    duration: 0.9,
-    stagger: 0.2,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: "#contact",
-      start: "top 78%",
-      toggleActions: "play none none none"
-    }
+  /* Hover micro-interactions */
+  document.querySelectorAll(".perf-card").forEach(function(el){
+    var pv=el.querySelector(".perf-val");
+    el.addEventListener("mouseenter",function(){gsap.to(el,{y:-6,scale:1.025,duration:.35,ease:"power2.out"});if(pv)gsap.to(pv,{scale:1.06,duration:.3,ease:"power2.out"});});
+    el.addEventListener("mouseleave",function(){gsap.to(el,{y:0,scale:1,duration:.4,ease:"power2.out"});if(pv)gsap.to(pv,{scale:1,duration:.3,ease:"power2.out"});});
+  });
+  document.querySelectorAll(".impact-row").forEach(function(el){
+    el.addEventListener("mouseenter",function(){gsap.to(el,{x:6,duration:.3,ease:"power2.out"});});
+    el.addEventListener("mouseleave",function(){gsap.to(el,{x:0,duration:.35,ease:"power2.out"});});
+  });
+  document.querySelectorAll(".dec-card").forEach(function(el){
+    el.addEventListener("mouseenter",function(){gsap.to(el,{y:-8,scale:1.02,duration:.35,ease:"power2.out"});});
+    el.addEventListener("mouseleave",function(){gsap.to(el,{y:0,scale:1,duration:.4,ease:"power2.out"});});
+  });
+  document.querySelectorAll(".principle").forEach(function(el){
+    var lbl=el.querySelector(".p-label");
+    el.addEventListener("mouseenter",function(){if(lbl)gsap.to(lbl,{color:"#c8a96a",x:4,duration:.25,ease:"power2.out"});});
+    el.addEventListener("mouseleave",function(){if(lbl)gsap.to(lbl,{color:"",x:0,duration:.3,ease:"power2.out"});});
   });
 
-  /* ══════════════════════════════════════════════════════════════
-     15. GLOBAL — Section heading display lines
-         Every .display gets a clip-from-bottom entry
-     ══════════════════════════════════════════════════════════════ */
-  ScrollTrigger.batch(".display", {
-    start: "top 80%",
-    onEnter: function(batch) {
-      gsap.from(batch, {
-        y: 40,
-        opacity: 0,
-        duration: 0.9,
-        stagger: 0.1,
-        ease: "power3.out",
-        overwrite: "auto"
-      });
-    }
+  /* Eyebrow batch */
+  ScrollTrigger.batch(".eyebrow",{
+    start:"top 84%",
+    onEnter:function(els){gsap.to(els,{opacity:1,y:0,duration:.7,ease:"power2.out",overwrite:true});},
+    onLeaveBack:function(els){gsap.set(els,{opacity:0,y:20});}
   });
 
-  /* ══════════════════════════════════════════════════════════════
-     Safety: refresh ScrollTrigger after all images/fonts load
-     ══════════════════════════════════════════════════════════════ */
-  window.addEventListener("load", function() {
-    ScrollTrigger.refresh();
-  });
-
-}());
-
-/* ══════════════════════════════════════════════════════════════════
-   ADMIN PANEL — Belt-and-braces re-wiring with null checks
-   Ensures admin button works even if earlier binding silently failed
-   ══════════════════════════════════════════════════════════════════ */
-(function rewireAdmin() {
-  "use strict";
-
-  function safeEl(id) {
-    return document.getElementById(id);
-  }
-
-  function doWire() {
-    var adminBtn   = safeEl("admin-btn");
-    var adminPanel = safeEl("admin-panel");
-    var apClose1   = safeEl("ap-close1");
-    var apClose2   = safeEl("ap-close2");
-    var apPw       = safeEl("ap-pw");
-    var apUnlock   = safeEl("ap-unlock-btn");
-    var apSave     = safeEl("ap-save-btn");
-    var apLock     = safeEl("ap-lock-wrap");
-    var apEditor   = safeEl("ap-editor");
-    var apErr      = safeEl("ap-err");
-
-    if (!adminBtn || !adminPanel) {
-      return; /* Elements not in DOM yet — bail cleanly */
-    }
-
-    /* Only wire if not already wired (avoid duplicate listeners) */
-    if (adminBtn.dataset.wired === "1") { return; }
-    adminBtn.dataset.wired = "1";
-
-    function openPanel()  { adminPanel.classList.add("open");    }
-    function closePanel() { adminPanel.classList.remove("open"); }
-
-    adminBtn.addEventListener("click", function(e) {
-      e.stopPropagation();
-      adminPanel.classList.toggle("open");
-    });
-
-    if (apClose1) { apClose1.addEventListener("click", closePanel); }
-    if (apClose2) { apClose2.addEventListener("click", closePanel); }
-
-    /* Close on backdrop click */
-    adminPanel.addEventListener("click", function(e) {
-      if (e.target === adminPanel) { closePanel(); }
-    });
-
-    /* Escape key */
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "Escape" && adminPanel.classList.contains("open")) {
-        closePanel();
-      }
-    });
-
-    /* Admin tab switching */
-    document.querySelectorAll(".ap-tab").forEach(function(tab) {
-      if (tab.dataset.tabWired) { return; }
-      tab.dataset.tabWired = "1";
-      tab.addEventListener("click", function() {
-        document.querySelectorAll(".ap-tab").forEach(function(t) {
-          t.classList.remove("on");
-        });
-        document.querySelectorAll(".ap-tc").forEach(function(tc) {
-          tc.classList.remove("on");
-        });
-        tab.classList.add("on");
-        var tc = safeEl("tc-" + tab.dataset.t);
-        if (tc) { tc.classList.add("on"); }
-      });
-    });
-
-    /* Unlock editor */
-    function tryUnlock() {
-      var pw      = apPw ? apPw.value : "";
-      var stored  = (window.__MMConfig && window.__MMConfig.password) || "Magdoom@2024";
-      if (pw === stored) {
-        if (apLock)   { apLock.style.display   = "none";  }
-        if (apEditor) { apEditor.style.display = "block"; }
-      } else {
-        if (apErr) { apErr.style.display = "block"; }
-      }
-    }
-
-    if (apUnlock) {
-      apUnlock.addEventListener("click", tryUnlock);
-    }
-    if (apPw) {
-      apPw.addEventListener("keydown", function(e) {
-        if (e.key === "Enter") { tryUnlock(); }
-      });
-    }
-  }
-
-  /* Run immediately if DOM ready, else wait */
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", doWire);
-  } else {
-    doWire();
-  }
-  /* Also run on load as final safety net */
-  window.addEventListener("load", doWire);
-
+  window.addEventListener("load",function(){ScrollTrigger.refresh();});
 }());
 
 </script>
+<script>
 
+/* WIRE-ALL: FAB, business card, chat, counters — DOM guaranteed at window.load */
+window.addEventListener("load", function() {
+  "use strict";
+  function g(id){ return document.getElementById(id); }
 
-<!-- ═══════════════════════════════════════════════════════
-     SPEED-DIAL FLOATING ACTION BUTTONS
-═══════════════════════════════════════════════════════ -->
-<div id="fab-wrap">
-  <!-- FAB menu items (shown when open) -->
-  <div id="fab-menu" role="menu">
-
-    <div class="fab-item">
-      <span class="fab-item-lbl">Portfolio</span>
-      <a class="fab-item-btn" href="https://mohamedmagdoom.pages.dev" target="_blank" title="Portfolio" role="menuitem">🌐</a>
-    </div>
-
-    <div class="fab-item">
-      <span class="fab-item-lbl">Digital Card</span>
-      <button class="fab-item-btn" id="card-btn" title="Digital Business Card" role="menuitem">💳</button>
-    </div>
-
-    <div class="fab-item">
-      <span class="fab-item-lbl">Chat with AI</span>
-      <button class="fab-item-btn" id="chat-btn" title="AI Assistant" role="menuitem">🤖</button>
-    </div>
-
-    <div class="fab-item">
-      <span class="fab-item-lbl">WhatsApp</span>
-      <a class="fab-item-btn" href="https://wa.me/260760634300?text=Hi%20Mohamed%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank" title="WhatsApp" role="menuitem">💬</a>
-    </div>
-
-    <div class="fab-item">
-      <span class="fab-item-lbl">LinkedIn</span>
-      <a class="fab-item-btn" href="https://linkedin.com/in/mohamed-magdoom" target="_blank" title="LinkedIn" role="menuitem">in</a>
-    </div>
-
-  </div>
-
-  <!-- Main toggle -->
-  <button id="fab-toggle" aria-label="Quick actions" aria-expanded="false" aria-controls="fab-menu">⚡</button>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     DIGITAL BUSINESS CARD MODAL
-═══════════════════════════════════════════════════════ -->
-<div id="bcard-modal" role="dialog" aria-label="Digital Business Card" aria-modal="true">
-  <div class="bcard">
-
-    <!-- Header -->
-    <div class="bcard-header">
-      <button id="bcard-close" aria-label="Close card">✕</button>
-      <h2>Mohamed <span>Magdoom</span></h2>
-      <div class="bcard-title">Fuel Retail &amp; Multi-Site Operations Executive</div>
-      <div class="bcard-kpis">
-        <div class="bcard-kpi"><div class="bcard-kpi-val">$240M</div><div class="bcard-kpi-lbl">P&amp;L</div></div>
-        <div class="bcard-kpi"><div class="bcard-kpi-val">90+</div><div class="bcard-kpi-lbl">Stations</div></div>
-        <div class="bcard-kpi"><div class="bcard-kpi-val">1,500+</div><div class="bcard-kpi-lbl">People</div></div>
-        <div class="bcard-kpi"><div class="bcard-kpi-val">12+</div><div class="bcard-kpi-lbl">Years</div></div>
-      </div>
-    </div>
-
-    <!-- QR / scan area -->
-    <div class="bcard-qr-area">
-      <div id="bcard-qr" title="Scan to visit portfolio"></div>
-    </div>
-
-    <!-- Contact details -->
-    <div class="bcard-body">
-      <div class="bcard-contact-row">
-        <span class="bcard-contact-icon">📧</span>
-        <a href="/cdn-cgi/l/email-protection#1b7674737a767e7f35767a7c7f7474765b7c767a727735787476"><span class="__cf_email__" data-cfemail="5f3230373e323a3b71323e383b3030321f38323e3633713c3032">[email&#160;protected]</span></a>
-      </div>
-      <div class="bcard-contact-row">
-        <span class="bcard-contact-icon">📱</span>
-        <span>+260 760 634 300 &nbsp;·&nbsp; +91 7550 270 450</span>
-      </div>
-      <div class="bcard-contact-row">
-        <span class="bcard-contact-icon">💼</span>
-        <a href="https://linkedin.com/in/mohamed-magdoom" target="_blank">linkedin.com/in/mohamed-magdoom</a>
-      </div>
-      <div class="bcard-contact-row">
-        <span class="bcard-contact-icon">📍</span>
-        <span>Lusaka, Zambia · Open to relocation globally</span>
-      </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="bcard-actions">
-      <button class="bcard-btn bcard-btn-primary" id="bcard-dl">⬇ Save Contact (.vcf)</button>
-      <button class="bcard-btn" id="bcard-copy">Copy Link</button>
-    </div>
-
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     AI CHAT WIDGET
-═══════════════════════════════════════════════════════ -->
-<div id="chat-panel" role="dialog" aria-label="Chat with Mohamed's assistant" aria-modal="true">
-
-  <div class="chat-header">
-    <div class="chat-header-info">
-      <div class="chat-avatar">M</div>
-      <div class="chat-header-text">
-        <h4>Portfolio Assistant</h4>
-        <p>Ask about Mohamed's career</p>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <div class="chat-dot"></div>
-      <button id="chat-close" aria-label="Close chat">✕</button>
-    </div>
-  </div>
-
-  <div id="chat-msgs" aria-live="polite" aria-label="Chat messages"></div>
-
-  <div class="chat-input-row">
-        <input id="chat-input" type="text" placeholder="Ask about experience, achievements, contact…" autocomplete="off" aria-label="Chat message">
-    <button id="chat-send" aria-label="Send message">➤</button>
-  </div>
-
-</div>
-
-/* ═══════════════════════════════════════════════════════
-   HERO COUNTER FIX — Direct DOM-ready trigger
-   Reads data-count from HTML attributes (not from applyData)
-   Ensures counters animate on page load regardless of JS timing
-═══════════════════════════════════════════════════════ */
-(function() {
-  function runCounters() {
-    document.querySelectorAll('.hero-stat-v[data-count]').forEach(function(el) {
-      var target = parseFloat(el.dataset.count) || 0;
-      var suffix = el.dataset.suffix || '';
-      var big    = target >= 1000;
-      var dur    = 1800;
-      var start  = performance.now();
-      function step(now) {
-        var p    = Math.min((now - start) / dur, 1);
-        var ease = 1 - Math.pow(1 - p, 4);
-        var v    = Math.round(target * ease);
-        el.textContent = (big && v >= 1000 ? (v / 1000).toFixed(1) + 'K' : v) + suffix;
-        if (p < 1) {
-          requestAnimationFrame(step);
-        } else {
-          el.textContent = (big && target >= 1000 ? (target / 1000).toFixed(1) + 'K' : target) + suffix;
-        }
-      }
-      requestAnimationFrame(step);
+  /* ── FAB speed-dial ────────────────────────────────────────── */
+  (function(){
+    var tog=g("fab-toggle"), menu=g("fab-menu");
+    if(!tog||!menu||tog.dataset.wired)return;
+    tog.dataset.wired="1";
+    var open=false;
+    tog.addEventListener("click",function(e){
+      e.stopPropagation(); open=!open;
+      menu.classList.toggle("open",open);
+      tog.setAttribute("aria-expanded",String(open));
+      tog.textContent=open?"✕":"⚡";
     });
-  }
-  // Fire immediately if DOM is ready, otherwise wait
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', runCounters);
-  } else {
-    runCounters();
-  }
-  // Also re-run after applyData may have changed data-count values
-  window.addEventListener('load', function() {
-    setTimeout(runCounters, 100);
-  });
-})();
+    document.addEventListener("click",function(e){
+      if(open&&!tog.contains(e.target)&&!menu.contains(e.target)){
+        open=false; menu.classList.remove("open"); tog.textContent="⚡";
+      }
+    });
+    document.addEventListener("keydown",function(e){
+      if(e.key==="Escape"&&open){open=false;menu.classList.remove("open");tog.textContent="⚡";}
+    });
+    console.log("[Portfolio] FAB ready");
+  }());
 
+  /* ── Digital Business Card ─────────────────────────────────── */
+  (function(){
+    var btn=g("card-btn"),modal=g("bcard-modal"),
+        cls=g("bcard-close"),dl=g("bcard-dl"),cp=g("bcard-copy");
+    if(!btn||!modal||btn.dataset.wired)return;
+    btn.dataset.wired="1";
+    btn.addEventListener("click",function(e){e.stopPropagation();modal.classList.toggle("open");});
+    if(cls)cls.addEventListener("click",function(){modal.classList.remove("open");});
+    modal.addEventListener("click",function(e){if(e.target===modal)modal.classList.remove("open");});
+    document.addEventListener("keydown",function(e){if(e.key==="Escape")modal.classList.remove("open");});
+    if(dl)dl.addEventListener("click",function(){
+      var lines=[
+        "BEGIN:VCARD","VERSION:3.0","FN:Mohamed Magdoom",
+        "TITLE:Fuel Retail & Multi-Site Operations Executive",
+        "ORG:Mount Meru Petroleum Limited",
+        "TEL;TYPE=CELL:+260760634300","TEL;TYPE=CELL:+917550270450",
+        "EMAIL:mohamed.magdoom@gmail.com",
+        "URL:https://linkedin.com/in/mohamed-magdoom",
+        "ADR:;;Lusaka;Zambia",
+        "NOTE:USD 240M P&L | 90 Stations | 1500+ People",
+        "END:VCARD"
+      ];
+      var sep=String.fromCharCode(13)+String.fromCharCode(10);
+      var vc=lines.join(sep);
+      var blob=new Blob([vc],{type:"text/vcard"});
+      var a=document.createElement("a");
+      a.href=URL.createObjectURL(blob); a.download="Mohamed_Magdoom.vcf"; a.click();
+      setTimeout(function(){URL.revokeObjectURL(a.href);},5000);
+    });
+    if(cp)cp.addEventListener("click",function(){
+      var url="https://mohamedmagdoom.pages.dev";
+      if(navigator.clipboard){
+        navigator.clipboard.writeText(url).then(function(){
+          cp.textContent="✓ Copied!";
+          setTimeout(function(){cp.textContent="Copy Link";},2000);
+        }).catch(function(){cp.textContent=url;});
+      }else cp.textContent=url;
+    });
+    console.log("[Portfolio] Business card ready");
+  }());
+
+  /* ── AI Chat ───────────────────────────────────────────────── */
+  (function(){
+    var btn=g("chat-btn"),panel=g("chat-panel"),cls=g("chat-close"),
+        inp=g("chat-input"),snd=g("chat-send"),msgs=g("chat-msgs");
+    if(!btn||!panel||btn.dataset.wired)return;
+    btn.dataset.wired="1";
+    var hist=[];
+    btn.addEventListener("click",function(e){
+      e.stopPropagation(); panel.classList.toggle("open");
+      if(panel.classList.contains("open")&&msgs&&!msgs.children.length)
+        addMsg("assistant","Hi! Ask me about Mohamed’s career, achievements, or how to get in touch.");
+    });
+    if(cls)cls.addEventListener("click",function(){panel.classList.remove("open");});
+    document.addEventListener("keydown",function(e){if(e.key==="Escape")panel.classList.remove("open");});
+    function addMsg(role,text){
+      if(!msgs)return;
+      var d=document.createElement("div");
+      d.className="cmsg cmsg-"+role; d.textContent=text;
+      msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+    }
+    function mkDots(){
+      if(!msgs)return null;
+      var d=document.createElement("div");
+      d.className="cmsg cmsg-assistant cmsg-typing";
+      d.innerHTML="<span></span><span></span><span></span>";
+      msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight; return d;
+    }
+    function fallback(q){
+      var lo=(q||"").toLowerCase(), ans;
+      if(/p.?l|240|profit/.test(lo))       ans="Mohamed owns a USD 240M annual P&L at Mount Meru Petroleum — 90 stations, 20M litres/month, full OPEX/CAPEX accountability.";
+      else if(/team|people|1500/.test(lo))  ans="He leads 1,500+ people across Ops, Sales, Finance, HR, and Compliance.";
+      else if(/share|17/.test(lo))          ans="17.5% retail market share for 32 consecutive months — the longest in territory history.";
+      else if(/opex|cost|30/.test(lo))      ans="30% OPEX reduction, USD 3.6M+ saved annually — renegotiated 15+ vendor contracts.";
+      else if(/zambia|india|saudi/.test(lo)) ans="Based in Lusaka, Zambia. Career spans Zambia, India, and Saudi Arabia — 12+ years.";
+      else if(/role|gm|head/.test(lo))      ans="Targeting GM, Head of Sales, Head of Operations, and Business Development roles across Sub-Saharan Africa, GCC, and UAE.";
+      else if(/contact|email|phone/.test(lo)) ans="Email: mohamed.magdoom@gmail.com · Phone: +260 760 634 300 · LinkedIn: linkedin.com/in/mohamed-magdoom";
+      else if(/fleet|b2b/.test(lo))         ans="Built B2B Fleet Card Programme from zero — 30% fuel sales increase within 6 months.";
+      else if(/education|degree/.test(lo))   ans="BSc Hospitality (First Class, 75%) and Diploma Hotel Management (Distinction, 85%) — both 2012.";
+      else ans="I can answer questions about Mohamed’s career, P&L, leadership, achievements, or contact details.";
+      addMsg("assistant",ans); hist.push({role:"assistant",content:ans});
+    }
+    async function send(){
+      if(!inp)return;
+      var text=(inp.value||"").trim(); if(!text)return;
+      inp.value=""; if(snd)snd.disabled=true;
+      addMsg("user",text); hist.push({role:"user",content:text});
+      var t=mkDots();
+      try{
+        var resp=await fetch("https://api.anthropic.com/v1/messages",{
+          method:"POST",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({
+            model:"claude-sonnet-4-20250514",max_tokens:300,
+            system:"You are Mohamed Magdoom’s portfolio assistant. Answer questions about his career concisely and professionally. Key facts: USD 240M P&L, 90 stations, 1500+ employees, 12+ years, Zambia/India/Saudi Arabia. Targeting GM, Head of Sales, Head of Operations, Business Development.",
+            messages:hist.slice(-6)
+          })
+        });
+        if(t)t.remove();
+        if(resp.ok){
+          var data=await resp.json();
+          var reply=(data.content&&data.content[0]&&data.content[0].text)||"";
+          if(reply){addMsg("assistant",reply);hist.push({role:"assistant",content:reply});}
+          else fallback(text);
+        }else fallback(text);
+      }catch(err){if(t)t.remove(); fallback(text);}
+      if(snd)snd.disabled=false; if(inp)inp.focus();
+    }
+    if(snd)snd.addEventListener("click",send);
+    if(inp)inp.addEventListener("keydown",function(e){
+      if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}
+    });
+    console.log("[Portfolio] Chat ready");
+  }());
+
+  /* ── Hero counters ─────────────────────────────────────────── */
+  document.querySelectorAll(".hero-stat-v[data-count]").forEach(function(el){
+    var target=parseFloat(el.dataset.count)||0, suffix=el.dataset.suffix||"";
+    if(!target)return;
+    var big=target>=1000, dur=1800, t0=performance.now();
+    function tick(now){
+      var p=Math.min((now-t0)/dur,1), ease=1-Math.pow(1-p,4), v=Math.round(target*ease);
+      el.textContent=(big&&v>=1000?(v/1000).toFixed(1)+"K":v)+suffix;
+      if(p<1)requestAnimationFrame(tick);
+      else el.textContent=(big&&target>=1000?(target/1000).toFixed(1)+"K":target)+suffix;
+    }
+    requestAnimationFrame(tick);
+  });
+  console.log("[Portfolio] Counters started");
+
+  /* ── Fallback: force .visible after 2s (IntersectionObserver safety net) */
+  setTimeout(function(){
+    document.querySelectorAll(".reveal:not(.visible)").forEach(function(el){
+      el.classList.add("visible");
+    });
+  },2000);
+});
+
+</script>
 </body>
 </html>
