@@ -999,25 +999,7 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
 #chat-input::placeholder{color:var(--text-dim)}
 #chat-send{width:48px;background:var(--gold);border:none;color:var(--bg);cursor:pointer;font-size:1rem;transition:background .2s;flex-shrink:0}
 #chat-send:hover{background:#d4b87a}
-#chat-send:disabled{background:var(--rule);cursor:not-allowed}
-
-/* ===== VISIBILITY FIX (DO NOT REMOVE) ===== */
-/* Show everything EXCEPT FAB elements */
-*:not(#fab-wrap):not(#fab-toggle):not(#fab-menu) {
-  opacity: 1 !important;
-  visibility: visible !important;
-  filter: none !important;
-}
-
-body {
-  color: #e8e4dc !important;
-  background: #080a0f !important;
-}
-
-p, span, div, h1, h2, h3, h4, h5, h6 {
-  color: #e8e4dc !important;
-}
-   
+#chat-send:disabled{background:var(--rule);cursor:not-allowed}   
 </style>
 </head>
 <body>
@@ -1960,11 +1942,26 @@ window.addEventListener("load", function() {
 </script>
 <script>
   // Fix FAB so it can open/close normally
-  document.querySelectorAll('#fab-wrap, #fab-toggle, #fab-menu').forEach(el => {
-    el.style.opacity = '';
-    el.style.visibility = '';
-    el.style.filter = '';
+  const fabWrap = document.getElementById('fab-wrap');
+  const fabToggle = document.getElementById('fab-toggle');
+  const fabMenu = document.getElementById('fab-menu');
+
+  // Reset any forced styles
+  [fabWrap, fabToggle, fabMenu].forEach(el => {
+    if (el) {
+      el.style.opacity = '';
+      el.style.visibility = '';
+      el.style.filter = '';
+    }
   });
+
+  // Make FAB toggle open/close on click
+  if(fabToggle && fabMenu){
+    fabToggle.addEventListener('click', () => {
+      const isOpen = fabMenu.classList.toggle('open'); // toggle open class
+      fabToggle.setAttribute('aria-expanded', isOpen); // update accessibility
+    });
+  }
 </script>
 </body>
 </html>
