@@ -996,10 +996,174 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
 #chat-send{width:48px;background:var(--gold);border:none;color:var(--bg);cursor:pointer;font-size:1rem;transition:background .2s;flex-shrink:0}
 #chat-send:hover{background:#d4b87a}
 #chat-send:disabled{background:var(--rule);cursor:not-allowed}
-#chat-input::placeholder{color:var(--text-dim)}
-#chat-send{width:48px;background:var(--gold);border:none;color:var(--bg);cursor:pointer;font-size:1rem;transition:background .2s;flex-shrink:0}
-#chat-send:hover{background:#d4b87a}
-#chat-send:disabled{background:var(--rule);cursor:not-allowed}   
+
+/* ═══════════════════════════════════════════════════════
+   AWWWARDS UPGRADE — CSS LAYER
+═══════════════════════════════════════════════════════ */
+
+/* Noise grain texture overlay */
+body::after{
+  content:"";
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+  opacity:0.028;
+  pointer-events:none;
+  z-index:9990;
+  animation:grainShift 8s steps(1) infinite;
+}
+@keyframes grainShift{
+  0%{background-position:0 0}
+  10%{background-position:-5% -10%}
+  20%{background-position:-15% 5%}
+  30%{background-position:7% -25%}
+  40%{background-position:-5% 25%}
+  50%{background-position:-15% 10%}
+  60%{background-position:15% 0}
+  70%{background-position:0 15%}
+  80%{background-position:3% 35%}
+  90%{background-position:-10% 10%}
+  100%{background-position:0 0}
+}
+
+/* Enhanced cursor — velocity-aware */
+#cursor{
+  width:6px;height:6px;
+  background:var(--gold);
+  mix-blend-mode:difference;
+  transition:width .15s,height .15s,opacity .2s;
+  will-change:left,top;
+}
+#cursor.cursor-hover{width:20px;height:20px;background:transparent;border:1.5px solid var(--gold)}
+#cursor-trail{
+  width:36px;height:36px;
+  border:1px solid rgba(200,169,106,0.25);
+  transition:left .08s ease,top .08s ease,width .25s,height .25s,opacity .3s;
+  will-change:left,top;
+}
+#cursor.cursor-fast{opacity:.5}
+
+/* Magnetic button glow */
+.btn{transition:transform .3s var(--ease-out),box-shadow .3s,background .2s,color .2s}
+.btn-primary:hover{box-shadow:0 0 24px rgba(200,169,106,.35)}
+
+/* KPI glow pulse — applied via JS after count-up */
+.perf-val.glow{
+  text-shadow:0 0 32px rgba(200,169,106,.6);
+  transition:text-shadow .4s;
+}
+
+/* Hero name — each char in a span (JS builds these) */
+.hero-name-char{
+  display:inline-block;
+  will-change:transform,opacity;
+}
+
+/* Section side number indicator */
+.section-indicator{
+  position:fixed;right:28px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:8px;z-index:300;
+  opacity:0;transition:opacity .5s;
+}
+.section-indicator.visible{opacity:1}
+.si-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(200,169,106,.25);
+  transition:background .3s,transform .3s;
+  cursor:pointer;
+}
+.si-dot.active{background:var(--gold);transform:scale(1.5)}
+
+/* 3D tilt container */
+.perf-card{transform-style:preserve-3d;will-change:transform}
+
+/* Decision card scramble — target the title */
+.dec-title{will-change:contents}
+
+/* Scroll progress — enhanced with gradient */
+#progress{
+  background:linear-gradient(90deg,transparent,var(--gold),rgba(200,169,106,.4));
+  height:2px;
+  box-shadow:0 0 8px rgba(200,169,106,.4);
+}
+
+/* Hero name line-mask reveal */
+.hero-name,.hero-name-alt{
+  overflow:hidden;
+  display:block;
+}
+.hero-name-inner{
+  display:block;
+  will-change:transform;
+}
+
+/* Velocity distort on cursor trail */
+#cursor-trail.fast{
+  width:60px;height:24px;
+  border-color:rgba(200,169,106,.15);
+  transition:left .04s,top .04s,width .2s,height .2s;
+}
+
+/* About section — left quote line */
+.about-conviction{
+  position:relative;
+  padding-left:20px;
+}
+.about-conviction::before{
+  content:"";
+  position:absolute;left:0;top:0;bottom:0;
+  width:2px;
+  background:linear-gradient(180deg,var(--gold),transparent);
+}
+
+/* Impact number — large ambient text */
+.impact-num{
+  position:relative;
+  overflow:hidden;
+}
+.impact-num::before{
+  content:attr(data-n);
+  position:absolute;
+  font-size:5rem;
+  font-family:var(--font-display);
+  color:rgba(200,169,106,.04);
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  white-space:nowrap;
+}
+
+/* Horizontal rule with gold gradient */
+.section-rule{
+  width:40px;height:1px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+  margin-bottom:32px;
+}
+
+/* Career nav active dot pulse */
+.career-nav-item.active .career-nav-item-dot{
+  animation:dotPulse 2s ease-in-out infinite;
+}
+@keyframes dotPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(200,169,106,.5)}
+  50%{box-shadow:0 0 0 6px rgba(200,169,106,0)}
+}
+
+/* Globe canvas — subtle vignette */
+#globe-canvas{
+  mask-image:radial-gradient(ellipse 60% 60% at 50% 50%,#000 50%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 60% 60% at 50% 50%,#000 50%,transparent 100%);
+}
+
+/* Timeline dot glow on active */
+.tl-dot.cur{
+  box-shadow:0 0 0 3px rgba(200,169,106,.2),0 0 16px rgba(200,169,106,.3);
+}
+
+@media(max-width:768px){
+  .section-indicator{display:none}
+  body::after{opacity:.018}
+}
 </style>
 </head>
 <body>
@@ -1940,28 +2104,306 @@ window.addEventListener("load", function() {
 
 });
 </script>
-<script>
-  // Fix FAB so it can open/close normally
-  const fabWrap = document.getElementById('fab-wrap');
-  const fabToggle = document.getElementById('fab-toggle');
-  const fabMenu = document.getElementById('fab-menu');
 
-  // Reset any forced styles
-  [fabWrap, fabToggle, fabMenu].forEach(el => {
-    if (el) {
-      el.style.opacity = '';
-      el.style.visibility = '';
-      el.style.filter = '';
+<script>
+/* AWWWARDS UPGRADE — JS LAYER */
+(function awwUpgrade(){
+  "use strict";
+
+  /* ── 1. SCROLL VELOCITY + CURSOR DISTORTION ─────────────────── */
+  var lastY=window.scrollY, velY=0, velRaf=null;
+  var trail=document.getElementById("cursor-trail");
+  var cursor=document.getElementById("cursor");
+  function trackVelocity(){
+    var y=window.scrollY;
+    velY=Math.abs(y-lastY);
+    lastY=y;
+    if(trail){
+      if(velY>12){trail.classList.add("fast");cursor&&cursor.classList.add("cursor-fast");}
+      else{trail.classList.remove("fast");cursor&&cursor.classList.remove("cursor-fast");}
     }
+    velRaf=requestAnimationFrame(trackVelocity);
+  }
+  trackVelocity();
+
+  /* ── 2. ENHANCED CURSOR (scale on hoverable elements) ───────── */
+  document.querySelectorAll("a,button,.perf-card,.dec-card,.impact-row,.role,.tl-item,.proj").forEach(function(el){
+    el.addEventListener("mouseenter",function(){
+      if(cursor)cursor.classList.add("cursor-hover");
+      if(trail){trail.style.width="60px";trail.style.height="60px";}
+    });
+    el.addEventListener("mouseleave",function(){
+      if(cursor)cursor.classList.remove("cursor-hover");
+      if(trail){trail.style.width="36px";trail.style.height="36px";}
+    });
   });
 
-  // Make FAB toggle open/close on click
-  if(fabToggle && fabMenu){
-    fabToggle.addEventListener('click', () => {
-      const isOpen = fabMenu.classList.toggle('open'); // toggle open class
-      fabToggle.setAttribute('aria-expanded', isOpen); // update accessibility
+  /* ── 3. MAGNETIC BUTTONS ────────────────────────────────────── */
+  document.querySelectorAll(".btn-primary,.btn-ghost").forEach(function(btn){
+    btn.addEventListener("mousemove",function(e){
+      var r=btn.getBoundingClientRect();
+      var x=e.clientX-r.left-r.width/2;
+      var y=e.clientY-r.top-r.height/2;
+      btn.style.transform="translate("+x*.18+"px,"+y*.18+"px)";
     });
+    btn.addEventListener("mouseleave",function(){
+      btn.style.transform="";
+    });
+  });
+
+  /* ── 4. HERO NAME — CHAR-BY-CHAR STAGGER ───────────────────── */
+  (function splitHeroNames(){
+    var els=[document.querySelector(".hero-name"),document.querySelector(".hero-name-alt")];
+    els.forEach(function(el){
+      if(!el||el.dataset.split)return;
+      el.dataset.split="1";
+      var text=el.textContent.trim();
+      el.textContent="";
+      // Create inner wrapper for line-mask
+      var inner=document.createElement("span");
+      inner.className="hero-name-inner";
+      text.split("").forEach(function(ch){
+        var span=document.createElement("span");
+        span.className="hero-name-char";
+        span.textContent=ch===" "?"\u00a0":ch;
+        inner.appendChild(span);
+      });
+      el.appendChild(inner);
+    });
+    // GSAP animate chars if gsap available
+    if(typeof gsap!=="undefined"){
+      var allChars=document.querySelectorAll(".hero-name-char");
+      gsap.fromTo(allChars,
+        {y:"110%",opacity:0},
+        {y:"0%",opacity:1,duration:1,stagger:.04,ease:"power3.out",delay:.2}
+      );
+    }
+  }());
+
+  /* ── 5. SECTION SIDE INDICATORS ────────────────────────────── */
+  (function buildIndicators(){
+    var secIds=["hero","about","performance","impact","career","decisions","approach","capabilities","journey","projects","contact"];
+    var wrap=document.createElement("nav");
+    wrap.className="section-indicator";
+    wrap.setAttribute("aria-label","Section navigation");
+    secIds.forEach(function(id,i){
+      var dot=document.createElement("div");
+      dot.className="si-dot";
+      dot.title=id.charAt(0).toUpperCase()+id.slice(1);
+      dot.addEventListener("click",function(){
+        var target=document.getElementById(id);
+        if(target)target.scrollIntoView({behavior:"smooth"});
+      });
+      wrap.appendChild(dot);
+    });
+    document.body.appendChild(wrap);
+
+    // Show after hero
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting)wrap.classList.add("visible");
+        else wrap.classList.remove("visible");
+      });
+    },{threshold:.5});
+    var heroEl=document.getElementById("hero");
+    if(heroEl)io.observe(heroEl);
+
+    // Track active section
+    var sectionIo=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          var idx=secIds.indexOf(entry.target.id);
+          wrap.querySelectorAll(".si-dot").forEach(function(d,i){
+            d.classList.toggle("active",i===idx);
+          });
+        }
+      });
+    },{threshold:.3});
+    secIds.forEach(function(id){
+      var el=document.getElementById(id);
+      if(el)sectionIo.observe(el);
+    });
+  }());
+
+  /* ── 6. PERF CARD 3D TILT ON MOUSEMOVE ─────────────────────── */
+  document.querySelectorAll(".perf-card").forEach(function(card){
+    card.addEventListener("mousemove",function(e){
+      var r=card.getBoundingClientRect();
+      var x=(e.clientX-r.left)/r.width-.5;
+      var y=(e.clientY-r.top)/r.height-.5;
+      card.style.transform="perspective(600px) rotateX("+(-y*8)+"deg) rotateY("+(x*8)+"deg) translateY(-6px) scale(1.025)";
+    });
+    card.addEventListener("mouseleave",function(){
+      card.style.transform="perspective(600px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)";
+    });
+  });
+
+  /* ── 7. KPI GLOW PULSE AFTER COUNT-UP ──────────────────────── */
+  document.querySelectorAll(".perf-val").forEach(function(el){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          setTimeout(function(){el.classList.add("glow");},1700);
+          io.disconnect();
+        }
+      });
+    },{threshold:.5});
+    io.observe(el);
+  });
+
+  /* ── 8. DECISION CARD TEXT SCRAMBLE ON HOVER ────────────────── */
+  var CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  function scramble(el,original){
+    var frame=0,total=20;
+    var interval=setInterval(function(){
+      el.textContent=original.split("").map(function(ch,i){
+        if(i<frame*(original.length/total))return original[i];
+        return ch===" "?" ":CHARS[Math.floor(Math.random()*CHARS.length)];
+      }).join("");
+      frame++;
+      if(frame>total){clearInterval(interval);el.textContent=original;}
+    },35);
+    return interval;
   }
+  document.querySelectorAll(".dec-title").forEach(function(el){
+    var orig=el.textContent;
+    var iv=null;
+    el.closest(".dec-card").addEventListener("mouseenter",function(){
+      if(iv)clearInterval(iv);
+      iv=scramble(el,orig);
+    });
+    el.closest(".dec-card").addEventListener("mouseleave",function(){
+      if(iv)clearInterval(iv);
+      el.textContent=orig;
+    });
+  });
+
+  /* ── 9. IMPACT NUM DATA ATTRIBUTE ──────────────────────────── */
+  document.querySelectorAll(".impact-num span").forEach(function(el){
+    var parent=el.closest(".impact-num");
+    if(parent)parent.setAttribute("data-n",el.textContent);
+  });
+
+  /* ── 10. HORIZONTAL PARALLAX ON CAPABILITIES GRID ──────────── */
+  if(typeof gsap!=="undefined"&&typeof ScrollTrigger!=="undefined"){
+    var capsGrid=document.querySelector(".caps-grid");
+    if(capsGrid){
+      gsap.registerPlugin(ScrollTrigger);
+      // Stagger caps with depth
+      var caps=document.querySelectorAll(".cap");
+      caps.forEach(function(cap,i){
+        gsap.fromTo(cap,
+          {y:30,opacity:0,filter:"blur(4px)"},
+          {y:0,opacity:1,filter:"blur(0px)",duration:.7,ease:"power2.out",
+           scrollTrigger:{trigger:cap,start:"top 85%",toggleActions:"play none none none"}}
+        );
+      });
+    }
+
+    /* ── 11. ABOUT SECTION — WORD-BY-WORD REVEAL ─────────────── */
+    var aboutConviction=document.querySelector(".about-conviction");
+    if(aboutConviction){
+      var words=aboutConviction.querySelectorAll("em,strong");
+      if(words.length){
+        gsap.fromTo(words,
+          {color:"rgba(200,169,106,0)"},
+          {color:"rgba(200,169,106,1)",duration:.6,stagger:.15,ease:"power2.out",
+           scrollTrigger:{trigger:aboutConviction,start:"top 70%",toggleActions:"play none none none"}}
+        );
+      }
+    }
+
+    /* ── 12. HERO STAT COUNTER GLOW ──────────────────────────── */
+    var heroStats=document.querySelector(".hero-stats");
+    if(heroStats){
+      gsap.fromTo(".hero-stat",
+        {opacity:0,y:20,scale:.95},
+        {opacity:1,y:0,scale:1,duration:.8,stagger:.12,ease:"back.out(1.5)",
+         scrollTrigger:{trigger:"#hero",start:"top 30%",toggleActions:"play none none none"}}
+      );
+    }
+
+    /* ── 13. SECTION HEADINGS — CLIP-PATH REVEAL ─────────────── */
+    document.querySelectorAll(".display").forEach(function(el){
+      if(el.dataset.clip)return;
+      el.dataset.clip="1";
+      gsap.fromTo(el,
+        {clipPath:"inset(0 100% 0 0)",opacity:.3},
+        {clipPath:"inset(0 0% 0 0)",opacity:1,duration:1.2,ease:"power3.out",
+         scrollTrigger:{trigger:el,start:"top 82%",toggleActions:"play none none none"}}
+      );
+    });
+
+    /* ── 14. JOURNEY TIMELINE — SCRUB LINE ───────────────────── */
+    var tlItems=document.querySelectorAll(".tl-item");
+    tlItems.forEach(function(item,i){
+      gsap.fromTo(item.querySelector(".tl-body")||item,
+        {x:-20,opacity:0},
+        {x:0,opacity:1,duration:.8,ease:"power2.out",
+         scrollTrigger:{trigger:item,start:"top 80%",toggleActions:"play none none none"}}
+      );
+    });
+
+    /* ── 15. APPROACH QUOTE — SCALE + FADE ───────────────────── */
+    var aq=document.querySelector(".approach-quote");
+    if(aq){
+      gsap.fromTo(aq,
+        {letterSpacing:"0.3em",opacity:0},
+        {letterSpacing:"normal",opacity:1,duration:1.4,ease:"power3.out",
+         scrollTrigger:{trigger:aq,start:"top 75%",toggleActions:"play none none none"}}
+      );
+    }
+
+    /* ── 16. PROJECTS — NUMBERED COUNTER REVEAL ──────────────── */
+    document.querySelectorAll(".proj-num").forEach(function(el){
+      gsap.fromTo(el,
+        {opacity:0,scale:2,color:"rgba(200,169,106,0)"},
+        {opacity:1,scale:1,color:"rgba(200,169,106,1)",duration:.9,ease:"power3.out",
+         scrollTrigger:{trigger:el,start:"top 85%",toggleActions:"play none none none"}}
+      );
+    });
+
+    /* ── 17. SCROLL-SCRUBBED GOLD LINE ON PERFORMANCE ─────────── */
+    var perfSection=document.getElementById("performance");
+    if(perfSection){
+      var line=document.createElement("div");
+      line.style.cssText="position:absolute;bottom:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--gold),transparent);pointer-events:none;";
+      perfSection.style.position="relative";
+      perfSection.appendChild(line);
+      gsap.to(line,{
+        width:"100%",ease:"none",
+        scrollTrigger:{trigger:perfSection,start:"top bottom",end:"bottom top",scrub:true}
+      });
+    }
+
+    /* ── 18. CONTACT SECTION — AMBIENT GLOW ─────────────────── */
+    var contactSec=document.getElementById("contact");
+    if(contactSec){
+      gsap.fromTo(contactSec,
+        {background:"#080a0f"},
+        {background:"#0a0e0a",duration:1.5,ease:"power2.out",
+         scrollTrigger:{trigger:contactSec,start:"top 70%",toggleActions:"play none none none"}}
+      );
+    }
+  }
+
+  /* ── 19. SMOOTH SCROLL MOMENTUM (native CSS + JS polish) ────── */
+  document.documentElement.style.scrollBehavior="smooth";
+
+  /* ── 20. PAGE LOAD REVEAL ANIMATION ─────────────────────────── */
+  (function pageLoadReveal(){
+    if(typeof gsap==="undefined")return;
+    var tl=gsap.timeline();
+    tl.fromTo("body",{opacity:0},{opacity:1,duration:.6,ease:"power2.out"})
+      .fromTo(".hero-tag",{y:-20,opacity:0},{y:0,opacity:1,duration:.8,ease:"power3.out"},"0.3")
+      .fromTo(".hero-rule",{scaleX:0,transformOrigin:"left"},{scaleX:1,duration:.6,ease:"power2.out"},"0.6")
+      .fromTo(".hero-role",{y:20,opacity:0},{y:0,opacity:1,duration:.7,ease:"power2.out"},"0.7")
+      .fromTo(".hero-cta",{y:20,opacity:0},{y:0,opacity:1,duration:.7,ease:"power2.out"},"0.9");
+  }());
+
+  console.log("[Portfolio] Awwwards upgrade active");
+}());
+
 </script>
 </body>
 </html>
