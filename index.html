@@ -997,7 +997,8 @@ html.js-ready .reveal.visible{opacity:1;transform:none}
 #chat-send:hover{background:#d4b87a}
 #chat-send:disabled{background:var(--rule);cursor:not-allowed}
 /* ===== VISIBILITY FIX (DO NOT REMOVE) ===== */
-* {
+/* Show everything EXCEPT FAB elements */
+*:not(#fab-wrap):not(#fab-toggle):not(#fab-menu) {
   opacity: 1 !important;
   visibility: visible !important;
   filter: none !important;
