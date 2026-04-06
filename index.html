@@ -1953,5 +1953,13 @@ window.addEventListener("load", function() {
 
 });
 </script>
+<script>
+  // Fix FAB so it can open/close normally
+  document.querySelectorAll('#fab-wrap, #fab-toggle, #fab-menu').forEach(el => {
+    el.style.opacity = '';
+    el.style.visibility = '';
+    el.style.filter = '';
+  });
+</script>
 </body>
 </html>
