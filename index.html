@@ -1862,6 +1862,189 @@ nav{
   .hero-sub { font-size: 0.55rem; letter-spacing: 0.12em; }
 }
 
+
+/* ============================================================
+   ENHANCEMENTS — navbar scroll, mobile UX, footer
+   Additive only — no existing rules modified
+============================================================ */
+
+/* ── 1. NAV SCROLL SHADOW ───────────────────────────────── */
+/* JS adds .scrolled class to <nav> on scroll */
+nav.scrolled {
+  box-shadow: 0 4px 24px rgba(0,0,0,.35);
+  border-bottom-color: var(--border-a);
+}
+[data-theme="light"] nav.scrolled {
+  box-shadow: 0 4px 24px rgba(0,0,0,.12);
+}
+/* Smooth shadow transition (extend existing nav transition) */
+nav {
+  transition: background .5s ease, box-shadow .3s ease, border-color .3s ease;
+}
+
+/* ── 2. MOBILE MENU — improved ──────────────────────────── */
+/* Better tap targets for mobile menu links */
+.mob-menu a {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 0;
+  font-size: 1.3rem;
+}
+/* Hamburger: bigger tap area */
+.ham {
+  padding: 8px;
+  margin-right: -8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+/* Prevent body scroll when mobile menu open */
+body.menu-open {
+  overflow: hidden;
+}
+
+/* ── 3. MOBILE UX — tap targets & spacing ───────────────── */
+/* Buttons: enforce minimum tap target */
+.btn-g, .btn-o, .nav-cv {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+/* Contact items: better tap height */
+.ci {
+  min-height: 56px;
+}
+/* FAB buttons: already 42px, bump to 48px on mobile */
+
+/* ── 4. SMOOTH SCROLL (native) ──────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px; /* nav height + 12px breathing room */
+}
+
+/* ── 5. MOBILE BREAKPOINT IMPROVEMENTS ─────────────────── */
+@media (max-width: 768px) {
+  /* Tighter section padding already at 80px — fine */
+  /* Improve about grid on tablet */
+  .about-g { gap: 2rem; }
+  /* Better contact grid */
+  .contact-g { gap: 2rem; }
+  /* Approach quote smaller */
+  .approach-q p { font-size: 1.1rem; }
+  /* Timeline card padding tighter */
+  .tl-card { padding: 1.25rem 1.25rem; }
+  /* KPI grid: 2 cols at 768 (already handled but ensure) */
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  /* Hero metrics strip: allow wrap */
+  .hero-metrics-strip { flex-wrap: wrap; row-gap: .3rem; }
+  /* Hero sub wrap */
+  .hero-sub { white-space: normal; text-align: left; }
+  /* Dec grid already 1-col */
+  /* Improve FAB spacing on mobile */
+  .fab-bar { bottom: 1.25rem; right: 1.25rem; }
+  .fab { width: 44px; height: 44px; }
+}
+
+@media (max-width: 480px) {
+  /* Reduce section padding further on very small screens */
+  .sec { padding: 64px 0; }
+  /* Reduce wrap padding */
+  .wrap { padding: 0 1.25rem; }
+  /* Hero inner tighter */
+  .hero-inner { padding: 2rem 1.25rem 0; gap: 1.5rem; }
+  /* Hero metrics: reduce dot padding */
+  .hms-dot { padding: 0 .35rem; }
+  /* KPI grid: 1 col on very small */
+  .kpi-grid { grid-template-columns: 1fr; }
+  /* Impact grid: tighter */
+  .imp { padding: 1.5rem 1.25rem; gap: 1rem; }
+  /* Card padding tighter */
+  .dec { padding: 1.5rem 1.25rem; }
+  .proj { padding: 1.5rem 1.25rem; }
+  .cc { padding: 1.5rem 1.25rem; }
+  /* Contact */
+  .ci { padding: .75rem .9rem; }
+  /* Closing headline */
+  .closing-headline { font-size: clamp(1.6rem, 9vw, 2.5rem); }
+}
+
+/* ── 6. NEW EXECUTIVE FOOTER ────────────────────────────── */
+.exec-footer {
+  border-top: 1px solid var(--border);
+  padding: 3.5rem 2rem 2.5rem;
+  text-align: center;
+}
+.exec-footer-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+.exec-footer-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--tx);
+  letter-spacing: -.02em;
+}
+.exec-footer-name b { color: var(--gold); font-weight: 400; }
+.exec-footer-pos {
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--tx-3);
+  margin-top: -.75rem;
+}
+.exec-footer-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.75rem;
+  justify-content: center;
+  align-items: center;
+}
+.exec-footer-contacts a,
+.exec-footer-contacts span {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .06em;
+  color: var(--tx-2);
+  text-decoration: none;
+  transition: color .2s;
+  white-space: nowrap;
+}
+.exec-footer-contacts a:hover { color: var(--gold); }
+.exec-footer-sep {
+  color: var(--tx-3);
+  opacity: .4;
+  font-size: .7rem;
+  user-select: none;
+}
+.exec-footer-location {
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--tx-3);
+  opacity: .65;
+}
+.exec-footer-copy {
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  letter-spacing: .06em;
+  color: var(--tx-3);
+  opacity: .45;
+  margin-top: -.5rem;
+}
+@media (max-width: 480px) {
+  .exec-footer { padding: 2.5rem 1.25rem 2rem; }
+  .exec-footer-contacts { gap: .5rem 1.25rem; }
+  .exec-footer-contacts a,
+  .exec-footer-contacts span { font-size: .62rem; }
+}
+
 </style>
 </head>
 <body>
@@ -2652,17 +2835,19 @@ nav{
 </section>
 
 <!-- FOOTER -->
-<footer>
-  <div class="foot">
-    <div class="foot-brand">M<b>.</b>Magdoom</div>
-    <div class="foot-links">
-      <a href="#about">About</a>
-      <a href="#performance">Impact</a>
-      <a href="#career">Career</a>
-      <a href="#contact">Contact</a>
-      <a href="https://linkedin.com/in/mohamed-magdoom" target="_blank">LinkedIn</a>
+<footer class="exec-footer">
+  <div class="exec-footer-inner">
+    <div class="exec-footer-name">Mohamed <b>Magdoom</b></div>
+    <div class="exec-footer-pos">Fuel Retail &amp; Multi-Site Operations Executive &nbsp;·&nbsp; Data-Led &nbsp;·&nbsp; AI-Enabled</div>
+    <div class="exec-footer-contacts">
+      <a href="mailto:mailme.magdoom@gmail.com">mailme.magdoom@gmail.com</a>
+      <span class="exec-footer-sep">·</span>
+      <a href="tel:+917550270450">+91 7550 270 450</a>
+      <span class="exec-footer-sep">·</span>
+      <a href="https://linkedin.com/in/mohamed-magdoom" target="_blank" rel="noopener">linkedin.com/in/mohamed-magdoom</a>
     </div>
-    <div class="foot-copy">© 2025 Mohamed Magdoom · Lusaka, Zambia</div>
+    <div class="exec-footer-location">Lusaka, Zambia &nbsp;·&nbsp; Open to Relocation Globally</div>
+    <div class="exec-footer-copy">&copy; 2025 Mohamed Magdoom. All rights reserved.</div>
   </div>
 </footer>
 
@@ -2709,14 +2894,16 @@ function applyTheme(t){
   if(tlbl) tlbl.textContent = t==='dark' ? '☾' : '☀';
 }
 
-/* ── SCROLL PROGRESS ── */
+/* ── SCROLL PROGRESS + NAV SHADOW ── */
 var prog = document.getElementById('prog');
-if(prog){
-  window.addEventListener('scroll',function(){
-    var h = document.body.scrollHeight - window.innerHeight;
-    prog.style.width = (h>0 ? window.scrollY/h*100 : 0)+'%';
-  },{passive:true});
-}
+var nav  = document.querySelector('nav');
+window.addEventListener('scroll',function(){
+  var scrollY = window.scrollY;
+  var h = document.body.scrollHeight - window.innerHeight;
+  if(prog) prog.style.width = (h>0 ? scrollY/h*100 : 0)+'%';
+  /* Add shadow class once user scrolls past 10px */
+  if(nav) nav.classList.toggle('scrolled', scrollY > 10);
+},{passive:true});
 
 /* ── REVEAL SYSTEM ── */
 ['#hero','#hero *','nav','nav *','#prog'].forEach(function(sel){
@@ -2801,25 +2988,41 @@ var cntObs=new IntersectionObserver(function(entries){
 },{threshold:0.4});
 document.querySelectorAll('.cnt').forEach(function(el){ cntObs.observe(el); });
 
-/* ── MOBILE MENU ── */
+/* ── MOBILE MENU (enhanced) ── */
 var ham=document.getElementById('ham');
 var mob=document.getElementById('mob');
 var mobOpen=false;
+
+function openMenu(){
+  mobOpen=true;
+  ham.classList.add('open');
+  mob.classList.add('open');
+  mob.style.display='flex';
+  document.body.classList.add('menu-open');
+}
+function closeMenu(){
+  mobOpen=false;
+  ham.classList.remove('open');
+  mob.classList.remove('open');
+  mob.style.display='none';
+  document.body.classList.remove('menu-open');
+}
+
 if(ham && mob){
   mob.style.display='none';
   ham.addEventListener('click',function(){
-    mobOpen=!mobOpen;
-    ham.classList.toggle('open',mobOpen);
-    mob.classList.toggle('open',mobOpen);
-    mob.style.display=mobOpen?'flex':'none';
+    if(mobOpen) closeMenu(); else openMenu();
   });
   mob.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('click',function(){
-      mobOpen=false;
-      ham.classList.remove('open');
-      mob.classList.remove('open');
-      mob.style.display='none';
-    });
+    a.addEventListener('click', closeMenu);
+  });
+  /* Close on ESC */
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && mobOpen) closeMenu();
+  });
+  /* Close on overlay tap (outside menu content area) */
+  mob.addEventListener('click',function(e){
+    if(e.target===mob) closeMenu();
   });
 }
 
