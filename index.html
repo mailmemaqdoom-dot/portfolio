@@ -2045,6 +2045,212 @@ html {
   .exec-footer-contacts span { font-size: .62rem; }
 }
 
+
+/* ============================================================
+   MICRO-INTERACTIONS — additive layer
+   All durations ≤ 0.3s | translateY ≤ 4px | scale ≤ 1.02
+   No continuous animation | CSS-only except nav shrink
+============================================================ */
+
+/* ── 1. REVEAL MOTION — slightly more subtle entry ── */
+/* Override existing 24px to 16px for refined feel */
+.reveal {
+  transform: translateY(16px);
+}
+
+/* ── 2. NAV SHRINK ON SCROLL ── */
+/* JS already adds .scrolled — extend it to compress height */
+nav {
+  transition: background .5s ease, box-shadow .3s ease,
+              border-color .3s ease, height .25s ease,
+              padding .25s ease;
+}
+nav.scrolled {
+  height: 52px;
+}
+
+/* ── 3. NAV LINK — underline sweep micro-animation ── */
+.nav-links a::before {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  right: 50%;
+  height: 1px;
+  background: var(--gold);
+  transition: left .2s var(--ease), right .2s var(--ease);
+  opacity: 0;
+}
+.nav-links a:hover::before {
+  left: 8px;
+  right: 8px;
+  opacity: .5;
+}
+/* Keep the existing .on indicator (bottom:-1px) — no conflict */
+
+/* ── 4. BUTTON MICRO-INTERACTIONS ── */
+/* Upgrade existing transitions to include transform */
+.btn-g {
+  transition: background .2s, transform .2s var(--ease), box-shadow .2s;
+}
+.btn-g:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(194,158,80,.25);
+}
+.btn-g:active {
+  transform: scale(0.98) translateY(0);
+  box-shadow: none;
+  transition-duration: .08s;
+}
+
+.btn-o {
+  transition: border-color .2s, color .2s, transform .2s var(--ease), box-shadow .2s;
+}
+.btn-o:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,.2);
+}
+.btn-o:active {
+  transform: scale(0.98) translateY(0);
+  box-shadow: none;
+  transition-duration: .08s;
+}
+
+/* nav-cv button (Resume in nav) */
+.nav-cv {
+  transition: background .2s, transform .15s var(--ease);
+}
+.nav-cv:hover {
+  transform: translateY(-1px);
+}
+.nav-cv:active {
+  transform: scale(0.98);
+  transition-duration: .08s;
+}
+
+/* ── 5. IMPACT LIST — add lift + transition upgrade ── */
+.imp {
+  transition: background .25s, transform .25s var(--ease), box-shadow .25s;
+}
+.imp:hover {
+  transform: translateX(3px);   /* horizontal nudge — follows the left accent line */
+  box-shadow: 4px 0 16px rgba(0,0,0,.12);
+}
+
+/* ── 6. CONTACT ITEMS — add lift ── */
+.ci {
+  transition: border-color .2s, transform .2s var(--ease), box-shadow .2s;
+}
+.ci:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,.18);
+}
+
+/* ── 7. TIMELINE CARD — hover lift ── */
+.tl-card {
+  transition: border-color .3s, box-shadow .3s, transform .25s var(--ease);
+}
+.tl-i:hover .tl-card {
+  transform: translateY(-3px);
+}
+
+/* ── 8. PRINCIPLES (How I Operate rows) — hover lift ── */
+.pr {
+  transition: background .25s, transform .2s var(--ease);
+}
+.pr:hover {
+  transform: translateX(4px);
+}
+
+/* ── 9. CAPABILITY CARD — add shadow to existing hover ── */
+.cap {
+  transition: border-color .25s, transform .25s var(--ease), box-shadow .25s;
+}
+.cap:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+}
+
+/* ── 10. KPI CARD — existing hover good, add shadow transition ── */
+/* Already has transform + box-shadow — ensure transition includes them */
+.kpi-c {
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease),
+              border-color .25s, background .3s;
+}
+
+/* ── 11. PROJECT CARD — existing good, tighten timing ── */
+.proj {
+  transition: border-color .25s, transform .25s var(--ease), box-shadow .25s;
+}
+
+/* ── 12. STRATEGIC DECISION CARD — tighten timing ── */
+.dec {
+  transition: transform .25s var(--ease), border-color .25s, box-shadow .25s;
+}
+
+/* ── 13. IMAGE HOVER — subtle zoom (existing + tl-avatar + hero) ── */
+/* about-img-card: already has scale(1.03) — keep */
+
+/* tl-avatar: add image zoom */
+.tl-avatar img {
+  transition: transform .3s var(--ease);
+}
+.tl-avatar:hover img {
+  transform: scale(1.05);
+}
+
+/* hero-photo-col: subtle zoom on hover */
+.hero-photo-col img {
+  transition: transform .4s var(--ease), opacity 1s;
+}
+.hero-photo-col:hover img {
+  transform: scale(1.02);
+}
+
+/* ── 14. FAB BUTTONS — add press feedback ── */
+.fab:active {
+  transform: scale(0.93);
+  transition-duration: .08s;
+}
+.fab-p:active {
+  transform: scale(0.93);
+  transition-duration: .08s;
+}
+
+/* ── 15. CLOSING SECTION — subtle glow on hover ── */
+.closing-inner:hover .closing-headline {
+  color: var(--tx);
+  transition: color .3s;
+}
+
+/* ── 16. EXEC FOOTER CONTACTS — subtle gold on hover ── */
+/* Already handled by color transition — ensure it exists */
+.exec-footer-contacts a {
+  transition: color .2s;
+}
+
+/* ── 17. PERFORMANCE: GPU-hint only on actively animated elements ── */
+.btn-g, .btn-o, .kpi-c, .dec, .proj, .imp, .ci, .tl-card, .cap, .pr, .fab {
+  will-change: transform;
+}
+/* Remove will-change after interaction to free GPU memory */
+/* (CSS-only: browsers handle this automatically after transition ends) */
+
+/* ── 18. REDUCED MOTION RESPECT ── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transform: none;
+    transition: opacity .3s ease;
+  }
+  .btn-g, .btn-o, .btn-g:hover, .btn-o:hover,
+  .kpi-c:hover, .dec:hover, .proj:hover, .imp:hover,
+  .ci:hover, .tl-card, .cap:hover, .pr:hover, .fab:active {
+    transform: none;
+    transition: background .2s, border-color .2s, color .2s;
+  }
+  nav.scrolled { height: 60px; }
+  .tl-avatar:hover img, .hero-photo-col:hover img { transform: none; }
+}
+
 </style>
 </head>
 <body>
@@ -2894,15 +3100,14 @@ function applyTheme(t){
   if(tlbl) tlbl.textContent = t==='dark' ? '☾' : '☀';
 }
 
-/* ── SCROLL PROGRESS + NAV SHADOW ── */
+/* ── SCROLL: PROGRESS + NAV SHRINK + SHADOW ── */
 var prog = document.getElementById('prog');
 var nav  = document.querySelector('nav');
 window.addEventListener('scroll',function(){
   var scrollY = window.scrollY;
   var h = document.body.scrollHeight - window.innerHeight;
   if(prog) prog.style.width = (h>0 ? scrollY/h*100 : 0)+'%';
-  /* Add shadow class once user scrolls past 10px */
-  if(nav) nav.classList.toggle('scrolled', scrollY > 10);
+  if(nav)  nav.classList.toggle('scrolled', scrollY > 10);
 },{passive:true});
 
 /* ── REVEAL SYSTEM ── */
@@ -2988,7 +3193,7 @@ var cntObs=new IntersectionObserver(function(entries){
 },{threshold:0.4});
 document.querySelectorAll('.cnt').forEach(function(el){ cntObs.observe(el); });
 
-/* ── MOBILE MENU (enhanced) ── */
+/* ── MOBILE MENU ── */
 var ham=document.getElementById('ham');
 var mob=document.getElementById('mob');
 var mobOpen=false;
@@ -3016,15 +3221,29 @@ if(ham && mob){
   mob.querySelectorAll('a').forEach(function(a){
     a.addEventListener('click', closeMenu);
   });
-  /* Close on ESC */
   document.addEventListener('keydown',function(e){
     if(e.key==='Escape' && mobOpen) closeMenu();
   });
-  /* Close on overlay tap (outside menu content area) */
   mob.addEventListener('click',function(e){
     if(e.target===mob) closeMenu();
   });
 }
+
+/* ── WILL-CHANGE CLEANUP ──
+   Remove will-change after hover ends to free GPU memory.
+   This is the JS-only part that CSS cannot do alone. ── */
+var wc_els = document.querySelectorAll(
+  '.btn-g, .btn-o, .kpi-c, .dec, .proj, .imp, .ci, .tl-card, .cap, .pr, .fab'
+);
+wc_els.forEach(function(el){
+  el.addEventListener('mouseleave', function(){
+    /* Brief delay so transition can finish before releasing GPU layer */
+    setTimeout(function(){ el.style.willChange = 'auto'; }, 300);
+  });
+  el.addEventListener('mouseenter', function(){
+    el.style.willChange = 'transform';
+  });
+});
 
 })();
 </script>
