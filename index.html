@@ -2449,8 +2449,13 @@ nav.scrolled {
   .mandate { padding: 1.25rem; }
   .tl-card { padding: 1.1rem 1.1rem; }
 
-  /* ── FAB BAR: hide on mobile (bottom nav replaces it) ── */
-  .fab-bar { display: none; }
+  /* ── FAB BAR: show on mobile, positioned above bottom nav ── */
+  .fab-bar {
+    display: flex;
+    bottom: calc(68px + env(safe-area-inset-bottom, 0px) + 0.75rem);
+    right: 1rem;
+  }
+  .fab { width: 44px; height: 44px; }
 
   /* ── FONT SIZES: ensure readability without zoom ── */
   .imp-t { font-size: 1rem; }
@@ -2471,6 +2476,18 @@ nav.scrolled {
   .hero-name { font-size: 3.5rem; }
   .closing-headline { font-size: clamp(1.5rem, 9vw, 2.2rem); }
   .hero-photo-col { width: 100px; height: 100px; }
+}
+
+
+/* LinkedIn FAB — branded blue background overrides card bg */
+.fab-li {
+  background: #0A66C2 !important;
+  border-color: #0A66C2 !important;
+}
+.fab-li:hover {
+  background: #004182 !important;
+  border-color: #004182 !important;
+  transform: scale(1.08);
 }
 
 </style>
@@ -3282,7 +3299,12 @@ nav.scrolled {
 <!-- FAB -->
 <div class="fab-bar">
   <a href="https://wa.me/917550270450" class="fab" title="WhatsApp" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
-  <a href="https://linkedin.com/in/mohamed-magdoom" class="fab" title="LinkedIn" target="_blank" style="font-size:.7rem;font-weight:700">in</a>
+  <a href="https://linkedin.com/in/mohamed-magdoom" class="fab fab-li" title="LinkedIn" target="_blank" rel="noopener">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+      <rect width="24" height="24" rx="4" fill="#0A66C2"/>
+      <path fill="#ffffff" d="M7.75 9.5h-2.5v8h2.5v-8zm-1.25-4a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM18.25 13c0-2.07-1.18-3.5-3-3.5a2.9 2.9 0 00-2.5 1.3V9.5h-2.5v8h2.5v-4.25c0-1.1.65-1.75 1.65-1.75s1.35.6 1.35 1.75V17.5h2.5V13z"/>
+    </svg>
+  </a>
   <a href="#hero" class="fab fab-p" title="Back to top">↑</a>
 </div>
 
@@ -3347,8 +3369,8 @@ function applyTheme(t){
 }
 
 /* ── SCROLL: PROGRESS + NAV SHRINK + SHADOW ── */
-var prog    = document.getElementById('prog');
-var topNav  = document.querySelector('nav:not(#mob-bottom-nav)');
+var prog   = document.getElementById('prog');
+var topNav = document.querySelector('nav:not(#mob-bottom-nav)');
 window.addEventListener('scroll',function(){
   var scrollY = window.scrollY;
   var h = document.body.scrollHeight - window.innerHeight;
@@ -3439,11 +3461,10 @@ var cntObs=new IntersectionObserver(function(entries){
 },{threshold:0.4});
 document.querySelectorAll('.cnt').forEach(function(el){ cntObs.observe(el); });
 
-/* ── TOP MOBILE MENU (desktop fallback — hidden on mobile by CSS) ── */
+/* ── TOP MOBILE MENU ── */
 var ham=document.getElementById('ham');
 var mob=document.getElementById('mob');
 var mobOpen=false;
-
 function openMenu(){
   mobOpen=true;
   if(ham) ham.classList.add('open');
@@ -3465,83 +3486,53 @@ if(ham && mob){
 }
 
 /* ── WILL-CHANGE CLEANUP ── */
-var wc_els = document.querySelectorAll(
-  '.btn-g,.btn-o,.kpi-c,.dec,.proj,.imp,.ci,.tl-card,.cap,.pr,.fab'
-);
-wc_els.forEach(function(el){
-  el.addEventListener('mouseenter', function(){ el.style.willChange = 'transform'; });
-  el.addEventListener('mouseleave', function(){
-    setTimeout(function(){ el.style.willChange = 'auto'; }, 300);
+document.querySelectorAll('.btn-g,.btn-o,.kpi-c,.dec,.proj,.imp,.ci,.tl-card,.cap,.pr,.fab')
+  .forEach(function(el){
+    el.addEventListener('mouseenter', function(){ el.style.willChange='transform'; });
+    el.addEventListener('mouseleave', function(){
+      setTimeout(function(){ el.style.willChange='auto'; }, 300);
+    });
   });
-});
 
-/* ═══════════════════════════════════════════════════════════
-   MOBILE BOTTOM NAV
-   - Active section tracking via IntersectionObserver
-   - Hide on scroll down / show on scroll up
-   - Smooth scroll on tap (native CSS already handles it)
-═══════════════════════════════════════════════════════════ */
+/* ── MOBILE BOTTOM NAV ── */
 var mbn = document.getElementById('mob-bottom-nav');
 if(mbn){
   var mbnItems = mbn.querySelectorAll('.mbn-item');
-
-  /* Map: section id → nav item */
   var sectionMap = {};
   mbnItems.forEach(function(item){
     var sec = item.dataset.section;
     if(sec) sectionMap[sec] = item;
   });
 
-  /* Active tracking — same IntersectionObserver pattern as top nav */
   var mbnSections = ['hero','career','impact','projects','contact'];
-  var mbnEls = mbnSections
-    .map(function(id){ return document.getElementById(id); })
-    .filter(Boolean);
+  var mbnEls = mbnSections.map(function(id){ return document.getElementById(id); }).filter(Boolean);
 
-  /* Use a wider threshold window so active updates feel immediate on tap */
   var mbnObs = new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
       if(entry.isIntersecting){
-        /* Clear all active */
         mbnItems.forEach(function(i){ i.classList.remove('mbn-active'); });
-        /* Set matched item active */
         var item = sectionMap[entry.target.id];
         if(item) item.classList.add('mbn-active');
       }
     });
-  },{threshold: 0.25});
-
+  },{threshold:0.25});
   mbnEls.forEach(function(el){ mbnObs.observe(el); });
 
-  /* Tap: prevent default, use native smooth scroll via href */
-  /* (scroll-behavior: smooth already on html) */
-  /* No JS scroll needed — CSS handles it cleanly */
-
-  /* ── Hide on scroll down / show on scroll up ── */
+  /* Hide/show on scroll */
   var lastScrollY = window.scrollY;
   var scrollTicking = false;
-
-  window.addEventListener('scroll', function(){
+  window.addEventListener('scroll',function(){
     if(!scrollTicking){
       requestAnimationFrame(function(){
-        var currentScrollY = window.scrollY;
-        var delta = currentScrollY - lastScrollY;
-
-        /* Only hide if scrolled down > 60px from top (not at hero) */
-        if(currentScrollY > 120){
-          if(delta > 4){
-            /* Scrolling down — hide */
-            mbn.classList.add('mbn-hidden');
-          } else if(delta < -4){
-            /* Scrolling up — show */
-            mbn.classList.remove('mbn-hidden');
-          }
+        var cur = window.scrollY;
+        var delta = cur - lastScrollY;
+        if(cur > 120){
+          if(delta > 4)       mbn.classList.add('mbn-hidden');
+          else if(delta < -4) mbn.classList.remove('mbn-hidden');
         } else {
-          /* Near top — always show */
           mbn.classList.remove('mbn-hidden');
         }
-
-        lastScrollY = currentScrollY;
+        lastScrollY = cur;
         scrollTicking = false;
       });
       scrollTicking = true;
