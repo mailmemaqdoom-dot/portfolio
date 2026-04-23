@@ -2778,6 +2778,23 @@ html[data-theme="light"] {
 
 } /* end hover:none */
 
+
+/* ── HERO PROOF LINE (supporting metric below differentiator) ── */
+.hero-proof {
+  margin-top: .75rem;
+  font-size: .82rem;
+  color: var(--tx-3);
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: .005em;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fuY 0.8s 0.58s forwards var(--ease);
+}
+@media (max-width: 768px) {
+  .hero-proof { font-size: .78rem; }
+}
+
 </style>
 </head>
 <body>
@@ -2842,7 +2859,8 @@ html[data-theme="light"] {
       </div>
       <div class="hero-meta">
         <div class="hero-desc">
-          <p>Fuel Retail &amp; Multi-Site Operations Executive. USD 200M P&amp;L. 90 stations. 20 million litres monthly. 1,200+ people. Revenue growth and cost discipline — delivered simultaneously, not in sequence.</p>
+          <p>I build and scale fuel retail networks where revenue growth and cost discipline are delivered simultaneously — not as trade-offs.</p>
+          <p class="hero-proof">USD 36M growth alongside 30% cost reduction across a USD 200M operation — executed under full operating load.</p>
         </div>
         <div class="hero-vl"></div>
         <div class="hero-q">
@@ -2887,8 +2905,8 @@ html[data-theme="light"] {
           <p>I run fuel retail networks — commercial and operational, <strong>simultaneously.</strong> Full P&amp;L accountability at USD 200M scale, across 12+ years in Zambia, India, and Saudi Arabia. Both sides of the business. One owner.</p>
           <p>The results — <strong>USD 36M revenue uplift, 30% OPEX reduction, 32 months of record market share</strong> — came from making decisions early and holding the consequences. Not every call was clean. Rebuilding inventory governance while the network processed 20 million litres a month required deciding what to break first and what to protect.</p>
           <p>My career spans petroleum retail at scale (Mount Meru Petroleum, Zambia), state-wide downstream oil network development (Reliance BP Mobility, India), and multi-site general management across QSR in the GCC. Three industries. Three countries. One consistent outcome.</p>
-          <p class="repeat-narrative">These results are not market-specific. <strong>The same discipline — early decisions, full accountability, simultaneous commercial and operational delivery — has produced above-target outcomes across every environment I have operated in.</strong> The conditions change. The outcome does not.</p>
-          <p class="control-narrative">The standard I hold is simple: <strong>governance, accountability, and performance frameworks that function identically whether I am in the room or not</strong> — across 1 station or 90.</p>
+          <p class="repeat-narrative">These results are not market-specific. <strong>The same discipline — early decisions, full accountability, simultaneous commercial and operational delivery — has produced above-target outcomes across every environment I have operated in.</strong> The operating principles built in fuel retail apply directly across any multi-site, high-volume, margin-sensitive business. The conditions change. The outcome does not.</p>
+          <p class="control-narrative">The standard I hold is simple: <strong>governance, accountability, and performance frameworks that function identically whether I am in the room or not</strong> — across 1 station or 90. I build operating systems that allow these outcomes to be repeated — not one-time results dependent on circumstance.</p>
         </div>
         <div class="pullq reveal">
           <p>"The numbers report what happened. I stay close enough to know what they are hiding."</p>
@@ -3644,43 +3662,28 @@ if(anchor){
 var htmlEl = document.documentElement;
 var thm    = document.getElementById('thm');
 var tlbl   = document.getElementById('tlbl');
-
-/* Determine initial theme:
-   1. User's manual saved preference wins
-   2. System prefers-color-scheme second
-   3. Dark as default fallback */
 var saved  = localStorage.getItem('mm-theme');
 var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 var theme  = saved ? saved : (sysDark ? 'dark' : 'light');
-
-/* Apply immediately — before paint — to prevent flash */
 htmlEl.setAttribute('data-theme', theme);
-applyTheme(theme, false); /* false = no transition on first paint */
-
-/* Listen for system theme changes (user changes OS preference) */
+applyTheme(theme, false);
 if(window.matchMedia){
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e){
-    /* Only follow system if user hasn't manually set a preference */
     if(!localStorage.getItem('mm-theme')){
       theme = e.matches ? 'dark' : 'light';
       applyTheme(theme, true);
     }
   });
 }
-
-/* Manual toggle */
 if(thm) thm.addEventListener('click', function(){
   theme = theme === 'dark' ? 'light' : 'dark';
   applyTheme(theme, true);
-  localStorage.setItem('mm-theme', theme); /* save manual preference */
+  localStorage.setItem('mm-theme', theme);
 });
-
 function applyTheme(t, animate){
   if(!animate){
-    /* Kill transitions on first paint to prevent flash */
     htmlEl.style.transition = 'none';
     htmlEl.setAttribute('data-theme', t);
-    /* Force reflow then restore */
     void htmlEl.offsetHeight;
     htmlEl.style.transition = '';
   } else {
@@ -3690,7 +3693,7 @@ function applyTheme(t, animate){
   theme = t;
 }
 
-/* ── SCROLL: PROGRESS + NAV SHRINK + SHADOW ── */
+/* ── SCROLL: PROGRESS + NAV SHADOW ── */
 var prog   = document.getElementById('prog');
 var topNav = document.querySelector('nav:not(#mob-bottom-nav)');
 window.addEventListener('scroll', function(){
@@ -3708,7 +3711,6 @@ window.addEventListener('scroll', function(){
       el.classList.remove('reveal','reveal-group');
     });
   });
-
 var revealObs = new IntersectionObserver(function(entries){
   entries.forEach(function(entry){
     if(entry.isIntersecting){
@@ -3717,7 +3719,6 @@ var revealObs = new IntersectionObserver(function(entries){
     }
   });
 }, {threshold: 0.08, rootMargin: '0px 0px -40px 0px'});
-
 document.querySelectorAll('.reveal,.reveal-group').forEach(function(el){
   if(el.classList.contains('no-reveal')) return;
   var rect = el.getBoundingClientRect();
@@ -3727,7 +3728,6 @@ document.querySelectorAll('.reveal,.reveal-group').forEach(function(el){
     revealObs.observe(el);
   }
 });
-
 document.addEventListener('visibilitychange', function(){
   if(document.visibilityState === 'visible'){
     document.querySelectorAll('.reveal:not(.visible),.reveal-group:not(.visible)')
@@ -3787,7 +3787,7 @@ var cntObs = new IntersectionObserver(function(entries){
 }, {threshold: 0.4});
 document.querySelectorAll('.cnt').forEach(function(el){ cntObs.observe(el); });
 
-/* ── TOP MOBILE MENU (desktop fallback) ── */
+/* ── TOP MOBILE MENU ── */
 var ham = document.getElementById('ham');
 var mob = document.getElementById('mob');
 var mobOpen = false;
@@ -3820,11 +3820,9 @@ document.querySelectorAll('.btn-g,.btn-o,.kpi-c,.dec,.proj,.imp,.ci,.tl-card,.ca
     });
   });
 
-/* ── GESTURE CONTROL — prevent accidental horizontal scroll ── */
-/* Lock scroll axis on touch start: once vertical, stay vertical */
+/* ── GESTURE AXIS LOCK ── */
 (function(){
   var startX = 0, startY = 0, lockAxis = null;
-
   document.addEventListener('touchstart', function(e){
     if(e.touches.length === 1){
       startX = e.touches[0].clientX;
@@ -3832,22 +3830,14 @@ document.querySelectorAll('.btn-g,.btn-o,.kpi-c,.dec,.proj,.imp,.ci,.tl-card,.ca
       lockAxis = null;
     }
   }, {passive: true});
-
   document.addEventListener('touchmove', function(e){
     if(e.touches.length !== 1 || lockAxis) return;
     var dx = Math.abs(e.touches[0].clientX - startX);
     var dy = Math.abs(e.touches[0].clientY - startY);
-    if(dy > dx + 4){
-      lockAxis = 'vertical';
-    } else if(dx > dy + 4){
-      lockAxis = 'horizontal';
-    }
+    if(dy > dx + 4)      lockAxis = 'vertical';
+    else if(dx > dy + 4) lockAxis = 'horizontal';
   }, {passive: true});
-
-  /* Reset on touchend */
-  document.addEventListener('touchend', function(){
-    lockAxis = null;
-  }, {passive: true});
+  document.addEventListener('touchend', function(){ lockAxis = null; }, {passive: true});
 })();
 
 /* ── MOBILE BOTTOM NAV ── */
@@ -3859,12 +3849,8 @@ if(mbn){
     var sec = item.dataset.section;
     if(sec) sectionMap[sec] = item;
   });
-
-  var mbnSectionIds = ['hero','career','impact','projects','contact'];
-  var mbnEls = mbnSectionIds
-    .map(function(id){ return document.getElementById(id); })
-    .filter(Boolean);
-
+  var mbnEls = ['hero','career','impact','projects','contact']
+    .map(function(id){ return document.getElementById(id); }).filter(Boolean);
   var mbnObs = new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
       if(entry.isIntersecting){
@@ -3875,15 +3861,11 @@ if(mbn){
     });
   }, {threshold: 0.25});
   mbnEls.forEach(function(el){ mbnObs.observe(el); });
-
-  /* Hide/show on scroll */
-  var lastScrollY = window.scrollY;
-  var scrollTicking = false;
+  var lastScrollY = window.scrollY, scrollTicking = false;
   window.addEventListener('scroll', function(){
     if(!scrollTicking){
       requestAnimationFrame(function(){
-        var cur = window.scrollY;
-        var delta = cur - lastScrollY;
+        var cur = window.scrollY, delta = cur - lastScrollY;
         if(cur > 120){
           if(delta > 4)       mbn.classList.add('mbn-hidden');
           else if(delta < -4) mbn.classList.remove('mbn-hidden');
