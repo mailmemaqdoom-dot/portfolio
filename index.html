@@ -2490,6 +2490,294 @@ nav.scrolled {
   transform: scale(1.08);
 }
 
+
+/* ============================================================
+   MOBILE UX — overflow, scroll, touch, theme
+   Additive only — no desktop rules affected
+============================================================ */
+
+/* ── 1. GLOBAL OVERFLOW GUARD ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+/* Ensure html/body never allow horizontal scroll */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* ── 2. OVERSCROLL CONTROL ── */
+/* Prevent scroll chaining: content scroll stays contained */
+html {
+  overscroll-behavior-y: none;
+}
+body {
+  overscroll-behavior-y: contain;
+}
+/* Sections scroll contained — prevents bounce propagation */
+.sec, .mob-menu, #mob-bottom-nav {
+  overscroll-behavior: contain;
+}
+
+/* ── 3. SCROLL MOMENTUM (iOS native feel) ── */
+.tabs, .mob-menu {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── 4. TAP DELAY REMOVAL — global ── */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+a, button, [role="button"], .tab, .mbn-item, .btn-g, .btn-o,
+.fab, .nav-cv, .theme-btn, .ham, .ci, .kpi-c, .dec, .proj {
+  touch-action: manipulation;
+}
+
+/* ── 5. THEME TRANSITION — prevent layout shift ── */
+/* Apply transition only to color properties, not layout */
+html[data-theme] {
+  color-scheme: dark;
+}
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* ── 6. MOBILE NAV-R — fix overflow in portrait ── */
+@media (max-width: 768px) {
+
+  /* nav-r: the right cluster (theme label + toggle + Resume + ham) */
+  /* ham is hidden by bottom-nav CSS, but theme + Resume still show */
+  .nav-r {
+    gap: .4rem;
+    flex-shrink: 0;
+    /* Do NOT overflow the nav */
+    min-width: 0;
+    overflow: visible;
+  }
+
+  /* Theme label — hide on small screens to save space */
+  .theme-lbl {
+    display: none;
+  }
+
+  /* Resume button — tighten padding, ensure it stays visible */
+  .nav-cv {
+    font-size: .62rem;
+    padding: .28rem .6rem;
+    letter-spacing: .04em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Nav itself: ensure logo + nav-r never cause overflow */
+  nav {
+    padding: 0 1rem;
+    /* justify: space-between keeps logo left, nav-r right */
+  }
+
+  /* Nav logo: allow shrink if needed but keep visible */
+  .nav-logo {
+    font-size: 1rem;
+    flex-shrink: 1;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  /* Section scroll alignment — subtle, not snapping */
+  section[id] {
+    scroll-margin-top: 60px;
+  }
+
+  /* Prevent any child from escaping viewport width */
+  .hero-inner, .wrap, .contact-g, .about-g, .dec-g,
+  .cap-g, .proj-g, .kpi-grid, .impact-list, .tl {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Hero CTA buttons: stack, full width */
+  .hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .65rem;
+  }
+  .hero-cta .btn-g,
+  .hero-cta .btn-o {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Exec footer contacts: allow wrap, no overflow */
+  .exec-footer-contacts {
+    gap: .4rem .9rem;
+  }
+  .exec-footer-contacts a,
+  .exec-footer-contacts span {
+    font-size: .58rem;
+    letter-spacing: .04em;
+  }
+
+  /* Tags: wrap cleanly */
+  .tags {
+    flex-wrap: wrap;
+    gap: .35rem;
+  }
+
+  /* Mandate list: don't overflow */
+  .mandate li {
+    word-break: break-word;
+  }
+
+  /* Timeline: prevent connector overflow */
+  .tl-i::before {
+    max-width: 1.5rem;
+  }
+
+  /* Hero sub line: wrap cleanly, no overflow */
+  .hero-sub {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  /* Approach quote: allow wrap */
+  .approach-q p {
+    word-break: break-word;
+  }
+
+  /* Impact desc: readable without zoom */
+  .imp-d {
+    font-size: .82rem;
+    line-height: 1.6;
+  }
+
+  /* Section label: no overflow */
+  .lbl {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* PR rows: no horizontal overflow */
+  .pr {
+    overflow: hidden;
+  }
+
+  /* Closing headline: prevent bleed */
+  .closing-headline {
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+} /* end @media 768px */
+
+@media (max-width: 480px) {
+
+  /* Ultra narrow: even tighter nav */
+  nav {
+    padding: 0 .75rem;
+  }
+
+  .nav-logo {
+    font-size: .9rem;
+  }
+
+  .nav-cv {
+    font-size: .58rem;
+    padding: .24rem .5rem;
+  }
+
+  /* Theme toggle: keep but compact */
+  .theme-btn {
+    width: 30px;
+    height: 17px;
+    flex-shrink: 0;
+  }
+
+  .theme-btn::after {
+    width: 12px;
+    height: 12px;
+  }
+
+  [data-theme="light"] .theme-btn::after {
+    transform: translateX(13px);
+  }
+
+  /* Wrap: minimal padding */
+  .wrap {
+    padding: 0 .9rem;
+  }
+
+  /* Ensure no element overflows on 320px wide screens */
+  .hero-metrics-strip {
+    font-size: .6rem;
+  }
+  .hms-val {
+    font-size: .85rem;
+  }
+  .hms-dot {
+    padding: 0 .25rem;
+  }
+
+  /* Cards: prevent bleed */
+  .kpi-c, .dec, .proj, .cap, .cc, .mandate, .tl-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+} /* end @media 480px */
+
+/* ── 7. PRESS FEEDBACK — touch (CSS-only, no JS) ── */
+/* Applied globally to all interactive elements on touch */
+@media (hover: none) and (pointer: coarse) {
+  /* This targets touch devices specifically */
+  .btn-g:active,
+  .btn-o:active {
+    transform: scale(0.97) !important;
+    transition-duration: .06s !important;
+  }
+
+  .kpi-c:active,
+  .dec:active,
+  .proj:active,
+  .cap:active {
+    transform: scale(0.99) !important;
+    transition-duration: .06s !important;
+    box-shadow: none !important;
+  }
+
+  .ci:active {
+    transform: scale(0.98) !important;
+    transition-duration: .06s !important;
+  }
+
+  .mbn-item:active svg {
+    transform: scale(0.85) !important;
+  }
+
+  /* Remove desktop hover effects on touch devices */
+  .btn-g:hover,
+  .btn-o:hover,
+  .kpi-c:hover,
+  .dec:hover,
+  .proj:hover,
+  .cap:hover,
+  .ci:hover,
+  .tl-i:hover .tl-card,
+  .pr:hover,
+  .imp:hover,
+  .fab:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Keep border color feedback on hover (no motion) */
+  .kpi-c:hover { border-color: var(--border-a); }
+  .dec:hover   { border-color: var(--border-a); }
+  .proj:hover  { border-color: var(--border-a); }
+  .cap:hover   { border-color: var(--border-a); }
+
+} /* end hover:none */
+
 </style>
 </head>
 <body>
@@ -3352,39 +3640,75 @@ if(anchor){
   });
 }
 
-/* ── THEME ── */
+/* ── THEME — system detection + manual toggle ── */
 var htmlEl = document.documentElement;
 var thm    = document.getElementById('thm');
 var tlbl   = document.getElementById('tlbl');
-var theme  = localStorage.getItem('mm-theme') || 'dark';
-applyTheme(theme);
-if(thm) thm.addEventListener('click',function(){
+
+/* Determine initial theme:
+   1. User's manual saved preference wins
+   2. System prefers-color-scheme second
+   3. Dark as default fallback */
+var saved  = localStorage.getItem('mm-theme');
+var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+var theme  = saved ? saved : (sysDark ? 'dark' : 'light');
+
+/* Apply immediately — before paint — to prevent flash */
+htmlEl.setAttribute('data-theme', theme);
+applyTheme(theme, false); /* false = no transition on first paint */
+
+/* Listen for system theme changes (user changes OS preference) */
+if(window.matchMedia){
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e){
+    /* Only follow system if user hasn't manually set a preference */
+    if(!localStorage.getItem('mm-theme')){
+      theme = e.matches ? 'dark' : 'light';
+      applyTheme(theme, true);
+    }
+  });
+}
+
+/* Manual toggle */
+if(thm) thm.addEventListener('click', function(){
   theme = theme === 'dark' ? 'light' : 'dark';
-  applyTheme(theme);
-  localStorage.setItem('mm-theme',theme);
+  applyTheme(theme, true);
+  localStorage.setItem('mm-theme', theme); /* save manual preference */
 });
-function applyTheme(t){
-  htmlEl.setAttribute('data-theme',t);
-  if(tlbl) tlbl.textContent = t==='dark' ? '☾' : '☀';
+
+function applyTheme(t, animate){
+  if(!animate){
+    /* Kill transitions on first paint to prevent flash */
+    htmlEl.style.transition = 'none';
+    htmlEl.setAttribute('data-theme', t);
+    /* Force reflow then restore */
+    void htmlEl.offsetHeight;
+    htmlEl.style.transition = '';
+  } else {
+    htmlEl.setAttribute('data-theme', t);
+  }
+  if(tlbl) tlbl.textContent = t === 'dark' ? '☾' : '☀';
+  theme = t;
 }
 
 /* ── SCROLL: PROGRESS + NAV SHRINK + SHADOW ── */
 var prog   = document.getElementById('prog');
 var topNav = document.querySelector('nav:not(#mob-bottom-nav)');
-window.addEventListener('scroll',function(){
+window.addEventListener('scroll', function(){
   var scrollY = window.scrollY;
   var h = document.body.scrollHeight - window.innerHeight;
-  if(prog) prog.style.width = (h>0 ? scrollY/h*100 : 0)+'%';
+  if(prog) prog.style.width = (h > 0 ? scrollY / h * 100 : 0) + '%';
   if(topNav) topNav.classList.toggle('scrolled', scrollY > 10);
-},{passive:true});
+}, {passive: true});
 
 /* ── REVEAL SYSTEM ── */
-['#hero','#hero *','nav:not(#mob-bottom-nav)','nav:not(#mob-bottom-nav) *','#prog'].forEach(function(sel){
-  document.querySelectorAll(sel).forEach(function(el){
-    el.classList.add('no-reveal');
-    el.classList.remove('reveal','reveal-group');
+['#hero','#hero *','nav:not(#mob-bottom-nav)','nav:not(#mob-bottom-nav) *','#prog']
+  .forEach(function(sel){
+    document.querySelectorAll(sel).forEach(function(el){
+      el.classList.add('no-reveal');
+      el.classList.remove('reveal','reveal-group');
+    });
   });
-});
+
 var revealObs = new IntersectionObserver(function(entries){
   entries.forEach(function(entry){
     if(entry.isIntersecting){
@@ -3392,7 +3716,8 @@ var revealObs = new IntersectionObserver(function(entries){
       revealObs.unobserve(entry.target);
     }
   });
-},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+}, {threshold: 0.08, rootMargin: '0px 0px -40px 0px'});
+
 document.querySelectorAll('.reveal,.reveal-group').forEach(function(el){
   if(el.classList.contains('no-reveal')) return;
   var rect = el.getBoundingClientRect();
@@ -3402,8 +3727,9 @@ document.querySelectorAll('.reveal,.reveal-group').forEach(function(el){
     revealObs.observe(el);
   }
 });
-document.addEventListener('visibilitychange',function(){
-  if(document.visibilityState==='visible'){
+
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'visible'){
     document.querySelectorAll('.reveal:not(.visible),.reveal-group:not(.visible)')
       .forEach(function(el){
         var rect = el.getBoundingClientRect();
@@ -3419,21 +3745,21 @@ var navObs = new IntersectionObserver(function(entries){
   entries.forEach(function(entry){
     if(entry.isIntersecting){
       navAs.forEach(function(a){ a.classList.remove('on'); });
-      var a = document.querySelector('.nav-links a[href="#'+entry.target.id+'"]');
+      var a = document.querySelector('.nav-links a[href="#' + entry.target.id + '"]');
       if(a) a.classList.add('on');
     }
   });
-},{threshold:0.3});
+}, {threshold: 0.3});
 secEls.forEach(function(s){ navObs.observe(s); });
 
 /* ── CAREER TABS ── */
 document.querySelectorAll('.tab').forEach(function(tab){
-  tab.addEventListener('click',function(){
+  tab.addEventListener('click', function(){
     var id = tab.dataset.p;
     document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('on'); });
     document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('on'); });
     tab.classList.add('on');
-    var panel = document.getElementById('p-'+id);
+    var panel = document.getElementById('p-' + id);
     if(panel){
       panel.classList.add('on');
       panel.querySelectorAll('.reveal,.reveal-group').forEach(function(el){
@@ -3445,54 +3771,84 @@ document.querySelectorAll('.tab').forEach(function(tab){
 
 /* ── KPI COUNTERS ── */
 function animCount(el){
-  var target=+el.dataset.t, pre=el.dataset.pre||'', suf=el.dataset.suf||'';
-  var dur=1800, t0=performance.now();
+  var target = +el.dataset.t, pre = el.dataset.pre || '', suf = el.dataset.suf || '';
+  var dur = 1800, t0 = performance.now();
   (function step(now){
-    var p=Math.min((now-t0)/dur,1);
-    var ease=p===1?1:1-Math.pow(2,-10*p);
-    el.textContent=pre+Math.round(ease*target).toLocaleString()+suf;
-    if(p<1) requestAnimationFrame(step);
+    var p    = Math.min((now - t0) / dur, 1);
+    var ease = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+    el.textContent = pre + Math.round(ease * target).toLocaleString() + suf;
+    if(p < 1) requestAnimationFrame(step);
   })(performance.now());
 }
-var cntObs=new IntersectionObserver(function(entries){
+var cntObs = new IntersectionObserver(function(entries){
   entries.forEach(function(entry){
     if(entry.isIntersecting){ animCount(entry.target); cntObs.unobserve(entry.target); }
   });
-},{threshold:0.4});
+}, {threshold: 0.4});
 document.querySelectorAll('.cnt').forEach(function(el){ cntObs.observe(el); });
 
-/* ── TOP MOBILE MENU ── */
-var ham=document.getElementById('ham');
-var mob=document.getElementById('mob');
-var mobOpen=false;
+/* ── TOP MOBILE MENU (desktop fallback) ── */
+var ham = document.getElementById('ham');
+var mob = document.getElementById('mob');
+var mobOpen = false;
 function openMenu(){
-  mobOpen=true;
+  mobOpen = true;
   if(ham) ham.classList.add('open');
-  if(mob){ mob.classList.add('open'); mob.style.display='flex'; }
+  if(mob){ mob.classList.add('open'); mob.style.display = 'flex'; }
   document.body.classList.add('menu-open');
 }
 function closeMenu(){
-  mobOpen=false;
+  mobOpen = false;
   if(ham) ham.classList.remove('open');
-  if(mob){ mob.classList.remove('open'); mob.style.display='none'; }
+  if(mob){ mob.classList.remove('open'); mob.style.display = 'none'; }
   document.body.classList.remove('menu-open');
 }
 if(ham && mob){
-  mob.style.display='none';
-  ham.addEventListener('click',function(){ if(mobOpen) closeMenu(); else openMenu(); });
+  mob.style.display = 'none';
+  ham.addEventListener('click', function(){ if(mobOpen) closeMenu(); else openMenu(); });
   mob.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMenu); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&mobOpen) closeMenu(); });
-  mob.addEventListener('click',function(e){ if(e.target===mob) closeMenu(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && mobOpen) closeMenu(); });
+  mob.addEventListener('click', function(e){ if(e.target === mob) closeMenu(); });
 }
 
 /* ── WILL-CHANGE CLEANUP ── */
 document.querySelectorAll('.btn-g,.btn-o,.kpi-c,.dec,.proj,.imp,.ci,.tl-card,.cap,.pr,.fab')
   .forEach(function(el){
-    el.addEventListener('mouseenter', function(){ el.style.willChange='transform'; });
+    el.addEventListener('mouseenter', function(){ el.style.willChange = 'transform'; });
     el.addEventListener('mouseleave', function(){
-      setTimeout(function(){ el.style.willChange='auto'; }, 300);
+      setTimeout(function(){ el.style.willChange = 'auto'; }, 300);
     });
   });
+
+/* ── GESTURE CONTROL — prevent accidental horizontal scroll ── */
+/* Lock scroll axis on touch start: once vertical, stay vertical */
+(function(){
+  var startX = 0, startY = 0, lockAxis = null;
+
+  document.addEventListener('touchstart', function(e){
+    if(e.touches.length === 1){
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      lockAxis = null;
+    }
+  }, {passive: true});
+
+  document.addEventListener('touchmove', function(e){
+    if(e.touches.length !== 1 || lockAxis) return;
+    var dx = Math.abs(e.touches[0].clientX - startX);
+    var dy = Math.abs(e.touches[0].clientY - startY);
+    if(dy > dx + 4){
+      lockAxis = 'vertical';
+    } else if(dx > dy + 4){
+      lockAxis = 'horizontal';
+    }
+  }, {passive: true});
+
+  /* Reset on touchend */
+  document.addEventListener('touchend', function(){
+    lockAxis = null;
+  }, {passive: true});
+})();
 
 /* ── MOBILE BOTTOM NAV ── */
 var mbn = document.getElementById('mob-bottom-nav');
@@ -3504,8 +3860,10 @@ if(mbn){
     if(sec) sectionMap[sec] = item;
   });
 
-  var mbnSections = ['hero','career','impact','projects','contact'];
-  var mbnEls = mbnSections.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var mbnSectionIds = ['hero','career','impact','projects','contact'];
+  var mbnEls = mbnSectionIds
+    .map(function(id){ return document.getElementById(id); })
+    .filter(Boolean);
 
   var mbnObs = new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
@@ -3515,13 +3873,13 @@ if(mbn){
         if(item) item.classList.add('mbn-active');
       }
     });
-  },{threshold:0.25});
+  }, {threshold: 0.25});
   mbnEls.forEach(function(el){ mbnObs.observe(el); });
 
   /* Hide/show on scroll */
   var lastScrollY = window.scrollY;
   var scrollTicking = false;
-  window.addEventListener('scroll',function(){
+  window.addEventListener('scroll', function(){
     if(!scrollTicking){
       requestAnimationFrame(function(){
         var cur = window.scrollY;
@@ -3537,7 +3895,7 @@ if(mbn){
       });
       scrollTicking = true;
     }
-  },{passive:true});
+  }, {passive: true});
 }
 
 })();
