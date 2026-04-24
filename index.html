@@ -1941,8 +1941,7 @@ html {
   .hero-sub { white-space: normal; text-align: left; }
   /* Dec grid already 1-col */
   /* Improve FAB spacing on mobile */
-  .fab-bar { bottom: 1.25rem; right: 1.25rem; }
-  .fab { width: 44px; height: 44px; }
+  /* fab-bar mobile handled below */
 }
 
 @media (max-width: 480px) {
@@ -2451,13 +2450,7 @@ nav.scrolled {
   .mandate { padding: 1.25rem; }
   .tl-card { padding: 1.1rem 1.1rem; }
 
-  /* ── FAB BAR: show on mobile, positioned above bottom nav ── */
-  .fab-bar {
-    display: flex;
-    bottom: calc(68px + env(safe-area-inset-bottom, 0px) + 0.75rem);
-    right: 1rem;
-  }
-  .fab { width: 44px; height: 44px; }
+  /* fab-bar mobile: see bottom */
 
   /* ── FONT SIZES: ensure readability without zoom ── */
   .imp-t { font-size: 1rem; }
@@ -2850,6 +2843,45 @@ html, body {
 /* 6. Sections: allow scroll to propagate */
 section[id], .sec {
   overscroll-behavior: auto;
+}
+
+
+/* ── FAB BAR — MOBILE: horizontal row above bottom nav ──────── */
+@media (max-width: 768px) {
+  .fab-bar {
+    /* Horizontal row, sits above the 60px bottom nav with 10px gap */
+    flex-direction: row;
+    bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 10px);
+    right: 1rem;
+    left: auto;
+    gap: 0.5rem;
+    z-index: 850;
+    /* Subtle background pill so buttons don't float nakedly */
+    background: transparent;
+  }
+
+  /* Slightly smaller on mobile — still thumb-friendly at 40px */
+  .fab-bar .fab {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* fab-p (back to top) stays gold, no change needed */
+  /* fab-li (LinkedIn) keeps its blue, no change needed */
+}
+
+@media (max-width: 480px) {
+  .fab-bar {
+    /* On very small screens, keep right-aligned */
+    right: 0.75rem;
+    gap: 0.4rem;
+    bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 8px);
+  }
+
+  .fab-bar .fab {
+    width: 38px;
+    height: 38px;
+  }
 }
 
 </style>
