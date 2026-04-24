@@ -187,8 +187,9 @@ nav{
   padding:2rem;flex-direction:column;gap:.4rem;
   transform:translateX(100%);
   transition:transform .4s var(--ease);
+  pointer-events:none;
 }
-.mob-menu.open{transform:translateX(0)}
+.mob-menu.open{transform:translateX(0);pointer-events:auto;display:flex}
 .mob-menu a{
   font-size:1.4rem;font-family:var(--font-display);
   color:var(--tx-2);padding:.7rem 0;
@@ -1050,7 +1051,7 @@ nav{
 @media(max-width:768px){
   .nav-links,.nav-cv{display:none}
   .ham{display:flex}
-  .mob-menu{display:flex}
+  .mob-menu{display:none}/* open state handles display */
   .hero-strip{grid-template-columns:repeat(2,1fr)}
   .hk{border-right:none;border-bottom:1px solid var(--border)}
   .hk:nth-child(odd){border-right:1px solid var(--border)}
@@ -2799,6 +2800,56 @@ html[data-theme="light"] {
 }
 @media (max-width: 768px) {
   .hero-proof { font-size: .78rem; }
+}
+
+
+/* ============================================================
+   SCROLL FIX — authoritative, placed last to win cascade
+   These rules override ALL previous conflicting declarations
+============================================================ */
+
+/* 1. html/body MUST scroll — these are the scroll containers */
+html {
+  overflow: visible !important;
+  height: auto !important;
+}
+body {
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  height: auto !important;
+  min-height: 100vh;
+}
+
+/* 2. Remove any scroll blocking from sections/containers */
+section, .sec, .wrap, main, article {
+  overflow-x: visible;
+  overflow-y: visible;
+}
+
+/* 3. mob-menu: NEVER intercept scroll events when not open */
+.mob-menu:not(.open) {
+  pointer-events: none !important;
+}
+
+/* 4. Bottom nav: only intercept its own area */
+#mob-bottom-nav {
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+#mob-bottom-nav .mbn-item {
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+/* 5. Touch scrolling - explicit permission on scroll container */
+html, body {
+  touch-action: pan-x pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 6. Sections: allow scroll to propagate */
+section[id], .sec {
+  overscroll-behavior: auto;
 }
 
 </style>
