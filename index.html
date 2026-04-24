@@ -225,7 +225,7 @@ nav{
 #hero{
   min-height:100svh;
   display:grid;grid-template-rows:1fr auto;
-  padding-top:60px;position:relative;overflow:hidden;
+  padding-top:60px;position:relative;overflow:clip;
 }
 .hero-bg{position:absolute;inset:0;pointer-events:none}
 .hero-orb{
@@ -2438,8 +2438,8 @@ nav.scrolled {
     gap: .4rem 0;
   }
 
-  /* Prevent horizontal overflow */
-  .wrap { padding: 0 1.1rem; overflow: hidden; }
+  /* Prevent horizontal overflow — y must remain scrollable */
+  .wrap { padding: 0 1.1rem; overflow-x: clip; overflow-y: visible; }
   .hero-inner { padding-left: 1.1rem; padding-right: 1.1rem; }
 
   /* Card padding tighter on mobile */
@@ -2516,14 +2516,13 @@ html {
 
 /* ── 2. OVERSCROLL CONTROL ── */
 /* Prevent scroll chaining: content scroll stays contained */
-html {
-  overscroll-behavior-y: none;
-}
+/* html overscroll-behavior removed — was blocking keyboard scroll */
 body {
   overscroll-behavior-y: contain;
 }
 /* Sections scroll contained — prevents bounce propagation */
-.sec, .mob-menu, #mob-bottom-nav {
+/* .sec: no overscroll-behavior — must propagate scroll to body/html */
+.mob-menu, #mob-bottom-nav {
   overscroll-behavior: contain;
 }
 
@@ -2596,11 +2595,11 @@ html[data-theme="light"] {
     scroll-margin-top: 60px;
   }
 
-  /* Prevent any child from escaping viewport width */
+  /* Prevent horizontal overflow only — vertical must propagate */
   .hero-inner, .wrap, .contact-g, .about-g, .dec-g,
   .cap-g, .proj-g, .kpi-grid, .impact-list, .tl {
     max-width: 100%;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   /* Hero CTA buttons: stack, full width */
@@ -3666,9 +3665,9 @@ if(anchor){
 }
 
 /* ── THEME — system detection + manual toggle ── */
-var htmlEl = document.documentElement;
-var thm    = document.getElementById('thm');
-var tlbl   = document.getElementById('tlbl');
+var htmlEl  = document.documentElement;
+var thm     = document.getElementById('thm');
+var tlbl    = document.getElementById('tlbl');
 var saved   = localStorage.getItem('mm-theme');
 var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 var theme   = saved ? saved : (sysDark ? 'dark' : 'light');
@@ -3795,8 +3794,8 @@ var cntObs = new IntersectionObserver(function(entries){
 document.querySelectorAll('.cnt').forEach(function(el){ cntObs.observe(el); });
 
 /* ── TOP MOBILE MENU ── */
-var ham = document.getElementById('ham');
-var mob = document.getElementById('mob');
+var ham     = document.getElementById('ham');
+var mob     = document.getElementById('mob');
 var mobOpen = false;
 function openMenu(){
   mobOpen = true;
