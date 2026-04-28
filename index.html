@@ -3530,6 +3530,7 @@ nav:not(#mob-bottom-nav) .nav-cv:hover {
       <div class="tab on" data-p="mmp">Mount Meru</div>
       <div class="tab" data-p="rbp">Reliance BP</div>
       <div class="tab" data-p="pj">Papa John's</div>
+      <div class="tab" data-p="pc">Pizza Corner</div>
       <div class="tab" data-p="mcd">McDonald's</div>
     </div>
 
@@ -3611,6 +3612,14 @@ nav:not(#mob-bottom-nav) .nav-cv:hover {
             <div class="pt"><strong>25+ person cross-functional team</strong> led across channel development, dealer incentives, and partner management.</div>
           </div>
         </div>
+        <div class="cc-sec">
+          <div class="cc-sec-lbl">Operations &amp; Network Control</div>
+          <div class="pts">
+            <div class="pt"><strong>Owned operational performance across 30+ retail stations</strong> (COCO and DODO) spanning 10 districts in Tamil Nadu — ensuring network-level discipline across distributed assets.</div>
+            <div class="pt"><strong>Product loss held materially below industry benchmarks</strong> — protecting channel partner economics through strengthened inventory governance and loss control systems.</div>
+            <div class="pt">Stepped in as <strong>state-level SPOC for approximately 10 months</strong> — supporting senior leadership on network performance, issue resolution, and operational continuity.</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -3629,6 +3638,32 @@ nav:not(#mob-bottom-nav) .nav-cv:hover {
           <div class="pts">
             <div class="pt">Held all-in OPEX below <strong>28%</strong> — market-leading benchmark for the region — while simultaneously opening 5 new stores and stepping up as Acting Operations Manager during a leadership gap.</div>
             <div class="pt">Directed the regional Training Department; designed onboarding curricula, brand standards training, and new store readiness programmes adopted across the entire Saudi network.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel reveal" id="p-pc">
+      <div class="cc">
+        <div class="cc-head">
+          <div>
+            <div class="cc-role">Assistant Restaurant General Manager</div>
+            <div class="cc-co">Global Franchise Architect (Pizza Corner)</div>
+          </div>
+          <div class="cc-per"><strong>Feb 2014 – Aug 2014</strong>India</div>
+        </div>
+        <div class="cc-ctx">Full P&amp;L accountability · Unit economics · Team performance · Guest experience</div>
+        <div class="cc-sec">
+          <div class="cc-sec-lbl">Operations &amp; Delivery</div>
+          <div class="pts">
+            <div class="pt">Ran end-to-end restaurant operations with <strong>full accountability across guest experience, team performance, and unit economics</strong> — maintaining cost discipline while sustaining service standards and profitability.</div>
+            <div class="pt"><strong>Installed operational and cost controls</strong> that held expenses within defined thresholds without compromising throughput or customer experience.</div>
+          </div>
+        </div>
+        <div class="cc-sec">
+          <div class="cc-sec-lbl">Team &amp; Capability</div>
+          <div class="pts">
+            <div class="pt">Built and developed team capability delivering approximately <strong>35% internal promotion rate</strong> — became a trusted input into performance and progression decisions at unit level.</div>
           </div>
         </div>
       </div>
@@ -3889,6 +3924,17 @@ nav:not(#mob-bottom-nav) .nav-cv:hover {
         </div>
       </div>
 
+      <!-- ── Entry 5 ── -->
+      <div class="tl-i reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-p">Feb 2014 – Aug 2014</div>
+          <div class="tl-r">Assistant Restaurant General Manager</div>
+          <div class="tl-c">Global Franchise Architect (Pizza Corner) · India</div>
+          <div class="tl-s">Full accountability for restaurant operations — unit economics, team performance, and guest experience. Installed cost controls holding expenses within thresholds without compromising throughput. ~35% internal promotion rate through structured team development.</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -4132,196 +4178,144 @@ function applyTheme(t, animate){
   theme = t;
 }
 
-/* ── SCROLL: PROGRESS + FLOATING NAV HIDE/SHOW ── */
-var prog          = document.getElementById('prog');
-var topNav        = document.querySelector('nav:not(#mob-bottom-nav)');
-var lastScrollY   = window.scrollY;
-var navTicking    = false;
-var scrollTimer   = null;
-var NAV_THRESHOLD = 80;
-
-window.addEventListener('scroll', function(){
-  var scrollY = window.scrollY;
-  if(prog){
-    var h = document.body.scrollHeight - window.innerHeight;
-    prog.style.width = (h > 0 ? scrollY / h * 100 : 0) + '%';
-  }
-  if(topNav) topNav.classList.toggle('scrolled', scrollY > 10);
+/* ── SCROLL: PROGRESS + FLOATING NAV ── */
+var prog=document.getElementById('prog');
+var topNav=document.querySelector('nav:not(#mob-bottom-nav)');
+var lastScrollY=window.scrollY,navTicking=false,scrollTimer=null,NAV_THRESHOLD=80;
+window.addEventListener('scroll',function(){
+  var scrollY=window.scrollY;
+  if(prog){var h=document.body.scrollHeight-window.innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%';}
+  if(topNav) topNav.classList.toggle('scrolled',scrollY>10);
   if(!navTicking){
     requestAnimationFrame(function(){
-      var delta = scrollY - lastScrollY;
-      if(scrollY <= 0){
-        if(topNav) topNav.classList.remove('nav-hidden','nav-top');
-      } else if(scrollY < NAV_THRESHOLD){
-        if(topNav){ topNav.classList.remove('nav-hidden'); topNav.classList.add('nav-top'); }
-      } else {
-        if(delta > 6){
-          if(topNav){ topNav.classList.add('nav-hidden'); topNav.classList.remove('nav-top'); }
-        } else if(delta < -4){
-          if(topNav) topNav.classList.remove('nav-hidden');
-        }
+      var delta=scrollY-lastScrollY;
+      if(scrollY<=0){if(topNav)topNav.classList.remove('nav-hidden','nav-top');}
+      else if(scrollY<NAV_THRESHOLD){if(topNav){topNav.classList.remove('nav-hidden');topNav.classList.add('nav-top');}}
+      else{
+        if(delta>6){if(topNav){topNav.classList.add('nav-hidden');topNav.classList.remove('nav-top');}}
+        else if(delta<-4){if(topNav)topNav.classList.remove('nav-hidden');}
       }
       clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(function(){
-        if(topNav) topNav.classList.remove('nav-hidden');
-      }, 800);
-      lastScrollY = scrollY;
-      navTicking = false;
+      scrollTimer=setTimeout(function(){if(topNav)topNav.classList.remove('nav-hidden');},800);
+      lastScrollY=scrollY;navTicking=false;
     });
-    navTicking = true;
+    navTicking=true;
   }
-}, {passive: true});
+},{passive:true});
 
 /* ── REVEAL SYSTEM ── */
-['#hero','#hero *','nav:not(#mob-bottom-nav)','nav:not(#mob-bottom-nav) *','#prog']
-  .forEach(function(sel){
-    document.querySelectorAll(sel).forEach(function(el){
-      el.classList.add('no-reveal');
-      el.classList.remove('reveal','reveal-group');
-    });
-  });
-var revealObs = new IntersectionObserver(function(entries){
-  entries.forEach(function(entry){
-    if(entry.isIntersecting){
-      entry.target.classList.add('visible');
-      revealObs.unobserve(entry.target);
-    }
-  });
-}, {threshold: 0.08, rootMargin: '0px 0px -40px 0px'});
-document.querySelectorAll('.reveal,.reveal-group').forEach(function(el){
-  if(el.classList.contains('no-reveal')) return;
-  var rect = el.getBoundingClientRect();
-  if(rect.top < window.innerHeight && rect.bottom > 0){
-    el.classList.add('visible');
-  } else { revealObs.observe(el); }
+['#hero','#hero *','nav:not(#mob-bottom-nav)','nav:not(#mob-bottom-nav) *','#prog'].forEach(function(sel){
+  document.querySelectorAll(sel).forEach(function(el){el.classList.add('no-reveal');el.classList.remove('reveal','reveal-group');});
 });
-document.addEventListener('visibilitychange', function(){
-  if(document.visibilityState === 'visible'){
-    document.querySelectorAll('.reveal:not(.visible),.reveal-group:not(.visible)')
-      .forEach(function(el){
-        var rect = el.getBoundingClientRect();
-        if(rect.top < window.innerHeight) el.classList.add('visible');
-      });
+var revealObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('visible');revealObs.unobserve(entry.target);}});
+},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal,.reveal-group').forEach(function(el){
+  if(el.classList.contains('no-reveal'))return;
+  var rect=el.getBoundingClientRect();
+  if(rect.top<window.innerHeight&&rect.bottom>0){el.classList.add('visible');}else{revealObs.observe(el);}
+});
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='visible'){
+    document.querySelectorAll('.reveal:not(.visible),.reveal-group:not(.visible)').forEach(function(el){
+      var rect=el.getBoundingClientRect();if(rect.top<window.innerHeight)el.classList.add('visible');
+    });
   }
 });
 
 /* ── ACTIVE TOP NAV ── */
-var navAs  = document.querySelectorAll('.nav-links a');
-var secEls = document.querySelectorAll('section[id]');
-var navObs = new IntersectionObserver(function(entries){
+var navAs=document.querySelectorAll('.nav-links a');
+var secEls=document.querySelectorAll('section[id]');
+var navObs=new IntersectionObserver(function(entries){
   entries.forEach(function(entry){
     if(entry.isIntersecting){
-      navAs.forEach(function(a){ a.classList.remove('on'); });
-      var a = document.querySelector('.nav-links a[href="#'+entry.target.id+'"]');
-      if(a) a.classList.add('on');
+      navAs.forEach(function(a){a.classList.remove('on');});
+      var a=document.querySelector('.nav-links a[href="#'+entry.target.id+'"]');
+      if(a)a.classList.add('on');
     }
   });
-}, {threshold: 0.3});
-secEls.forEach(function(s){ navObs.observe(s); });
+},{threshold:0.3});
+secEls.forEach(function(s){navObs.observe(s);});
 
 /* ── CAREER TABS ── */
 document.querySelectorAll('.tab').forEach(function(tab){
-  tab.addEventListener('click', function(){
-    var id = tab.dataset.p;
-    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('on'); });
-    document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('on'); });
+  tab.addEventListener('click',function(){
+    var id=tab.dataset.p;
+    document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});
     tab.classList.add('on');
-    var panel = document.getElementById('p-'+id);
+    var panel=document.getElementById('p-'+id);
     if(panel){
       panel.classList.add('on');
-      panel.querySelectorAll('.reveal,.reveal-group').forEach(function(el){ el.classList.add('visible'); });
+      panel.querySelectorAll('.reveal,.reveal-group').forEach(function(el){el.classList.add('visible');});
     }
   });
 });
 
 /* ── KPI COUNTERS ── */
 function animCount(el){
-  var target=+el.dataset.t, pre=el.dataset.pre||'', suf=el.dataset.suf||'';
-  var dur=1800, t0=performance.now();
+  var target=+el.dataset.t,pre=el.dataset.pre||'',suf=el.dataset.suf||'';
+  var dur=1800,t0=performance.now();
   (function step(now){
-    var p=Math.min((now-t0)/dur,1);
-    var ease=p===1?1:1-Math.pow(2,-10*p);
+    var p=Math.min((now-t0)/dur,1),ease=p===1?1:1-Math.pow(2,-10*p);
     el.textContent=pre+Math.round(ease*target).toLocaleString()+suf;
-    if(p<1) requestAnimationFrame(step);
+    if(p<1)requestAnimationFrame(step);
   })(performance.now());
 }
 var cntObs=new IntersectionObserver(function(entries){
-  entries.forEach(function(entry){
-    if(entry.isIntersecting){ animCount(entry.target); cntObs.unobserve(entry.target); }
-  });
-}, {threshold:0.4});
-document.querySelectorAll('.cnt').forEach(function(el){ cntObs.observe(el); });
+  entries.forEach(function(entry){if(entry.isIntersecting){animCount(entry.target);cntObs.unobserve(entry.target);}});
+},{threshold:0.4});
+document.querySelectorAll('.cnt').forEach(function(el){cntObs.observe(el);});
 
 /* ── TOP MOBILE MENU ── */
 var ham=document.getElementById('ham');
 var mob=document.getElementById('mob');
 var mobOpen=false;
-function openMenu(){
-  mobOpen=true;
-  if(ham) ham.classList.add('open');
-  if(mob){ mob.classList.add('open'); mob.style.display='flex'; }
-  document.body.classList.add('menu-open');
-}
-function closeMenu(){
-  mobOpen=false;
-  if(ham) ham.classList.remove('open');
-  if(mob){ mob.classList.remove('open'); mob.style.display='none'; }
-  document.body.classList.remove('menu-open');
-}
-if(ham && mob){
+function openMenu(){mobOpen=true;if(ham)ham.classList.add('open');if(mob){mob.classList.add('open');mob.style.display='flex';}document.body.classList.add('menu-open');}
+function closeMenu(){mobOpen=false;if(ham)ham.classList.remove('open');if(mob){mob.classList.remove('open');mob.style.display='none';}document.body.classList.remove('menu-open');}
+if(ham&&mob){
   mob.style.display='none';
-  ham.addEventListener('click', function(){ if(mobOpen) closeMenu(); else openMenu(); });
-  mob.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMenu); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape'&&mobOpen) closeMenu(); });
-  mob.addEventListener('click', function(e){ if(e.target===mob) closeMenu(); });
+  ham.addEventListener('click',function(){if(mobOpen)closeMenu();else openMenu();});
+  mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',closeMenu);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mobOpen)closeMenu();});
+  mob.addEventListener('click',function(e){if(e.target===mob)closeMenu();});
 }
 
 /* ── WILL-CHANGE CLEANUP ── */
-document.querySelectorAll('.btn-g,.btn-o,.kpi-c,.dec,.proj,.imp,.ci,.tl-card,.cap,.pr,.fab')
-  .forEach(function(el){
-    el.addEventListener('mouseenter', function(){ el.style.willChange='transform'; });
-    el.addEventListener('mouseleave', function(){
-      setTimeout(function(){ el.style.willChange='auto'; }, 300);
-    });
-  });
+document.querySelectorAll('.btn-g,.btn-o,.kpi-c,.dec,.proj,.imp,.ci,.tl-card,.cap,.pr,.fab').forEach(function(el){
+  el.addEventListener('mouseenter',function(){el.style.willChange='transform';});
+  el.addEventListener('mouseleave',function(){setTimeout(function(){el.style.willChange='auto';},300);});
+});
 
 /* ── MOBILE BOTTOM NAV ── */
 var mbn=document.getElementById('mob-bottom-nav');
 if(mbn){
   var mbnItems=mbn.querySelectorAll('.mbn-item');
   var sectionMap={};
-  mbnItems.forEach(function(item){
-    var sec=item.dataset.section;
-    if(sec) sectionMap[sec]=item;
-  });
-  var mbnEls=['hero','career','impact','projects','contact']
-    .map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  mbnItems.forEach(function(item){var sec=item.dataset.section;if(sec)sectionMap[sec]=item;});
+  var mbnEls=['hero','career','impact','projects','contact'].map(function(id){return document.getElementById(id);}).filter(Boolean);
   var mbnObs=new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
       if(entry.isIntersecting){
-        mbnItems.forEach(function(i){ i.classList.remove('mbn-active'); });
-        var item=sectionMap[entry.target.id];
-        if(item) item.classList.add('mbn-active');
+        mbnItems.forEach(function(i){i.classList.remove('mbn-active');});
+        var item=sectionMap[entry.target.id];if(item)item.classList.add('mbn-active');
       }
     });
-  }, {threshold:0.25});
-  mbnEls.forEach(function(el){ mbnObs.observe(el); });
-  var mbnLastY=window.scrollY, mbnTicking=false, mbnTimer=null;
-  window.addEventListener('scroll', function(){
+  },{threshold:0.25});
+  mbnEls.forEach(function(el){mbnObs.observe(el);});
+  var mbnLastY=window.scrollY,mbnTicking=false,mbnTimer=null;
+  window.addEventListener('scroll',function(){
     if(!mbnTicking){
       requestAnimationFrame(function(){
-        var cur=window.scrollY, delta=cur-mbnLastY;
-        if(cur>120){
-          if(delta>4) mbn.classList.add('mbn-hidden');
-          else if(delta<-4) mbn.classList.remove('mbn-hidden');
-        } else { mbn.classList.remove('mbn-hidden'); }
-        clearTimeout(mbnTimer);
-        mbnTimer=setTimeout(function(){ mbn.classList.remove('mbn-hidden'); }, 800);
-        mbnLastY=cur; mbnTicking=false;
+        var cur=window.scrollY,delta=cur-mbnLastY;
+        if(cur>120){if(delta>4)mbn.classList.add('mbn-hidden');else if(delta<-4)mbn.classList.remove('mbn-hidden');}
+        else{mbn.classList.remove('mbn-hidden');}
+        clearTimeout(mbnTimer);mbnTimer=setTimeout(function(){mbn.classList.remove('mbn-hidden');},800);
+        mbnLastY=cur;mbnTicking=false;
       });
       mbnTicking=true;
     }
-  }, {passive:true});
+  },{passive:true});
 }
 
 })();
