@@ -3245,6 +3245,121 @@ nav:not(#mob-bottom-nav) .nav-cv:hover {
   .arc-close { font-size: 0.95rem; }
 }
 
+
+/* ── CONVERSION NARRATIVE SECTION ── */
+.conv-sec {
+  padding: 80px 0;
+}
+.conv-inner {
+  max-width: 760px;
+}
+
+/* Lead — display size, commands attention */
+.conv-lead {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: var(--tx);
+  margin-bottom: 2rem;
+}
+
+/* Body paragraphs */
+.conv-body {
+  margin-bottom: 2rem;
+  border-left: 2px solid var(--border-a);
+  padding-left: 1.5rem;
+}
+.conv-body p {
+  font-size: var(--type-base, 0.95rem);
+  line-height: var(--lh-body, 1.78);
+  color: var(--tx-2);
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+.conv-body p:last-child { margin-bottom: 0; }
+
+/* Translates block */
+.conv-translates {
+  margin-bottom: 2rem;
+  padding: 1.5rem 1.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.conv-translates-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx-3);
+  margin-bottom: 1rem;
+}
+.conv-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.conv-list li {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--tx);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  padding-left: 1.25rem;
+  position: relative;
+}
+.conv-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.7;
+}
+
+/* Mandate paragraph */
+.conv-mandate {
+  font-size: var(--type-base, 0.95rem);
+  line-height: var(--lh-body, 1.78);
+  color: var(--tx-2);
+  font-weight: 300;
+  margin-bottom: 1.75rem;
+}
+
+/* Closing line — gold, editorial weight */
+.conv-close {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--gold);
+  letter-spacing: -0.01em;
+  line-height: 1.45;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .conv-sec { padding: 64px 0; }
+  .conv-lead { font-size: clamp(1.3rem, 6vw, 1.75rem); margin-bottom: 1.5rem; }
+  .conv-body { padding-left: 1rem; }
+  .conv-translates { padding: 1.25rem 1.25rem; }
+  .conv-list li { font-size: 1.05rem; }
+  .conv-close { font-size: 1.05rem; }
+}
+@media (max-width: 480px) {
+  .conv-list li { font-size: 0.95rem; }
+}
+
 </style>
 </head>
 <body>
@@ -4036,6 +4151,37 @@ nav:not(#mob-bottom-nav) .nav-cv:hover {
       </h2>
       <p class="closing-sub">USD 200M P&amp;L · 90 Stations · 12+ Years · 3 Countries</p>
       <div class="closing-rule closing-rule--bottom"></div>
+    </div>
+  </div>
+</section>
+
+<div class="div"></div>
+
+<!-- ===== CONVERSION NARRATIVE ===== -->
+<section id="conversion" class="sec conv-sec">
+  <div class="wrap">
+    <div class="conv-inner reveal">
+
+      <p class="conv-lead">Operating at scale is not a future step — it is the current baseline.</p>
+
+      <div class="conv-body">
+        <p>I currently run a USD 200M multi-site business across 90 locations with full accountability across revenue, operations, and cost structure. The work is not functional — it is enterprise execution across commercial strategy, operational systems, and financial discipline.</p>
+        <p>The consistent outcome has been the ability to grow revenue while reducing cost without destabilising operations — delivered under full operating load, not in controlled environments.</p>
+      </div>
+
+      <div class="conv-translates">
+        <p class="conv-translates-label">This translates directly into mandates where businesses need</p>
+        <ul class="conv-list">
+          <li>Scale without loss of control</li>
+          <li>Growth without cost expansion</li>
+          <li>Systems that hold beyond individual leadership</li>
+        </ul>
+      </div>
+
+      <p class="conv-mandate">I am open to roles with full P&amp;L accountability across multi-site or distributed operations — where the expectation is not to manage complexity, but to bring structure, discipline, and sustained performance to it.</p>
+
+      <p class="conv-close">If the mandate requires both growth and control at scale — we should have a conversation.</p>
+
     </div>
   </div>
 </section>
