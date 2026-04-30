@@ -3609,6 +3609,98 @@ nav:not(#mob-bottom-nav) .nav-r {
   }
 }
 
+
+/* ════════════════════════════════════════════════════════════
+   NAV-R + HERO-CTA OVERFLOW FIX — mobile & mid breakpoint
+════════════════════════════════════════════════════════════ */
+
+/* ── 1. HERO CTA — guaranteed stack on all mobile ── */
+@media (max-width: 768px) {
+  .hero-cta {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: .65rem !important;
+    flex-wrap: nowrap !important;
+  }
+  .hero-cta .btn-g,
+  .hero-cta .btn-o {
+    width: 100% !important;
+    max-width: 100% !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    white-space: normal !important;
+    text-align: center !important;
+    min-height: 48px !important;
+  }
+}
+
+/* ── 2. NAV completely hidden on mobile — belt + suspenders ── */
+@media (max-width: 768px) {
+  nav:not(#mob-bottom-nav) {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* Belt: ensure no nav child can override parent display:none */
+  .nav-cv,
+  .theme-btn,
+  .theme-lbl,
+  .nav-links,
+  .nav-logo,
+  .nav-r,
+  .ham {
+    /* These are inside display:none nav — no additional rule needed,
+       but guard against any rogue display overrides */
+  }
+}
+
+/* ── 3. NAV-R overflow guard at mid breakpoints (769–900px) ── */
+@media (max-width: 900px) and (min-width: 769px) {
+  nav:not(#mob-bottom-nav) .nav-r {
+    gap: .3rem !important;
+    flex-shrink: 0 !important;
+    max-width: none !important;
+    overflow: visible !important;
+  }
+
+  /* Hide resume button at narrow desktop — save space */
+  nav:not(#mob-bottom-nav) .nav-cv {
+    display: none !important;
+  }
+
+  /* Compact theme toggle */
+  nav:not(#mob-bottom-nav) .theme-btn {
+    width: 30px !important;
+    height: 17px !important;
+  }
+}
+
+/* ── 4. HERO SECTION — no horizontal overflow ── */
+#hero {
+  overflow-x: clip !important;
+  max-width: 100vw !important;
+}
+.hero-text-col {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+}
+
+/* ── 5. EXTREME NARROW (≤ 380px) ── */
+@media (max-width: 380px) {
+  .hero-cta {
+    gap: .5rem !important;
+  }
+  .hero-cta .btn-g,
+  .hero-cta .btn-o {
+    font-size: .75rem !important;
+    padding: .65rem 1rem !important;
+  }
+}
+
 </style>
 </head>
 <body>
