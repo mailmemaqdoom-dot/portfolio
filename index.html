@@ -3360,6 +3360,201 @@ nav:not(#mob-bottom-nav) .nav-cv:hover {
   .conv-list li { font-size: 0.95rem; }
 }
 
+
+/* ════════════════════════════════════════════════════════════
+   EXPERIENCE SECTION — MOBILE OVERFLOW FIX
+   Placed last — wins cascade. No layout or content changes.
+════════════════════════════════════════════════════════════ */
+
+/* ── 1. GLOBAL BOX-SIZING (safe — same value, explicit) ── */
+#career *, #journey * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* ── 2. SECTION CONTAINERS — no horizontal bleed ── */
+#career, #journey {
+  overflow-x: hidden;
+}
+#career .wrap, #journey .wrap {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* ── 3. TABS — horizontal scroll on very narrow screens ── */
+.tabs {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  flex-wrap: nowrap;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  scroll-snap-align: start;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── 4. CAREER CARD — contain within viewport ── */
+.cc {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ── 5. CARD HEAD — the primary overflow source ── */
+/* Fix: cc-per has white-space:nowrap + flex-shrink:0 — override on mobile */
+@media (max-width: 768px) {
+
+  /* Stack role/company + period vertically on mobile */
+  .cc-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  /* Period: allow wrap, left-align, no longer right-aligned */
+  .cc-per {
+    white-space: normal;
+    text-align: left;
+    flex-shrink: 1;
+    font-size: .65rem;
+    line-height: 1.5;
+  }
+
+  /* Role title: smaller on mobile, ensure wrap */
+  .cc-role {
+    font-size: 1.15rem;
+    word-break: break-word;
+  }
+
+  /* Company: allow wrap */
+  .cc-co {
+    word-break: break-word;
+  }
+
+  /* Card padding: consistent, finger-friendly */
+  .cc {
+    padding: 1.25rem 1.1rem;
+    border-radius: 8px;
+  }
+
+  /* Context line: allow wrap */
+  .cc-ctx {
+    font-size: .78rem;
+    word-break: break-word;
+  }
+
+  /* Section label: no overflow */
+  .cc-sec-lbl {
+    word-break: break-word;
+  }
+
+  /* Bullet points: ensure full wrap */
+  .pt {
+    font-size: .82rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    padding-left: .75rem;
+  }
+
+}
+
+/* ── 6. TIMELINE — mobile overflow containment ── */
+@media (max-width: 768px) {
+
+  /* Timeline container: stay inside viewport */
+  .tl {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Each timeline entry: no bleed */
+  .tl-i {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  /* Timeline card: full width, contained */
+  .tl-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Role title: wrap on small screens */
+  .tl-r {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Company/location: wrap */
+  .tl-c {
+    word-break: break-word;
+  }
+
+  /* Description: wrap */
+  .tl-s {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Avatar row: stack if needed */
+  .tl-head-row {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+}
+
+/* ── 7. VERY NARROW (≤380px) — iPhone SE / small Android ── */
+@media (max-width: 380px) {
+
+  .cc {
+    padding: 1rem 0.9rem;
+  }
+
+  .cc-role {
+    font-size: 1.05rem;
+  }
+
+  .tab {
+    padding: .6rem .85rem;
+    font-size: .65rem;
+  }
+
+  .tl {
+    padding-left: 1.25rem;
+  }
+
+  .tl-i {
+    padding-left: 1rem;
+  }
+
+  .tl-i::before {
+    left: -1.25rem;
+    width: 1rem;
+  }
+
+  .tl-dot {
+    left: -1.25rem;
+    width: 9px;
+    height: 9px;
+  }
+
+  .tl-card {
+    padding: 0.9rem 1rem;
+  }
+
+}
+
 </style>
 </head>
 <body>
