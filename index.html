@@ -3555,6 +3555,60 @@ nav:not(#mob-bottom-nav) .nav-cv:hover {
 
 }
 
+
+/* ════════════════════════════════════════════════════════════
+   NAV ALIGNMENT FIX — three-column symmetric layout
+   Logo and nav-r get matching flex-basis so links are
+   mathematically centred regardless of their widths.
+════════════════════════════════════════════════════════════ */
+
+/* Outer pill: logo LEFT, links CENTRE, nav-r RIGHT */
+nav:not(#mob-bottom-nav) {
+  display: grid !important;
+  grid-template-columns: 1fr auto 1fr !important;
+  align-items: center !important;
+  gap: 0 !important;
+}
+
+/* Logo: left cell, left-aligned */
+nav:not(#mob-bottom-nav) .nav-logo {
+  justify-self: start !important;
+  margin-right: 0 !important;
+}
+
+/* Links: centre cell, centred within it */
+nav:not(#mob-bottom-nav) .nav-links {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  flex: unset !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+
+/* Nav-r: right cell, right-aligned */
+nav:not(#mob-bottom-nav) .nav-r {
+  justify-self: end !important;
+  margin-left: 0 !important;
+}
+
+/* Responsive tightening — keep grid but compress */
+@media (max-width: 960px) and (min-width: 769px) {
+  nav:not(#mob-bottom-nav) {
+    grid-template-columns: auto auto auto !important;
+    gap: 0 0.25rem !important;
+  }
+  nav:not(#mob-bottom-nav) .nav-links a {
+    padding: .35rem .38rem !important;
+    font-size: .57rem !important;
+    letter-spacing: .04em !important;
+  }
+  nav:not(#mob-bottom-nav) .nav-r {
+    gap: .3rem !important;
+  }
+}
+
 </style>
 </head>
 <body>
