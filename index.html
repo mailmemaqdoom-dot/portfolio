@@ -3935,6 +3935,406 @@ nav:not(#mob-bottom-nav) .nav-r {
   .rmo-btn-dl::after   { content: ""; }
 }
 
+
+/* ════════════════════════════════════════════════════════════
+   PILL MORPH NAV — expanding icon → icon+label
+   Placed last — wins all cascades
+════════════════════════════════════════════════════════════ */
+
+/* ── EACH NAV ITEM LINK (.nli) ── */
+nav:not(#mob-bottom-nav) .nav-links .nli {
+  /* Reset inherited styles */
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+  padding: .3rem .38rem !important;
+  border-radius: 8px !important;
+  color: var(--tx-3) !important;
+  background: transparent !important;
+  text-decoration: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+
+  /* Width animates: icon-only → icon+label */
+  transition:
+    background   .22s ease-out,
+    color        .22s ease-out,
+    padding      .22s ease-out,
+    box-shadow   .22s ease-out !important;
+
+  /* Remove old active underline pseudo */
+}
+nav:not(#mob-bottom-nav) .nav-links .nli::after {
+  display: none !important;
+}
+
+/* ── ICON ── */
+nav:not(#mob-bottom-nav) .nav-links .nli-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+  transition: color .22s ease-out !important;
+}
+nav:not(#mob-bottom-nav) .nav-links .nli-icon svg {
+  width: 14px !important;
+  height: 14px !important;
+  display: block !important;
+  max-width: none !important;
+}
+
+/* ── LABEL — hidden at rest, slides in on hover ── */
+nav:not(#mob-bottom-nav) .nav-links .nli-label {
+  display: inline-block !important;
+  font-family: var(--font-mono) !important;
+  font-size: .58rem !important;
+  font-weight: 600 !important;
+  letter-spacing: .07em !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+
+  /* Hidden state: zero width, invisible */
+  max-width: 0 !important;
+  opacity: 0 !important;
+  transform: translateX(-6px) !important;
+  overflow: hidden !important;
+
+  /* Animate in */
+  transition:
+    max-width    .22s ease-out,
+    opacity      .18s ease-out,
+    transform    .22s ease-out,
+    margin-left  .22s ease-out !important;
+  margin-left: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ── HOVER / FOCUS — expand pill ── */
+nav:not(#mob-bottom-nav) .nav-links .nli:hover,
+nav:not(#mob-bottom-nav) .nav-links .nli:focus-visible {
+  background: var(--gold-dim2, rgba(194,158,80,.08)) !important;
+  color: var(--gold) !important;
+  padding: .3rem .5rem .3rem .42rem !important;
+  box-shadow: 0 0 0 1px var(--border-a) !important;
+  outline: none !important;
+}
+
+nav:not(#mob-bottom-nav) .nav-links .nli:hover .nli-label,
+nav:not(#mob-bottom-nav) .nav-links .nli:focus-visible .nli-label {
+  max-width: 80px !important; /* enough for "Projects" */
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+  margin-left: .32rem !important;
+}
+
+/* ── ACTIVE STATE (.on class set by JS) ── */
+nav:not(#mob-bottom-nav) .nav-links .nli.on {
+  background: var(--gold-dim2, rgba(194,158,80,.1)) !important;
+  color: var(--gold) !important;
+  padding: .3rem .5rem .3rem .42rem !important;
+}
+nav:not(#mob-bottom-nav) .nav-links .nli.on .nli-label {
+  max-width: 80px !important;
+  opacity: .7 !important;
+  transform: translateX(0) !important;
+  margin-left: .32rem !important;
+}
+/* Gold underline on active */
+nav:not(#mob-bottom-nav) .nav-links li {
+  position: relative !important;
+}
+nav:not(#mob-bottom-nav) .nav-links .nli.on::before {
+  content: '' !important;
+  position: absolute !important;
+  bottom: -2px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 12px !important;
+  height: 2px !important;
+  background: var(--gold) !important;
+  border-radius: 2px !important;
+  display: block !important;
+}
+
+/* ── FOCUS-VISIBLE accessibility ── */
+nav:not(#mob-bottom-nav) .nav-links .nli:focus-visible {
+  outline: 2px solid var(--gold) !important;
+  outline-offset: 2px !important;
+  box-shadow: none !important;
+}
+
+/* ── REDUCE NAV LINKS PADDING (icons need less gap) ── */
+nav:not(#mob-bottom-nav) .nav-links {
+  gap: 1px !important;
+}
+
+/* ── MID-BREAKPOINT: shrink icon, keep morph ── */
+@media (max-width: 960px) and (min-width: 769px) {
+  nav:not(#mob-bottom-nav) .nav-links .nli {
+    padding: .28rem .32rem !important;
+  }
+  nav:not(#mob-bottom-nav) .nav-links .nli-icon svg {
+    width: 13px !important;
+    height: 13px !important;
+  }
+  nav:not(#mob-bottom-nav) .nav-links .nli.on .nli-label,
+  nav:not(#mob-bottom-nav) .nav-links .nli:hover .nli-label {
+    max-width: 70px !important;
+    font-size: .54rem !important;
+  }
+}
+
+/* ── 860px: still show all 7 — icons are compact enough ── */
+@media (max-width: 860px) and (min-width: 769px) {
+  /* Override the old nth-child hide rule — icons fit fine */
+  nav:not(#mob-bottom-nav) .nav-links li:nth-child(4),
+  nav:not(#mob-bottom-nav) .nav-links li:nth-child(5) {
+    display: list-item !important;
+  }
+}
+
+/* ── MOBILE: top nav hidden — bottom nav unchanged ── */
+@media (max-width: 768px) {
+  nav:not(#mob-bottom-nav) {
+    display: none !important;
+  }
+}
+
+/* ── PREFERS REDUCED MOTION: skip width animation ── */
+@media (prefers-reduced-motion: reduce) {
+  nav:not(#mob-bottom-nav) .nav-links .nli,
+  nav:not(#mob-bottom-nav) .nav-links .nli-label,
+  nav:not(#mob-bottom-nav) .nav-links .nli-icon {
+    transition: color .15s, background .15s, opacity .15s !important;
+  }
+  nav:not(#mob-bottom-nav) .nav-links .nli:hover .nli-label,
+  nav:not(#mob-bottom-nav) .nav-links .nli.on .nli-label {
+    max-width: 80px !important;
+    transform: none !important;
+  }
+}
+
+/* ── GPU HINT: promote animated elements ── */
+nav:not(#mob-bottom-nav) .nav-links .nli {
+  will-change: auto; /* browser decides; set on mouseenter via JS */
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   MOBILE BOTTOM NAV — authoritative, placed last
+   Clean premium pill design for touch devices
+   Overrides all previous accumulated mbn rules
+════════════════════════════════════════════════════════════ */
+
+/* ── BASE: hidden on desktop ── */
+#mob-bottom-nav {
+  display: none;
+}
+
+/* ── MOBILE ONLY ── */
+@media (max-width: 768px) {
+
+  /* ── CONTAINER ── */
+  #mob-bottom-nav {
+    /* Position */
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 950 !important;
+
+    /* Size */
+    height: auto !important;
+    min-height: 60px !important;
+    padding: 8px 12px !important;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+
+    /* Layout */
+    flex-direction: row !important;
+    align-items: stretch !important;
+    justify-content: space-between !important;
+    gap: 4px !important;
+
+    /* Glass pill */
+    background: rgba(9,9,10,0.92) !important;
+    backdrop-filter: blur(12px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(160%) !important;
+    border-top: 1px solid rgba(255,255,255,0.07) !important;
+    box-shadow: 0 -8px 24px rgba(0,0,0,.25) !important;
+
+    /* Scroll behaviour */
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: auto !important;
+    touch-action: manipulation !important;
+
+    /* Show/hide transition */
+    transform: translateY(0) !important;
+    transition: transform .28s cubic-bezier(0.16,1,0.3,1),
+                box-shadow .22s ease-out !important;
+  }
+
+  /* Hidden state (JS adds .mbn-hidden on scroll down) */
+  #mob-bottom-nav.mbn-hidden {
+    transform: translateY(calc(100% + env(safe-area-inset-bottom, 0px))) !important;
+    box-shadow: none !important;
+  }
+
+  /* ── EACH ITEM ── */
+  .mbn-item {
+    /* Layout */
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+
+    /* Touch target */
+    min-height: 44px !important;
+    padding: 6px 4px !important;
+    border-radius: 10px !important;
+
+    /* Typography */
+    font-family: var(--font-mono) !important;
+    font-size: 0.52rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.07em !important;
+    text-transform: uppercase !important;
+    line-height: 1.2 !important;
+
+    /* Colour — muted inactive */
+    color: var(--tx-3) !important;
+    text-decoration: none !important;
+
+    /* Interaction */
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    cursor: pointer !important;
+    position: relative !important;
+    overflow: hidden !important;
+
+    /* Transition — opacity + background only (no layout shift) */
+    transition:
+      color       .2s ease-out,
+      background  .2s ease-out,
+      opacity     .18s ease-out !important;
+
+    /* No hover states on touch */
+    user-select: none !important;
+    -webkit-user-select: none !important;
+  }
+
+  /* ── SVG ICON ── */
+  .mbn-item svg {
+    width: 22px !important;
+    height: 22px !important;
+    flex-shrink: 0 !important;
+    display: block !important;
+    stroke: currentColor !important;
+    transition: stroke .2s ease-out !important;
+    /* No transform — avoid repaints */
+    transform: none !important;
+  }
+
+  /* ── LABEL ── */
+  .mbn-item span {
+    display: block !important;
+    opacity: 0.6 !important;
+    transition: opacity .2s ease-out !important;
+    pointer-events: none !important;
+    font-size: 0.52rem !important;
+  }
+
+  /* ── ACTIVE STATE ── */
+  .mbn-item.mbn-active {
+    color: var(--gold) !important;
+    background: rgba(194,158,80,.1) !important;
+  }
+  .mbn-item.mbn-active span {
+    opacity: 1 !important;
+  }
+  /* Active pip — 12px gold underline */
+  .mbn-item.mbn-active::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 4px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 16px !important;
+    height: 2px !important;
+    background: var(--gold) !important;
+    border-radius: 2px !important;
+    opacity: 0.8 !important;
+  }
+
+  /* ── TAP FEEDBACK (:active — instant, subtle) ── */
+  .mbn-item:active {
+    background: rgba(194,158,80,.15) !important;
+    color: var(--gold) !important;
+    transition-duration: .06s !important;
+  }
+  .mbn-item:active span {
+    opacity: 1 !important;
+  }
+  /* No scale transforms — avoid repaints, prevent layout shift */
+
+  /* ── FOCUS-VISIBLE (keyboard / assistive tech) ── */
+  .mbn-item:focus-visible {
+    outline: 2px solid var(--gold) !important;
+    outline-offset: -2px !important;
+  }
+
+  /* ── LIGHT MODE ADJUSTMENT ── */
+  [data-theme="light"] #mob-bottom-nav {
+    background: rgba(250,248,244,.94) !important;
+    border-top-color: rgba(0,0,0,.08) !important;
+    box-shadow: 0 -4px 20px rgba(0,0,0,.12) !important;
+  }
+  [data-theme="light"] .mbn-item {
+    color: rgba(0,0,0,.38) !important;
+  }
+  [data-theme="light"] .mbn-item.mbn-active {
+    color: var(--gold) !important;
+    background: rgba(194,158,80,.1) !important;
+  }
+
+  /* ── LARGE PHONE / PHABLET (≥414px): more breathing room ── */
+  @media (min-width: 414px) {
+    #mob-bottom-nav {
+      padding: 8px 20px !important;
+      padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    .mbn-item {
+      gap: 4px !important;
+      font-size: 0.55rem !important;
+    }
+    .mbn-item svg {
+      width: 23px !important;
+      height: 23px !important;
+    }
+  }
+
+  /* ── BODY PADDING — content above bottom nav ── */
+  body {
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px) + 4px) !important;
+  }
+
+} /* end @media 768px */
+
+/* ── PREFERS REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  #mob-bottom-nav,
+  .mbn-item,
+  .mbn-item svg,
+  .mbn-item span {
+    transition: none !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3946,13 +4346,13 @@ nav:not(#mob-bottom-nav) .nav-r {
 <nav>
   <div class="nav-logo">M<b>.</b>Magdoom</div>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#performance">Impact</a></li>
-    <li><a href="#career">Career</a></li>
-    <li><a href="#approach">Approach</a></li>
-    <li><a href="#capabilities">Skills</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#about" class="nli"><span class="nli-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="5.5" r="2.5"/><path d="M2.5 14c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg></span><span class="nli-label">About</span></a></li>
+    <li><a href="#performance" class="nli"><span class="nli-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,11 5,6 8,9 11,4 15,7"/></svg></span><span class="nli-label">Impact</span></a></li>
+    <li><a href="#career" class="nli"><span class="nli-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="12" height="9" rx="1.5"/><path d="M5 5V3.5a3 3 0 016 0V5"/></svg></span><span class="nli-label">Career</span></a></li>
+    <li><a href="#approach" class="nli"><span class="nli-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><line x1="8" y1="5" x2="8" y2="8.5"/><circle cx="8" cy="11" r=".6" fill="currentColor" stroke="none"/></svg></span><span class="nli-label">Approach</span></a></li>
+    <li><a href="#capabilities" class="nli"><span class="nli-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="5.5" height="5.5" rx="1"/><rect x="9.5" y="1" width="5.5" height="5.5" rx="1"/><rect x="1" y="9.5" width="5.5" height="5.5" rx="1"/><rect x="9.5" y="9.5" width="5.5" height="5.5" rx="1"/></svg></span><span class="nli-label">Skills</span></a></li>
+    <li><a href="#projects" class="nli"><span class="nli-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="12" height="12" rx="1.5"/><line x1="2" y1="6" x2="14" y2="6"/><line x1="6" y1="6" x2="6" y2="14"/></svg></span><span class="nli-label">Projects</span></a></li>
+    <li><a href="#contact" class="nli"><span class="nli-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 10.5c0 .3-.06.58-.18.84l-.56 1.12a1.5 1.5 0 01-1.34.84c-4.97 0-9-4.03-9-9 0-.56.3-1.08.78-1.36L3.82 2.36A1.5 1.5 0 015.5 3.5v2.25c0 .4-.2.78-.53 1.01L4 7.5a7.06 7.06 0 003.5 3.5l.74-.97c.23-.33.61-.53 1.01-.53H11.5A1.5 1.5 0 0113 11v-.5z"/></svg></span><span class="nli-label">Contact</span></a></li>
   </ul>
   <div class="nav-r">
     <span class="theme-lbl" id="tlbl">☾</span>
@@ -4940,259 +5340,108 @@ nav:not(#mob-bottom-nav) .nav-r {
 (function(){
 'use strict';
 
-/* ── RESUME — view + download modal ── */
-var anchor    = document.getElementById('resume-anchor');
-var modal     = document.getElementById('resume-modal');
-var iframe    = document.getElementById('rmo-iframe');
-var fallback  = document.getElementById('rmo-fallback');
-var viewBtn   = document.getElementById('rmo-view-btn');
-var dlBtn     = document.getElementById('rmo-dl-btn');
-var fbDlBtn   = document.getElementById('rmo-fallback-dl');
-var closeBtn  = document.getElementById('rmo-close');
-var pdfSrc    = '';
-
+/* ── RESUME MODAL ── */
+var anchor=document.getElementById('resume-anchor'),modal=document.getElementById('resume-modal'),
+    iframe=document.getElementById('rmo-iframe'),fallback=document.getElementById('rmo-fallback'),
+    viewBtn=document.getElementById('rmo-view-btn'),dlBtn=document.getElementById('rmo-dl-btn'),
+    fbDlBtn=document.getElementById('rmo-fallback-dl'),closeBtn=document.getElementById('rmo-close'),
+    pdfSrc='';
 if(anchor){
-  pdfSrc = anchor.href;
-
-  /* Set download href on all download buttons */
-  [dlBtn, fbDlBtn].forEach(function(btn){
-    if(btn){ btn.href = pdfSrc; btn.setAttribute('download','Mohamed_Magdoom_Resume.pdf'); }
-  });
-
-  /* Set "Open in Browser" href (blob URL for clean tab view) */
-  if(viewBtn){
-    try {
-      var b64   = pdfSrc.split(',')[1];
-      var bytes = atob(b64);
-      var ab    = new ArrayBuffer(bytes.length);
-      var ua    = new Uint8Array(ab);
-      for(var i=0;i<bytes.length;i++) ua[i]=bytes.charCodeAt(i);
-      var blob  = new Blob([ab],{type:'application/pdf'});
-      viewBtn.href = URL.createObjectURL(blob);
-    } catch(e){ viewBtn.href = pdfSrc; }
-  }
+  pdfSrc=anchor.href;
+  [dlBtn,fbDlBtn].forEach(function(btn){ if(btn){ btn.href=pdfSrc; btn.setAttribute('download','Mohamed_Magdoom_Resume.pdf'); } });
+  if(viewBtn){ try{
+    var b64=pdfSrc.split(',')[1],bytes=atob(b64),ab=new ArrayBuffer(bytes.length),ua=new Uint8Array(ab);
+    for(var i=0;i<bytes.length;i++) ua[i]=bytes.charCodeAt(i);
+    viewBtn.href=URL.createObjectURL(new Blob([ab],{type:'application/pdf'}));
+  }catch(e){ viewBtn.href=pdfSrc; } }
 }
-
-/* Open modal */
-function openModal(){
-  if(!modal || !pdfSrc) return;
-  modal.removeAttribute('hidden');
-  document.body.style.overflow = 'hidden';
-
-  /* Load iframe — detect if PDF renders */
-  if(iframe && !iframe.src){
-    iframe.src = pdfSrc + '#toolbar=0&navpanes=0&scrollbar=1&view=FitH';
-    iframe.onerror = showFallback;
-    /* Mobile Safari / Chrome on iOS can't embed PDFs in iframe */
-    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if(isMobile){ showFallback(); }
-  }
-
-  /* Focus trap */
-  setTimeout(function(){ if(closeBtn) closeBtn.focus(); }, 100);
-}
-
-function closeModal(){
-  if(!modal) return;
-  modal.setAttribute('hidden','');
-  document.body.style.overflow = '';
-}
-
-function showFallback(){
-  if(iframe)   iframe.hidden = true;
-  if(fallback) fallback.removeAttribute('hidden');
-}
-
-/* Trigger: buttons with data-resume-modal */
-document.querySelectorAll('[data-resume-modal]').forEach(function(el){
-  el.addEventListener('click', function(e){ e.preventDefault(); openModal(); });
-});
-
-/* Close button */
-if(closeBtn) closeBtn.addEventListener('click', closeModal);
-
-/* Close on overlay click */
-if(modal) modal.addEventListener('click', function(e){
-  if(e.target === modal) closeModal();
-});
-
-/* Close on ESC */
-document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape' && modal && !modal.hidden) closeModal();
-});
+function openModal(){ if(!modal||!pdfSrc)return; modal.removeAttribute('hidden'); document.body.style.overflow='hidden'; if(iframe&&!iframe.src){ iframe.src=pdfSrc+'#toolbar=0&navpanes=0&scrollbar=1&view=FitH'; iframe.onerror=showFallback; if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) showFallback(); } setTimeout(function(){ if(closeBtn) closeBtn.focus(); },100); }
+function closeModal(){ if(!modal)return; modal.setAttribute('hidden',''); document.body.style.overflow=''; }
+function showFallback(){ if(iframe) iframe.hidden=true; if(fallback) fallback.removeAttribute('hidden'); }
+document.querySelectorAll('[data-resume-modal]').forEach(function(el){ el.addEventListener('click',function(e){ e.preventDefault(); openModal(); }); });
+if(closeBtn) closeBtn.addEventListener('click',closeModal);
+if(modal) modal.addEventListener('click',function(e){ if(e.target===modal) closeModal(); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal&&!modal.hidden) closeModal(); });
 
 /* ── THEME ── */
-var htmlEl  = document.documentElement;
-var thm     = document.getElementById('thm');
-var tlbl    = document.getElementById('tlbl');
-var saved   = localStorage.getItem('mm-theme');
-var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-var theme   = saved ? saved : (sysDark ? 'dark' : 'light');
-htmlEl.setAttribute('data-theme', theme);
-applyTheme(theme, false);
-if(window.matchMedia){
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e){
-    if(!localStorage.getItem('mm-theme')){
-      theme = e.matches ? 'dark' : 'light';
-      applyTheme(theme, true);
-    }
-  });
-}
-if(thm) thm.addEventListener('click', function(){
-  theme = theme === 'dark' ? 'light' : 'dark';
-  applyTheme(theme, true);
-  localStorage.setItem('mm-theme', theme);
-});
-function applyTheme(t, animate){
-  if(!animate){
-    htmlEl.style.transition = 'none';
-    htmlEl.setAttribute('data-theme', t);
-    void htmlEl.offsetHeight;
-    htmlEl.style.transition = '';
-  } else {
-    htmlEl.setAttribute('data-theme', t);
-  }
-  if(tlbl) tlbl.textContent = t === 'dark' ? '☾' : '☀';
-  theme = t;
-}
+var htmlEl=document.documentElement,thm=document.getElementById('thm'),tlbl=document.getElementById('tlbl');
+var saved=localStorage.getItem('mm-theme'),sysDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+var theme=saved?saved:(sysDark?'dark':'light');
+htmlEl.setAttribute('data-theme',theme); applyTheme(theme,false);
+if(window.matchMedia){ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(e){ if(!localStorage.getItem('mm-theme')){ theme=e.matches?'dark':'light'; applyTheme(theme,true); } }); }
+if(thm) thm.addEventListener('click',function(){ theme=theme==='dark'?'light':'dark'; applyTheme(theme,true); localStorage.setItem('mm-theme',theme); });
+function applyTheme(t,animate){ if(!animate){ htmlEl.style.transition='none'; htmlEl.setAttribute('data-theme',t); void htmlEl.offsetHeight; htmlEl.style.transition=''; } else { htmlEl.setAttribute('data-theme',t); } if(tlbl) tlbl.textContent=t==='dark'?'☾':'☀'; theme=t; }
 
 /* ── SCROLL: PROGRESS + FLOATING NAV ── */
-var prog=document.getElementById('prog');
-var topNav=document.querySelector('nav:not(#mob-bottom-nav)');
+var prog=document.getElementById('prog'),topNav=document.querySelector('nav:not(#mob-bottom-nav)');
 var lastScrollY=window.scrollY,navTicking=false,scrollTimer=null,NAV_THRESHOLD=80;
 window.addEventListener('scroll',function(){
   var scrollY=window.scrollY;
-  if(prog){var h=document.body.scrollHeight-window.innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%';}
+  if(prog){ var h=document.body.scrollHeight-window.innerHeight; prog.style.width=(h>0?scrollY/h*100:0)+'%'; }
   if(topNav) topNav.classList.toggle('scrolled',scrollY>10);
   if(!navTicking){
     requestAnimationFrame(function(){
       var delta=scrollY-lastScrollY;
-      if(scrollY<=0){if(topNav)topNav.classList.remove('nav-hidden','nav-top');}
-      else if(scrollY<NAV_THRESHOLD){if(topNav){topNav.classList.remove('nav-hidden');topNav.classList.add('nav-top');}}
-      else{
-        if(delta>6){if(topNav){topNav.classList.add('nav-hidden');topNav.classList.remove('nav-top');}}
-        else if(delta<-4){if(topNav)topNav.classList.remove('nav-hidden');}
-      }
-      clearTimeout(scrollTimer);
-      scrollTimer=setTimeout(function(){if(topNav)topNav.classList.remove('nav-hidden');},800);
-      lastScrollY=scrollY;navTicking=false;
-    });
-    navTicking=true;
+      if(scrollY<=0){ if(topNav) topNav.classList.remove('nav-hidden','nav-top'); }
+      else if(scrollY<NAV_THRESHOLD){ if(topNav){ topNav.classList.remove('nav-hidden'); topNav.classList.add('nav-top'); } }
+      else{ if(delta>6){ if(topNav){ topNav.classList.add('nav-hidden'); topNav.classList.remove('nav-top'); } } else if(delta<-4){ if(topNav) topNav.classList.remove('nav-hidden'); } }
+      clearTimeout(scrollTimer); scrollTimer=setTimeout(function(){ if(topNav) topNav.classList.remove('nav-hidden'); },800);
+      lastScrollY=scrollY; navTicking=false;
+    }); navTicking=true;
   }
 },{passive:true});
 
 /* ── REVEAL SYSTEM ── */
 ['#hero','#hero *','nav:not(#mob-bottom-nav)','nav:not(#mob-bottom-nav) *','#prog'].forEach(function(sel){
-  document.querySelectorAll(sel).forEach(function(el){el.classList.add('no-reveal');el.classList.remove('reveal','reveal-group');});
+  document.querySelectorAll(sel).forEach(function(el){ el.classList.add('no-reveal'); el.classList.remove('reveal','reveal-group'); });
 });
-var revealObs=new IntersectionObserver(function(entries){
-  entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('visible');revealObs.unobserve(entry.target);}});
-},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+var revealObs=new IntersectionObserver(function(entries){ entries.forEach(function(entry){ if(entry.isIntersecting){ entry.target.classList.add('visible'); revealObs.unobserve(entry.target); } }); },{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.reveal,.reveal-group').forEach(function(el){
-  if(el.classList.contains('no-reveal'))return;
+  if(el.classList.contains('no-reveal')) return;
   var rect=el.getBoundingClientRect();
-  if(rect.top<window.innerHeight&&rect.bottom>0){el.classList.add('visible');}else{revealObs.observe(el);}
+  if(rect.top<window.innerHeight&&rect.bottom>0) el.classList.add('visible'); else revealObs.observe(el);
 });
-document.addEventListener('visibilitychange',function(){
-  if(document.visibilityState==='visible'){
-    document.querySelectorAll('.reveal:not(.visible),.reveal-group:not(.visible)').forEach(function(el){
-      var rect=el.getBoundingClientRect();if(rect.top<window.innerHeight)el.classList.add('visible');
-    });
-  }
-});
+document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible'){ document.querySelectorAll('.reveal:not(.visible),.reveal-group:not(.visible)').forEach(function(el){ var rect=el.getBoundingClientRect(); if(rect.top<window.innerHeight) el.classList.add('visible'); }); } });
 
-/* ── ACTIVE TOP NAV ── */
-var navAs=document.querySelectorAll('.nav-links a');
-var secEls=document.querySelectorAll('section[id]');
-var navObs=new IntersectionObserver(function(entries){
-  entries.forEach(function(entry){
-    if(entry.isIntersecting){
-      navAs.forEach(function(a){a.classList.remove('on');});
-      var a=document.querySelector('.nav-links a[href="#'+entry.target.id+'"]');
-      if(a)a.classList.add('on');
-    }
-  });
-},{threshold:0.3});
-secEls.forEach(function(s){navObs.observe(s);});
+/* ── ACTIVE NAV (.nli desktop) ── */
+var nliLinks=document.querySelectorAll('.nav-links .nli'),secEls=document.querySelectorAll('section[id]');
+var navObs=new IntersectionObserver(function(entries){ entries.forEach(function(entry){ if(entry.isIntersecting){ nliLinks.forEach(function(a){ a.classList.remove('on'); }); var a=document.querySelector('.nav-links .nli[href="#'+entry.target.id+'"]'); if(a) a.classList.add('on'); } }); },{threshold:0.3});
+secEls.forEach(function(s){ navObs.observe(s); });
 
 /* ── CAREER TABS ── */
-document.querySelectorAll('.tab').forEach(function(tab){
-  tab.addEventListener('click',function(){
-    var id=tab.dataset.p;
-    document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
-    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});
-    tab.classList.add('on');
-    var panel=document.getElementById('p-'+id);
-    if(panel){
-      panel.classList.add('on');
-      panel.querySelectorAll('.reveal,.reveal-group').forEach(function(el){el.classList.add('visible');});
-    }
-  });
-});
+document.querySelectorAll('.tab').forEach(function(tab){ tab.addEventListener('click',function(){ var id=tab.dataset.p; document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('on'); }); document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('on'); }); tab.classList.add('on'); var panel=document.getElementById('p-'+id); if(panel){ panel.classList.add('on'); panel.querySelectorAll('.reveal,.reveal-group').forEach(function(el){ el.classList.add('visible'); }); } }); });
 
 /* ── KPI COUNTERS ── */
-function animCount(el){
-  var target=+el.dataset.t,pre=el.dataset.pre||'',suf=el.dataset.suf||'';
-  var dur=1800,t0=performance.now();
-  (function step(now){
-    var p=Math.min((now-t0)/dur,1),ease=p===1?1:1-Math.pow(2,-10*p);
-    el.textContent=pre+Math.round(ease*target).toLocaleString()+suf;
-    if(p<1)requestAnimationFrame(step);
-  })(performance.now());
-}
-var cntObs=new IntersectionObserver(function(entries){
-  entries.forEach(function(entry){if(entry.isIntersecting){animCount(entry.target);cntObs.unobserve(entry.target);}});
-},{threshold:0.4});
-document.querySelectorAll('.cnt').forEach(function(el){cntObs.observe(el);});
+function animCount(el){ var target=+el.dataset.t,pre=el.dataset.pre||'',suf=el.dataset.suf||'',dur=1800,t0=performance.now(); (function step(now){ var p=Math.min((now-t0)/dur,1),ease=p===1?1:1-Math.pow(2,-10*p); el.textContent=pre+Math.round(ease*target).toLocaleString()+suf; if(p<1) requestAnimationFrame(step); })(performance.now()); }
+var cntObs=new IntersectionObserver(function(entries){ entries.forEach(function(entry){ if(entry.isIntersecting){ animCount(entry.target); cntObs.unobserve(entry.target); } }); },{threshold:0.4});
+document.querySelectorAll('.cnt').forEach(function(el){ cntObs.observe(el); });
 
 /* ── TOP MOBILE MENU ── */
-var ham=document.getElementById('ham');
-var mob=document.getElementById('mob');
-var mobOpen=false;
-function openMenu(){mobOpen=true;if(ham)ham.classList.add('open');if(mob){mob.classList.add('open');mob.style.display='flex';}document.body.classList.add('menu-open');}
-function closeMenu(){mobOpen=false;if(ham)ham.classList.remove('open');if(mob){mob.classList.remove('open');mob.style.display='none';}document.body.classList.remove('menu-open');}
-if(ham&&mob){
-  mob.style.display='none';
-  ham.addEventListener('click',function(){if(mobOpen)closeMenu();else openMenu();});
-  mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',closeMenu);});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mobOpen&&!modal)closeMenu();});
-  mob.addEventListener('click',function(e){if(e.target===mob)closeMenu();});
-}
+var ham=document.getElementById('ham'),mob=document.getElementById('mob'),mobOpen=false;
+function openMenu(){ mobOpen=true; if(ham)ham.classList.add('open'); if(mob){mob.classList.add('open');mob.style.display='flex';} document.body.classList.add('menu-open'); }
+function closeMenu(){ mobOpen=false; if(ham)ham.classList.remove('open'); if(mob){mob.classList.remove('open');mob.style.display='none';} document.body.classList.remove('menu-open'); }
+if(ham&&mob){ mob.style.display='none'; ham.addEventListener('click',function(){ if(mobOpen) closeMenu(); else openMenu(); }); mob.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',closeMenu); }); document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&mobOpen&&modal&&modal.hidden) closeMenu(); }); mob.addEventListener('click',function(e){ if(e.target===mob) closeMenu(); }); }
 
 /* ── WILL-CHANGE CLEANUP ── */
-document.querySelectorAll('.btn-g,.btn-o,.kpi-c,.dec,.proj,.imp,.ci,.tl-card,.cap,.pr,.fab').forEach(function(el){
-  el.addEventListener('mouseenter',function(){el.style.willChange='transform';});
-  el.addEventListener('mouseleave',function(){setTimeout(function(){el.style.willChange='auto';},300);});
-});
+document.querySelectorAll('.btn-g,.btn-o,.kpi-c,.dec,.proj,.imp,.ci,.tl-card,.cap,.pr,.fab').forEach(function(el){ el.addEventListener('mouseenter',function(){ el.style.willChange='transform'; }); el.addEventListener('mouseleave',function(){ setTimeout(function(){ el.style.willChange='auto'; },300); }); });
+document.querySelectorAll('.nav-links .nli').forEach(function(el){ el.addEventListener('mouseenter',function(){ el.style.willChange='contents'; }); el.addEventListener('mouseleave',function(){ setTimeout(function(){ el.style.willChange='auto'; },300); }); });
 
 /* ── MOBILE BOTTOM NAV ── */
 var mbn=document.getElementById('mob-bottom-nav');
 if(mbn){
-  var mbnItems=mbn.querySelectorAll('.mbn-item');
-  var sectionMap={};
-  mbnItems.forEach(function(item){var sec=item.dataset.section;if(sec)sectionMap[sec]=item;});
-  var mbnEls=['hero','career','impact','projects','contact'].map(function(id){return document.getElementById(id);}).filter(Boolean);
-  var mbnObs=new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting){
-        mbnItems.forEach(function(i){i.classList.remove('mbn-active');});
-        var item=sectionMap[entry.target.id];if(item)item.classList.add('mbn-active');
-      }
-    });
-  },{threshold:0.25});
-  mbnEls.forEach(function(el){mbnObs.observe(el);});
+  var mbnItems=mbn.querySelectorAll('.mbn-item'),sectionMap={};
+  mbnItems.forEach(function(item){ var sec=item.dataset.section; if(sec) sectionMap[sec]=item; });
+  var mbnEls=['hero','career','impact','projects','contact'].map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var mbnObs=new IntersectionObserver(function(entries){ entries.forEach(function(entry){ if(entry.isIntersecting){ mbnItems.forEach(function(i){ i.classList.remove('mbn-active'); }); var item=sectionMap[entry.target.id]; if(item) item.classList.add('mbn-active'); } }); },{threshold:0.25});
+  mbnEls.forEach(function(el){ mbnObs.observe(el); });
   var mbnLastY=window.scrollY,mbnTicking=false,mbnTimer=null;
   window.addEventListener('scroll',function(){
-    if(!mbnTicking){
-      requestAnimationFrame(function(){
-        var cur=window.scrollY,delta=cur-mbnLastY;
-        if(cur>120){if(delta>4)mbn.classList.add('mbn-hidden');else if(delta<-4)mbn.classList.remove('mbn-hidden');}
-        else{mbn.classList.remove('mbn-hidden');}
-        clearTimeout(mbnTimer);mbnTimer=setTimeout(function(){mbn.classList.remove('mbn-hidden');},800);
-        mbnLastY=cur;mbnTicking=false;
-      });
-      mbnTicking=true;
-    }
+    if(!mbnTicking){ requestAnimationFrame(function(){
+      var cur=window.scrollY,delta=cur-mbnLastY;
+      if(cur>120){ if(delta>4) mbn.classList.add('mbn-hidden'); else if(delta<-4) mbn.classList.remove('mbn-hidden'); } else { mbn.classList.remove('mbn-hidden'); }
+      clearTimeout(mbnTimer); mbnTimer=setTimeout(function(){ mbn.classList.remove('mbn-hidden'); },800);
+      mbnLastY=cur; mbnTicking=false;
+    }); mbnTicking=true; }
   },{passive:true});
 }
 
