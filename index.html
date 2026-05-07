@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mohamed Magdoom — Retail & Multi-Site Operations Executive</title>
 <meta name="description" content="C-Suite Executive. GM · Head of Sales & Operations · USD 200M P&L · 90 Retail Stations · Sub-Saharan Africa · GCC · UAE">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="M.Magdoom">
+  <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Mohamed%20Magdoom%22%2C%22short_name%22%3A%22M.Magdoom%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230a0a0b%22%2C%22theme_color%22%3A%22%230a0a0b%22%2C%22start_url%22%3A%22%2F%22%7D">
 
 <!-- Cormorant Garamond (editorial luxury display) + DM Sans (refined body) + DM Mono -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4501,6 +4507,211 @@ nav:not(#mob-bottom-nav) .nav-links .nli {
 @media (min-width: 769px) {
   #mob-bottom-nav { display: none !important; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   FEATURE ENHANCEMENTS: ripple, bounce, PWA prompt, mobile UX
+════════════════════════════════════════════════════════════ */
+
+/* ── RIPPLE EFFECT — touch feedback on interactive elements ── */
+.ripple-host { position: relative; overflow: hidden; }
+@keyframes ripple-expand {
+  from { transform: scale(0); opacity: 0.35; }
+  to   { transform: scale(4); opacity: 0; }
+}
+.ripple-wave {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(194,158,80,0.35);
+  width: 60px;
+  height: 60px;
+  margin-top: -30px;
+  margin-left: -30px;
+  pointer-events: none;
+  animation: ripple-expand 0.5s ease-out forwards;
+  z-index: 10;
+}
+
+/* ── PILL MORPH ENHANCEMENTS: bounce + glow on active ── */
+@keyframes pill-bounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.06); }
+  70%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+nav:not(#mob-bottom-nav) .nav-links .nli.on {
+  animation: pill-bounce .32s ease-out;
+}
+/* Soft glow behind active pill */
+nav:not(#mob-bottom-nav) .nav-links .nli.on::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(194,158,80,0.25);
+  pointer-events: none;
+  display: block !important;
+}
+
+/* ── BOTTOM NAV ENHANCEMENTS: bounce + glow on active ── */
+@keyframes mbn-pip-in {
+  from { width: 4px; opacity: 0; }
+  to   { width: 16px; opacity: 0.9; }
+}
+@media (max-width: 768px) {
+  .mbn-item.mbn-active::before {
+    animation: mbn-pip-in .22s ease-out forwards;
+  }
+  /* Active item: subtle glow */
+  .mbn-item.mbn-active {
+    box-shadow: 0 0 14px rgba(194,158,80,0.15) !important;
+  }
+  /* Tap: scale press */
+  .mbn-item:active {
+    transform: scale(0.94) !important;
+    transition-duration: .07s !important;
+  }
+}
+
+/* ── GLOBAL MOBILE UX: card tap press feedback ── */
+@media (hover: none) and (pointer: coarse) {
+  .kpi-c:active, .dec:active, .proj:active,
+  .cap:active, .tl-card:active, .imp:active {
+    transform: scale(0.985) !important;
+    transition-duration: .06s !important;
+  }
+  .btn-g:active, .btn-o:active {
+    transform: scale(0.96) !important;
+    transition-duration: .06s !important;
+  }
+  /* Remove desktop hover states on touch */
+  .kpi-c:hover, .dec:hover, .proj:hover,
+  .cap:hover, .imp:hover, .pr:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ── SMOOTH ELASTIC SCROLL ── */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── PWA INSTALL PROMPT ── */
+.pwa-prompt {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1800;
+  padding: 0 1rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  transform: translateY(110%);
+  transition: transform .38s cubic-bezier(0.16,1,0.3,1);
+}
+.pwa-prompt:not([hidden]) {
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.pwa-prompt[hidden] {
+  display: flex !important; /* keep in DOM for animation */
+  transform: translateY(110%);
+  pointer-events: none;
+}
+.pwa-inner {
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-a);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  box-shadow: 0 -4px 32px rgba(0,0,0,.4), 0 8px 32px rgba(0,0,0,.3);
+  margin-bottom: .75rem;
+}
+.pwa-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pwa-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .18rem;
+}
+.pwa-text strong {
+  font-family: var(--font-display);
+  font-size: .95rem;
+  font-weight: 500;
+  color: var(--tx);
+  line-height: 1.2;
+}
+.pwa-text span {
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  letter-spacing: .05em;
+  color: var(--tx-3);
+}
+.pwa-actions {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  flex-shrink: 0;
+}
+.pwa-btn {
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  padding: .38rem .7rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .18s, transform .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.pwa-btn:active { transform: scale(0.96); }
+.pwa-btn-primary {
+  background: var(--gold);
+  color: #0a0a0b;
+  border-color: var(--gold);
+}
+.pwa-btn-primary:hover { background: #d4ad5c; }
+.pwa-btn-ghost {
+  background: transparent;
+  color: var(--tx-3);
+  border-color: var(--border);
+}
+.pwa-btn-ghost:hover { background: var(--bg-2); }
+
+/* Mobile: prompt sits above bottom nav */
+@media (max-width: 768px) {
+  .pwa-prompt {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+}
+/* Desktop: bottom-right corner */
+@media (min-width: 769px) {
+  .pwa-prompt {
+    justify-content: flex-end;
+    padding-right: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  .pwa-inner { max-width: 360px; }
+}
+
 </style>
 </head>
 <body>
@@ -5502,11 +5713,34 @@ nav:not(#mob-bottom-nav) .nav-links .nli {
     </div>
   </div>
 </div>
+
+<!-- ===== PWA INSTALL PROMPT ===== -->
+<div id="pwa-prompt" class="pwa-prompt" hidden aria-live="polite" role="dialog" aria-label="Install app">
+  <div class="pwa-inner">
+    <div class="pwa-icon">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+        <rect width="32" height="32" rx="8" fill="#c29e50" opacity="0.15"/>
+        <path d="M16 7v13M11 15l5 5 5-5" stroke="#c29e50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M8 23h16" stroke="#c29e50" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="pwa-text">
+      <strong>Add to Home Screen</strong>
+      <span>Install for a faster, app-like experience</span>
+    </div>
+    <div class="pwa-actions">
+      <button id="pwa-install" class="pwa-btn pwa-btn-primary">Install</button>
+      <button id="pwa-dismiss" class="pwa-btn pwa-btn-ghost">Not Now</button>
+    </div>
+  </div>
+</div>
 <script>
 (function(){
 'use strict';
 
-/* ── RESUME MODAL ── */
+/* ══════════════════════════════════════════════════════════════
+   RESUME MODAL
+══════════════════════════════════════════════════════════════ */
 var anchor=document.getElementById('resume-anchor');
 var modal=document.getElementById('resume-modal');
 var iframe=document.getElementById('rmo-iframe');
@@ -5529,7 +5763,81 @@ if(closeBtn)closeBtn.addEventListener('click',closeModal);
 if(modal)modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal&&!modal.hidden)closeModal();});
 
-/* ── THEME ── */
+/* ══════════════════════════════════════════════════════════════
+   RIPPLE ENGINE — visual haptic feedback on tap
+══════════════════════════════════════════════════════════════ */
+function addRipple(el, e){
+  var rect=el.getBoundingClientRect();
+  var x=(e.clientX||e.touches&&e.touches[0]&&e.touches[0].clientX||rect.left+rect.width/2)-rect.left;
+  var y=(e.clientY||e.touches&&e.touches[0]&&e.touches[0].clientY||rect.top+rect.height/2)-rect.top;
+  var wave=document.createElement('span');
+  wave.className='ripple-wave';
+  wave.style.left=x+'px';
+  wave.style.top=y+'px';
+  el.appendChild(wave);
+  wave.addEventListener('animationend',function(){wave.remove();});
+}
+/* Apply ripple to cards, buttons */
+document.querySelectorAll('.btn-g,.btn-o,.kpi-c,.dec,.imp,.tl-card,.cap,.proj,.mbn-item').forEach(function(el){
+  el.classList.add('ripple-host');
+  el.addEventListener('pointerdown',function(e){addRipple(el,e);},{passive:true});
+});
+
+/* ══════════════════════════════════════════════════════════════
+   PWA INSTALL PROMPT
+══════════════════════════════════════════════════════════════ */
+(function(){
+  var prompt=document.getElementById('pwa-prompt');
+  var installBtn=document.getElementById('pwa-install');
+  var dismissBtn=document.getElementById('pwa-dismiss');
+  var deferredEvent=null;
+  var SESSION_KEY='pwa-dismissed';
+
+  /* Only show if not dismissed this session */
+  if(!prompt||sessionStorage.getItem(SESSION_KEY)) return;
+
+  /* Listen for browser install prompt */
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault();
+    deferredEvent=e;
+    /* Delay 8s after page load — don't interrupt first impression */
+    setTimeout(showPrompt,8000);
+  });
+
+  /* iOS Safari: no beforeinstallprompt — show generic "add to homescreen" hint */
+  var isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent)&&!window.MSStream;
+  var isInStandalone=window.navigator.standalone===true||window.matchMedia('(display-mode: standalone)').matches;
+  if(isIOS&&!isInStandalone&&!sessionStorage.getItem(SESSION_KEY)){
+    setTimeout(showPrompt,10000);
+  }
+
+  function showPrompt(){
+    if(!prompt||sessionStorage.getItem(SESSION_KEY)) return;
+    prompt.removeAttribute('hidden');
+  }
+  function hidePrompt(){
+    if(!prompt) return;
+    prompt.setAttribute('hidden','');
+    sessionStorage.setItem(SESSION_KEY,'1');
+  }
+
+  if(installBtn){
+    installBtn.addEventListener('click',function(){
+      hidePrompt();
+      if(deferredEvent){
+        deferredEvent.prompt();
+        deferredEvent.userChoice.then(function(){ deferredEvent=null; });
+      }
+    });
+  }
+  if(dismissBtn){
+    dismissBtn.addEventListener('click',hidePrompt);
+  }
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   THEME
+══════════════════════════════════════════════════════════════ */
 var htmlEl=document.documentElement,thm=document.getElementById('thm'),tlbl=document.getElementById('tlbl');
 var saved=localStorage.getItem('mm-theme'),sysDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
 var theme=saved?saved:(sysDark?'dark':'light');
@@ -5538,7 +5846,9 @@ if(window.matchMedia){window.matchMedia('(prefers-color-scheme: dark)').addEvent
 if(thm)thm.addEventListener('click',function(){theme=theme==='dark'?'light':'dark';applyTheme(theme,true);localStorage.setItem('mm-theme',theme);});
 function applyTheme(t,animate){if(!animate){htmlEl.style.transition='none';htmlEl.setAttribute('data-theme',t);void htmlEl.offsetHeight;htmlEl.style.transition='';}else{htmlEl.setAttribute('data-theme',t);}if(tlbl)tlbl.textContent=t==='dark'?'☾':'☀';theme=t;}
 
-/* ── SCROLL: PROGRESS + NAV HIDE/SHOW ── */
+/* ══════════════════════════════════════════════════════════════
+   SCROLL: PROGRESS + FLOATING NAV HIDE/SHOW
+══════════════════════════════════════════════════════════════ */
 var prog=document.getElementById('prog');
 var topNav=document.querySelector('nav:not(#mob-bottom-nav)');
 var lastScrollY=window.scrollY,navTicking=false,scrollTimer=null,NAV_THRESHOLD=80;
@@ -5556,45 +5866,96 @@ window.addEventListener('scroll',function(){
   });navTicking=true;}
 },{passive:true});
 
-/* ── REVEAL ── */
-['#hero','#hero *','nav:not(#mob-bottom-nav)','nav:not(#mob-bottom-nav) *','#prog'].forEach(function(sel){document.querySelectorAll(sel).forEach(function(el){el.classList.add('no-reveal');el.classList.remove('reveal','reveal-group');});});
+/* ══════════════════════════════════════════════════════════════
+   REVEAL SYSTEM
+══════════════════════════════════════════════════════════════ */
+['#hero','#hero *','nav:not(#mob-bottom-nav)','nav:not(#mob-bottom-nav) *','#prog'].forEach(function(sel){
+  document.querySelectorAll(sel).forEach(function(el){el.classList.add('no-reveal');el.classList.remove('reveal','reveal-group');});
+});
 var revealObs=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('visible');revealObs.unobserve(entry.target);}});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.reveal,.reveal-group').forEach(function(el){if(el.classList.contains('no-reveal'))return;var rect=el.getBoundingClientRect();if(rect.top<window.innerHeight&&rect.bottom>0)el.classList.add('visible');else revealObs.observe(el);});
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'){document.querySelectorAll('.reveal:not(.visible),.reveal-group:not(.visible)').forEach(function(el){var rect=el.getBoundingClientRect();if(rect.top<window.innerHeight)el.classList.add('visible');});}});
+document.querySelectorAll('.reveal,.reveal-group').forEach(function(el){
+  if(el.classList.contains('no-reveal'))return;
+  var rect=el.getBoundingClientRect();
+  if(rect.top<window.innerHeight&&rect.bottom>0)el.classList.add('visible');
+  else revealObs.observe(el);
+});
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='visible'){
+    document.querySelectorAll('.reveal:not(.visible),.reveal-group:not(.visible)').forEach(function(el){
+      var rect=el.getBoundingClientRect();if(rect.top<window.innerHeight)el.classList.add('visible');
+    });
+  }
+});
 
-/* ── ACTIVE TOP NAV ── */
+/* ══════════════════════════════════════════════════════════════
+   ACTIVE TOP NAV (.nli pill morph)
+══════════════════════════════════════════════════════════════ */
 var nliLinks=document.querySelectorAll('.nav-links .nli');
 var secEls=document.querySelectorAll('section[id]');
-var navObs=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){nliLinks.forEach(function(a){a.classList.remove('on');});var a=document.querySelector('.nav-links .nli[href="#'+entry.target.id+'"]');if(a)a.classList.add('on');}});},{threshold:0.3});
+var navObs=new IntersectionObserver(function(entries){entries.forEach(function(entry){
+  if(entry.isIntersecting){
+    nliLinks.forEach(function(a){a.classList.remove('on');});
+    var a=document.querySelector('.nav-links .nli[href="#'+entry.target.id+'"]');
+    if(a)a.classList.add('on');
+  }
+});},{threshold:0.3});
 secEls.forEach(function(s){navObs.observe(s);});
 
-/* ── WILL-CHANGE on pill nav ── */
-document.querySelectorAll('.nav-links .nli').forEach(function(el){el.addEventListener('mouseenter',function(){el.style.willChange='contents';});el.addEventListener('mouseleave',function(){setTimeout(function(){el.style.willChange='auto';},300);});});
+/* Will-change on pill hover */
+nliLinks.forEach(function(el){
+  el.addEventListener('mouseenter',function(){el.style.willChange='contents';});
+  el.addEventListener('mouseleave',function(){setTimeout(function(){el.style.willChange='auto';},300);});
+});
 
-/* ── CAREER TABS ── */
-document.querySelectorAll('.tab').forEach(function(tab){tab.addEventListener('click',function(){var id=tab.dataset.p;document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});tab.classList.add('on');var panel=document.getElementById('p-'+id);if(panel){panel.classList.add('on');panel.querySelectorAll('.reveal,.reveal-group').forEach(function(el){el.classList.add('visible');});}});});
+/* ══════════════════════════════════════════════════════════════
+   CAREER TABS
+══════════════════════════════════════════════════════════════ */
+document.querySelectorAll('.tab').forEach(function(tab){tab.addEventListener('click',function(){
+  var id=tab.dataset.p;
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});
+  tab.classList.add('on');
+  var panel=document.getElementById('p-'+id);
+  if(panel){panel.classList.add('on');panel.querySelectorAll('.reveal,.reveal-group').forEach(function(el){el.classList.add('visible');});}
+});});
 
-/* ── KPI COUNTERS ── */
+/* ══════════════════════════════════════════════════════════════
+   KPI COUNTERS
+══════════════════════════════════════════════════════════════ */
 function animCount(el){var target=+el.dataset.t,pre=el.dataset.pre||'',suf=el.dataset.suf||'';var dur=1800,t0=performance.now();(function step(now){var p=Math.min((now-t0)/dur,1),ease=p===1?1:1-Math.pow(2,-10*p);el.textContent=pre+Math.round(ease*target).toLocaleString()+suf;if(p<1)requestAnimationFrame(step);})(performance.now());}
 var cntObs=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){animCount(entry.target);cntObs.unobserve(entry.target);}});},{threshold:0.4});
 document.querySelectorAll('.cnt').forEach(function(el){cntObs.observe(el);});
 
-/* ── MOBILE MENU (top — desktop fallback) ── */
+/* ══════════════════════════════════════════════════════════════
+   TOP MOBILE MENU
+══════════════════════════════════════════════════════════════ */
 var ham=document.getElementById('ham'),mob=document.getElementById('mob'),mobOpen=false;
 function openMenu(){mobOpen=true;if(ham)ham.classList.add('open');if(mob){mob.classList.add('open');mob.style.display='flex';}document.body.classList.add('menu-open');}
 function closeMenu(){mobOpen=false;if(ham)ham.classList.remove('open');if(mob){mob.classList.remove('open');mob.style.display='none';}document.body.classList.remove('menu-open');}
 if(ham&&mob){mob.style.display='none';ham.addEventListener('click',function(){if(mobOpen)closeMenu();else openMenu();});mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',closeMenu);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mobOpen&&modal&&modal.hidden)closeMenu();});mob.addEventListener('click',function(e){if(e.target===mob)closeMenu();});}
 
-/* ── WILL-CHANGE ── */
-document.querySelectorAll('.btn-g,.btn-o,.kpi-c,.dec,.proj,.imp,.ci,.tl-card,.cap,.pr,.fab').forEach(function(el){el.addEventListener('mouseenter',function(){el.style.willChange='transform';});el.addEventListener('mouseleave',function(){setTimeout(function(){el.style.willChange='auto';},300);});});
+/* ══════════════════════════════════════════════════════════════
+   WILL-CHANGE CLEANUP
+══════════════════════════════════════════════════════════════ */
+document.querySelectorAll('.btn-g,.btn-o,.kpi-c,.dec,.proj,.imp,.ci,.tl-card,.cap,.pr,.fab').forEach(function(el){
+  el.addEventListener('mouseenter',function(){el.style.willChange='transform';});
+  el.addEventListener('mouseleave',function(){setTimeout(function(){el.style.willChange='auto';},300);});
+});
 
-/* ── MOBILE BOTTOM NAV ── */
+/* ══════════════════════════════════════════════════════════════
+   MOBILE BOTTOM NAV
+══════════════════════════════════════════════════════════════ */
 var mbn=document.getElementById('mob-bottom-nav');
 if(mbn){
   var mbnItems=mbn.querySelectorAll('.mbn-item'),sectionMap={};
   mbnItems.forEach(function(item){var sec=item.dataset.section;if(sec)sectionMap[sec]=item;});
   var mbnEls=['hero','career','impact','projects','contact'].map(function(id){return document.getElementById(id);}).filter(Boolean);
-  var mbnObs=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){mbnItems.forEach(function(i){i.classList.remove('mbn-active');});var item=sectionMap[entry.target.id];if(item)item.classList.add('mbn-active');}});},{threshold:0.25});
+  var mbnObs=new IntersectionObserver(function(entries){entries.forEach(function(entry){
+    if(entry.isIntersecting){
+      mbnItems.forEach(function(i){i.classList.remove('mbn-active');});
+      var item=sectionMap[entry.target.id];if(item)item.classList.add('mbn-active');
+    }
+  });},{threshold:0.25});
   mbnEls.forEach(function(el){mbnObs.observe(el);});
   var mbnLastY=window.scrollY,mbnTicking=false,mbnTimer=null;
   window.addEventListener('scroll',function(){
