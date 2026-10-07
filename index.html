@@ -5847,7 +5847,7 @@ if(anchor){
   [dlBtn,fbDlBtn].forEach(function(btn){if(btn){btn.href=pdfSrc;btn.setAttribute('download','Mohamed_Magdoom_Resume.pdf');}});
   if(viewBtn){try{var b64=pdfSrc.split(',')[1],bytes=atob(b64),ab=new ArrayBuffer(bytes.length),ua=new Uint8Array(ab);for(var i=0;i<bytes.length;i++)ua[i]=bytes.charCodeAt(i);viewBtn.href=URL.createObjectURL(new Blob([ab],{type:'application/pdf'}));}catch(e){viewBtn.href=pdfSrc;}}
 }
-function openModal(){if(!modal||!pdfSrc)return;lastFocus=document.activeElement;modal.removeAttribute('hidden');document.body.style.overflow='hidden';if(closeBtn)closeBtn.focus();if(iframe&&!iframe.src){iframe.src=pdfSrc+'#toolbar=0&navpanes=0';iframe.onerror=showFallback;if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent))showFallback();}setTimeout(function(){if(closeBtn)closeBtn.focus();},100);}
+function openModal(){if(!modal||!pdfSrc)return;lastFocus=document.activeElement;modal.removeAttribute('hidden');document.body.style.overflow='hidden';if(closeBtn)closeBtn.focus();if(iframe&&!iframe.getAttribute('src')){iframe.src=pdfSrc+'#toolbar=0&navpanes=0';iframe.onerror=showFallback;if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent))showFallback();}setTimeout(function(){if(closeBtn)closeBtn.focus();},100);}
 function closeModal(){if(!modal)return;modal.setAttribute('hidden','');document.body.style.overflow='';if(lastFocus&&lastFocus.focus)lastFocus.focus();lastFocus=null;}
 function showFallback(){if(iframe)iframe.hidden=true;if(fallback)fallback.removeAttribute('hidden');}
 document.querySelectorAll('[data-resume-modal]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();openModal();});});
