@@ -4724,6 +4724,38 @@ html {
 .skip-link{position:fixed;top:12px;left:12px;z-index:10000;padding:8px 14px;background:var(--gold);color:var(--bg);font-family:var(--font-mono);font-size:.8rem;letter-spacing:.04em;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
 .skip-link:focus{width:auto;height:auto;overflow:visible;clip:auto;clip-path:none}
 .theme-btn:focus-visible,.ham:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+/* ── MOBILE THEME TOGGLE: keep the existing toggle reachable on phone portrait ── */
+@media (max-width: 768px) {
+  nav:not(#mob-bottom-nav) {
+    display: flex !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    position: fixed !important;
+    top: max(12px, env(safe-area-inset-top, 0px)) !important;
+    right: max(12px, env(safe-area-inset-right, 0px)) !important;
+    left: auto !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    background: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    z-index: 800 !important;
+  }
+  nav:not(#mob-bottom-nav) .nav-logo,
+  nav:not(#mob-bottom-nav) .nav-links,
+  nav:not(#mob-bottom-nav) .nav-cv,
+  nav:not(#mob-bottom-nav) .ham,
+  nav:not(#mob-bottom-nav) .theme-lbl {
+    display: none !important;
+  }
+  nav:not(#mob-bottom-nav) .theme-btn { position: relative; }
+  nav:not(#mob-bottom-nav) .theme-btn::before {
+    content: '';
+    position: absolute;
+    inset: -12px -8px;
+  }
+}
 </style>
 </head>
 <body>
