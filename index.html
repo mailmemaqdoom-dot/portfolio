@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mohamed Magdoom — Retail & Multi-Site Operations Executive</title>
 <meta name="description" content="C-Suite Executive. GM · Head of Sales & Operations · USD 200M P&L · 90 Retail Stations · Sub-Saharan Africa · GCC · UAE">
+<link rel="canonical" href="https://mohamedmagdoom.pages.dev/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Mohamed Magdoom">
+<meta property="og:title" content="Mohamed Magdoom — Retail & Multi-Site Operations Executive">
+<meta property="og:description" content="C-Suite Executive. GM · Head of Sales & Operations · USD 200M P&L · 90 Retail Stations · Sub-Saharan Africa · GCC · UAE">
+<meta property="og:url" content="https://mohamedmagdoom.pages.dev/">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Mohamed Magdoom","url":"https://mohamedmagdoom.pages.dev/","jobTitle":"Retail & Multi-Site Operations Executive","sameAs":["https://linkedin.com/in/mohamed-magdoom"],"address":{"@type":"PostalAddress","addressLocality":"Lusaka","addressCountry":"ZM"}}</script>
   <meta name="theme-color" content="#0a0a0b">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -4712,15 +4721,19 @@ html {
   .pwa-inner { max-width: 360px; }
 }
 
+.skip-link{position:fixed;top:12px;left:12px;z-index:10000;padding:8px 14px;background:var(--gold);color:var(--bg);font-family:var(--font-mono);font-size:.8rem;letter-spacing:.04em;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+.skip-link:focus{width:auto;height:auto;overflow:visible;clip:auto;clip-path:none}
+.theme-btn:focus-visible,.ham:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#hero">Skip to content</a>
 
 <!-- Progress bar -->
 <div id="prog"></div>
 
 <!-- ===== NAV ===== -->
-<nav>
+<nav aria-label="Primary">
   <div class="nav-logo">M<b>.</b>Magdoom</div>
   <ul class="nav-links">
     <li><a href="#about" class="nli"><span class="nli-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="5.5" r="2.5"/><path d="M2.5 14c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg></span><span class="nli-label">About</span></a></li>
@@ -4733,9 +4746,9 @@ html {
   </ul>
   <div class="nav-r">
     <span class="theme-lbl" id="tlbl">☾</span>
-    <div class="theme-btn" id="thm" role="button" aria-label="Toggle theme"></div>
+    <div class="theme-btn" id="thm" role="button" tabindex="0" aria-label="Toggle theme"></div>
     <a href="#" data-resume-modal="true" class="nav-cv" aria-haspopup="dialog">↓ Resume</a>
-    <div class="ham" id="ham"><span></span><span></span><span></span></div>
+    <div class="ham" id="ham" role="button" tabindex="0" aria-label="Open menu" aria-expanded="false" aria-controls="mob"><span></span><span></span><span></span></div>
   </div>
 </nav>
 
@@ -5750,18 +5763,20 @@ var dlBtn=document.getElementById('rmo-dl-btn');
 var fbDlBtn=document.getElementById('rmo-fallback-dl');
 var closeBtn=document.getElementById('rmo-close');
 var pdfSrc='';
+var lastFocus=null;
 if(anchor){
   pdfSrc=anchor.href;
   [dlBtn,fbDlBtn].forEach(function(btn){if(btn){btn.href=pdfSrc;btn.setAttribute('download','Mohamed_Magdoom_Resume.pdf');}});
   if(viewBtn){try{var b64=pdfSrc.split(',')[1],bytes=atob(b64),ab=new ArrayBuffer(bytes.length),ua=new Uint8Array(ab);for(var i=0;i<bytes.length;i++)ua[i]=bytes.charCodeAt(i);viewBtn.href=URL.createObjectURL(new Blob([ab],{type:'application/pdf'}));}catch(e){viewBtn.href=pdfSrc;}}
 }
-function openModal(){if(!modal||!pdfSrc)return;modal.removeAttribute('hidden');document.body.style.overflow='hidden';if(iframe&&!iframe.src){iframe.src=pdfSrc+'#toolbar=0&navpanes=0';iframe.onerror=showFallback;if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent))showFallback();}setTimeout(function(){if(closeBtn)closeBtn.focus();},100);}
-function closeModal(){if(!modal)return;modal.setAttribute('hidden','');document.body.style.overflow='';}
+function openModal(){if(!modal||!pdfSrc)return;lastFocus=document.activeElement;modal.removeAttribute('hidden');document.body.style.overflow='hidden';if(closeBtn)closeBtn.focus();if(iframe&&!iframe.src){iframe.src=pdfSrc+'#toolbar=0&navpanes=0';iframe.onerror=showFallback;if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent))showFallback();}setTimeout(function(){if(closeBtn)closeBtn.focus();},100);}
+function closeModal(){if(!modal)return;modal.setAttribute('hidden','');document.body.style.overflow='';if(lastFocus&&lastFocus.focus)lastFocus.focus();lastFocus=null;}
 function showFallback(){if(iframe)iframe.hidden=true;if(fallback)fallback.removeAttribute('hidden');}
 document.querySelectorAll('[data-resume-modal]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();openModal();});});
 if(closeBtn)closeBtn.addEventListener('click',closeModal);
 if(modal)modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal&&!modal.hidden)closeModal();});
+document.addEventListener('keydown',function(e){if(e.key!=='Tab'||!modal||modal.hidden)return;var f=[].slice.call(modal.querySelectorAll('a[href],button')).filter(function(el){return el.getClientRects().length;});if(!f.length)return;var first=f[0],last=f[f.length-1];if(!modal.contains(document.activeElement)){e.preventDefault();first.focus();}else if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}});
 
 /* ══════════════════════════════════════════════════════════════
    RIPPLE ENGINE — visual haptic feedback on tap
@@ -5844,6 +5859,7 @@ var theme=saved?saved:(sysDark?'dark':'light');
 htmlEl.setAttribute('data-theme',theme);applyTheme(theme,false);
 if(window.matchMedia){window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(e){if(!localStorage.getItem('mm-theme')){theme=e.matches?'dark':'light';applyTheme(theme,true);}});}
 if(thm)thm.addEventListener('click',function(){theme=theme==='dark'?'light':'dark';applyTheme(theme,true);localStorage.setItem('mm-theme',theme);});
+if(thm)thm.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();thm.click();}});
 function applyTheme(t,animate){if(!animate){htmlEl.style.transition='none';htmlEl.setAttribute('data-theme',t);void htmlEl.offsetHeight;htmlEl.style.transition='';}else{htmlEl.setAttribute('data-theme',t);}if(tlbl)tlbl.textContent=t==='dark'?'☾':'☀';theme=t;}
 
 /* ══════════════════════════════════════════════════════════════
@@ -5930,8 +5946,9 @@ document.querySelectorAll('.cnt').forEach(function(el){cntObs.observe(el);});
    TOP MOBILE MENU
 ══════════════════════════════════════════════════════════════ */
 var ham=document.getElementById('ham'),mob=document.getElementById('mob'),mobOpen=false;
-function openMenu(){mobOpen=true;if(ham)ham.classList.add('open');if(mob){mob.classList.add('open');mob.style.display='flex';}document.body.classList.add('menu-open');}
-function closeMenu(){mobOpen=false;if(ham)ham.classList.remove('open');if(mob){mob.classList.remove('open');mob.style.display='none';}document.body.classList.remove('menu-open');}
+function openMenu(){mobOpen=true;if(ham){ham.classList.add('open');ham.setAttribute('aria-expanded','true');ham.setAttribute('aria-label','Close menu');}if(mob){mob.classList.add('open');mob.style.display='flex';}document.body.classList.add('menu-open');}
+function closeMenu(){mobOpen=false;if(ham){ham.classList.remove('open');ham.setAttribute('aria-expanded','false');ham.setAttribute('aria-label','Open menu');}if(mob){mob.classList.remove('open');mob.style.display='none';}document.body.classList.remove('menu-open');}
+if(ham)ham.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();ham.click();}});
 if(ham&&mob){mob.style.display='none';ham.addEventListener('click',function(){if(mobOpen)closeMenu();else openMenu();});mob.querySelectorAll('a').forEach(function(a){a.addEventListener('click',closeMenu);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mobOpen&&modal&&modal.hidden)closeMenu();});mob.addEventListener('click',function(e){if(e.target===mob)closeMenu();});}
 
 /* ══════════════════════════════════════════════════════════════
