@@ -3917,6 +3917,22 @@ nav:not(#mob-bottom-nav) .nav-r {
   background: var(--bg);
 }
 
+.rmo-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--tx-3);
+  background: var(--bg);
+  pointer-events: none;
+}
+.rmo-loading[hidden] { display: none; }
+
 /* Fallback */
 .rmo-fallback {
   position: absolute;
@@ -3944,10 +3960,9 @@ nav:not(#mob-bottom-nav) .nav-r {
     max-height: none;
     border-radius: 14px 14px 0 0;
   }
-  .rmo-btn-view span,
-  .rmo-btn svg { display: none; }
-  .rmo-btn-view::after { content: "Open"; }
-  .rmo-btn-dl::after   { content: ""; }
+  #rmo-view-btn { display: none; }
+  .rmo-btn-dl svg { display: none; }
+  .rmo-btn-close { min-width: 36px; min-height: 36px; justify-content: center; }
 }
 
 
@@ -5810,6 +5825,7 @@ html {
       </div>
     </div>
     <div class="rmo-frame-wrap">
+      <div class="rmo-loading" id="rmo-loading">Loading resume…</div>
       <iframe id="rmo-iframe" title="Resume PDF" class="rmo-iframe" src="" loading="lazy"></iframe>
       <!-- Fallback for mobile where iframe PDF embed fails -->
       <div class="rmo-fallback" id="rmo-fallback" hidden>
@@ -5856,6 +5872,7 @@ var viewBtn=document.getElementById('rmo-view-btn');
 var dlBtn=document.getElementById('rmo-dl-btn');
 var fbDlBtn=document.getElementById('rmo-fallback-dl');
 var closeBtn=document.getElementById('rmo-close');
+var loadingEl=document.getElementById('rmo-loading');
 var pdfSrc='';
 var lastFocus=null;
 if(anchor){
@@ -5863,7 +5880,7 @@ if(anchor){
   [dlBtn,fbDlBtn].forEach(function(btn){if(btn){btn.href=pdfSrc;btn.setAttribute('download','Mohamed_Magdoom_Resume.pdf');}});
   if(viewBtn){try{var b64=pdfSrc.split(',')[1],bytes=atob(b64),ab=new ArrayBuffer(bytes.length),ua=new Uint8Array(ab);for(var i=0;i<bytes.length;i++)ua[i]=bytes.charCodeAt(i);viewBtn.href=URL.createObjectURL(new Blob([ab],{type:'application/pdf'}));}catch(e){viewBtn.href=pdfSrc;}}
 }
-function openModal(){if(!modal||!pdfSrc)return;lastFocus=document.activeElement;modal.removeAttribute('hidden');document.body.style.overflow='hidden';if(closeBtn)closeBtn.focus();if(iframe&&!iframe.getAttribute('src')){iframe.src=pdfSrc+'#toolbar=0&navpanes=0';iframe.onerror=showFallback;if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent))showFallback();}setTimeout(function(){if(closeBtn)closeBtn.focus();},100);}
+function openModal(){if(!modal||!pdfSrc)return;lastFocus=document.activeElement;modal.removeAttribute('hidden');document.body.style.overflow='hidden';if(closeBtn)closeBtn.focus();if(iframe&&!iframe.dataset.pdf){iframe.dataset.pdf='1';iframe.addEventListener('load',function(){if(loadingEl)loadingEl.hidden=true;});iframe.src=pdfSrc+'#toolbar=0&navpanes=0';}setTimeout(function(){if(closeBtn)closeBtn.focus();},100);}
 function closeModal(){if(!modal)return;modal.setAttribute('hidden','');document.body.style.overflow='';if(lastFocus&&lastFocus.focus)lastFocus.focus();lastFocus=null;}
 function showFallback(){if(iframe)iframe.hidden=true;if(fallback)fallback.removeAttribute('hidden');}
 document.querySelectorAll('[data-resume-modal]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();openModal();});});
