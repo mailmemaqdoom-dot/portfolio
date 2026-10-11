@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Administrator sign-in · Mohamed Magdoom</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<header class="adm-header">
+  <div class="adm-brand">M<b>.</b>Magdoom <span>Administration</span></div>
+  <div class="adm-header-right">
+    <span class="adm-conn" id="conn-indicator" aria-live="polite">Checking…</span>
+    <button type="button" id="btn-signout" class="adm-btn ghost" hidden>Sign out</button>
+  </div>
+</header>
+
+<main class="adm-main">
+
+  <!-- Sign-in: step 1 (email) and step 2 (code) -->
+  <section id="view-signin" class="adm-card adm-narrow" hidden aria-labelledby="signin-title">
+    <h1 id="signin-title" class="adm-title">Administrator sign-in</h1>
+    <p class="adm-lead" id="signin-lead">Enter your email address and we will send you a one-time sign-in code.</p>
+
+    <form id="form-email" novalidate>
+      <label class="adm-label" for="inp-email">Email address</label>
+      <input class="adm-input" id="inp-email" type="email" autocomplete="email" required maxlength="200">
+      <button class="adm-btn" id="btn-send" type="submit">Send sign-in code</button>
+    </form>
+
+    <form id="form-code" novalidate hidden>
+      <label class="adm-label" for="inp-code">One-time code</label>
+      <input class="adm-input adm-code" id="inp-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="10" required>
+      <button class="adm-btn" id="btn-verify" type="submit">Verify and sign in</button>
+      <button class="adm-btn ghost" id="btn-back" type="button">Use a different email</button>
+    </form>
+
+    <p class="adm-msg" id="signin-msg" role="status" aria-live="polite"></p>
+    <p class="adm-hint">The email also contains a sign-in link you can open on any device.</p>
+  </section>
+
+  <!-- Not authorised -->
+  <section id="view-denied" class="adm-card adm-narrow" hidden aria-labelledby="denied-title">
+    <h1 id="denied-title" class="adm-title">Access not available</h1>
+    <p class="adm-lead" id="denied-msg">This account is not authorised for administration.</p>
+    <button class="adm-btn" id="btn-denied-back" type="button">Back to sign-in</button>
+  </section>
+
+  <!-- Dashboard foundation -->
+  <section id="view-dashboard" hidden aria-labelledby="dash-title">
+    <h1 id="dash-title" class="adm-title">Dashboard</h1>
+
+    <div class="adm-grid">
+      <article class="adm-card">
+        <h2 class="adm-h2">Account</h2>
+        <dl class="adm-dl">
+          <dt>Signed in as</dt><dd id="acct-email">–</dd>
+          <dt>Administrator</dt><dd id="acct-admin">Verified</dd>
+        </dl>
+      </article>
+
+      <article class="adm-card">
+        <h2 class="adm-h2">Database</h2>
+        <p id="db-status" class="adm-status">Checking connection…</p>
+        <p class="adm-note">Read access is enforced by row-level security.</p>
+      </article>
+
+      <article class="adm-card">
+        <h2 class="adm-h2">Drafts</h2>
+        <p class="adm-empty">No drafts yet. Content editors arrive in the next stage.</p>
+      </article>
+
+      <article class="adm-card">
+        <h2 class="adm-h2">Publishing</h2>
+        <p class="adm-empty">Not yet enabled. Drafts do not change the live site.</p>
+      </article>
+
+      <article class="adm-card">
+        <h2 class="adm-h2">Analytics</h2>
+        <p class="adm-empty">Not connected. No visitor figures are shown until measured data is available.</p>
+      </article>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script type="module" src="admin.js"></script>
+</body>
+</html>
