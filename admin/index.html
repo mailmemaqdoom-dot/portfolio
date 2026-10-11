@@ -80,7 +80,13 @@
 
   <!-- Dashboard foundation -->
   <section id="view-dashboard" hidden aria-labelledby="dash-title">
-    <h1 id="dash-title" class="adm-title">Dashboard</h1>
+    <nav class="adm-subnav" aria-label="Dashboard sections">
+      <button type="button" class="adm-navbtn on" data-panel="overview" aria-current="page">Overview</button>
+      <button type="button" class="adm-navbtn" data-panel="hero" aria-current="false">Hero</button>
+    </nav>
+
+    <div id="panel-overview">
+    <h1 id="dash-title" class="adm-title">Overview</h1>
 
     <div class="adm-grid">
       <article class="adm-card">
@@ -111,19 +117,52 @@
       </article>
 
       <article class="adm-card">
-        <h2 class="adm-h2">Drafts</h2>
-        <p class="adm-empty">No drafts yet. Content editors arrive in the next stage.</p>
+        <h2 class="adm-h2">Saved draft records</h2>
+        <dl class="adm-dl" id="ov-counts"><dt>Loading</dt><dd>…</dd></dl>
       </article>
 
       <article class="adm-card">
         <h2 class="adm-h2">Publishing</h2>
-        <p class="adm-empty">Not yet enabled. Drafts do not change the live site.</p>
+        <p class="adm-empty">Not yet published. Drafts do not change the live site.</p>
       </article>
 
       <article class="adm-card">
         <h2 class="adm-h2">Analytics</h2>
         <p class="adm-empty">Not connected. No visitor figures are shown until measured data is available.</p>
       </article>
+    </div>
+    </div>
+
+    <div id="panel-hero" hidden>
+      <h1 class="adm-title">Hero</h1>
+      <p class="adm-lead">Draft text for the top of the homepage. Saving updates the draft only. The live website changes only after a future publishing step.</p>
+      <p class="adm-msg" id="h-status" role="status" aria-live="polite"></p>
+      <form id="form-hero" class="adm-form" novalidate>
+        <div class="adm-fields">
+          <div class="adm-field"><label class="adm-label" for="h-name">Name</label><input class="adm-input" id="h-name" maxlength="80" required></div>
+          <div class="adm-field"><label class="adm-label" for="h-eyebrow">Eyebrow line</label><input class="adm-input" id="h-eyebrow" maxlength="120" required></div>
+          <div class="adm-field adm-wide"><label class="adm-label" for="h-role">Role line</label><input class="adm-input" id="h-role" maxlength="200" required></div>
+          <div class="adm-field adm-wide"><label class="adm-label" for="h-positioning">Positioning statement</label><textarea class="adm-input adm-textarea" id="h-positioning" rows="3" maxlength="400" required></textarea></div>
+          <div class="adm-field adm-wide"><label class="adm-label" for="h-proof">Proof line</label><textarea class="adm-input adm-textarea" id="h-proof" rows="2" maxlength="400"></textarea></div>
+          <div class="adm-field adm-wide"><label class="adm-label" for="h-cred">Credibility line</label><input class="adm-input" id="h-cred" maxlength="160" required></div>
+          <div class="adm-field adm-wide"><label class="adm-label" for="h-quote">Pull quote</label><textarea class="adm-input adm-textarea" id="h-quote" rows="2" maxlength="300"></textarea></div>
+        </div>
+
+        <h2 class="adm-h2">Buttons</h2>
+        <div id="h-cta" class="adm-stack"></div>
+
+        <h2 class="adm-h2">Metric strip</h2>
+        <div id="h-metrics" class="adm-stack"></div>
+
+        <h2 class="adm-h2">Animated counters</h2>
+        <div id="h-stats" class="adm-stack"></div>
+
+        <div class="adm-actions">
+          <button class="adm-btn" id="h-save" type="submit">Save draft</button>
+          <button class="adm-btn ghost" id="h-discard" type="button">Discard edits</button>
+        </div>
+        <p class="adm-msg" id="h-msg" role="status" aria-live="polite"></p>
+      </form>
     </div>
   </section>
 </main>
