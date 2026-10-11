@@ -92,3 +92,11 @@ body {
 .adm-status { margin: 0; color: var(--tx-2); }
 .adm-status.ok { color: var(--ok); }
 .adm-status.err { color: var(--danger); }
+
+.adm-links { display: flex; justify-content: space-between; gap: .75rem; flex-wrap: wrap; margin: .2rem 0 1rem; }
+.adm-linkbtn {
+  background: none; border: 0; padding: .3rem 0; cursor: pointer;
+  font: inherit; font-size: .85rem; color: var(--tx-2); text-decoration: underline; text-underline-offset: 3px;
+}
+.adm-linkbtn:hover { color: var(--gold); }
+.adm-linkbtn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }

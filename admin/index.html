@@ -22,19 +22,44 @@
 
 <main class="adm-main">
 
-  <!-- Sign-in: request a link by email -->
+  <!-- Sign-in with password; email link as a backup -->
   <section id="view-signin" class="adm-card adm-narrow" hidden aria-labelledby="signin-title">
     <h1 id="signin-title" class="adm-title">Administrator sign-in</h1>
-    <p class="adm-lead">Enter your email address and we will send you a sign-in link. You can open it on any device.</p>
 
-    <form id="form-email" novalidate>
+    <form id="form-password" novalidate>
       <label class="adm-label" for="inp-email">Email address</label>
-      <input class="adm-input" id="inp-email" type="email" autocomplete="email" required maxlength="200">
-      <button class="adm-btn" id="btn-send" type="submit">Send sign-in link</button>
+      <input class="adm-input" id="inp-email" type="email" autocomplete="username" required maxlength="200">
+      <label class="adm-label" for="inp-password">Password</label>
+      <input class="adm-input" id="inp-password" type="password" autocomplete="current-password" required maxlength="128">
+      <button class="adm-btn" id="btn-signin" type="submit">Sign in</button>
+    </form>
+
+    <div class="adm-links">
+      <button type="button" class="adm-linkbtn" id="btn-forgot">Forgot password?</button>
+      <button type="button" class="adm-linkbtn" id="btn-link">Email me a sign-in link instead</button>
+    </div>
+
+    <form id="form-link" novalidate hidden>
+      <p class="adm-lead">We will email a sign-in link. You can open it on any device.</p>
+      <button class="adm-btn" id="btn-send-link" type="submit">Send sign-in link</button>
+      <button type="button" class="adm-btn ghost" id="btn-back-pw">Back to password sign-in</button>
     </form>
 
     <p class="adm-msg" id="signin-msg" role="status" aria-live="polite"></p>
-    <p class="adm-hint">Open the link in the email to finish signing in. Links expire quickly and can be used once.</p>
+  </section>
+
+  <!-- Choose a new password (after a reset link) -->
+  <section id="view-recovery" class="adm-card adm-narrow" hidden aria-labelledby="recovery-title">
+    <h1 id="recovery-title" class="adm-title">Choose a new password</h1>
+    <p class="adm-lead">Use at least 12 characters. A password manager is recommended.</p>
+    <form id="form-recovery" novalidate>
+      <label class="adm-label" for="inp-new-pw">New password</label>
+      <input class="adm-input" id="inp-new-pw" type="password" autocomplete="new-password" required minlength="12" maxlength="128">
+      <label class="adm-label" for="inp-new-pw2">Confirm new password</label>
+      <input class="adm-input" id="inp-new-pw2" type="password" autocomplete="new-password" required minlength="12" maxlength="128">
+      <button class="adm-btn" id="btn-recovery" type="submit">Save password</button>
+    </form>
+    <p class="adm-msg" id="recovery-msg" role="status" aria-live="polite"></p>
   </section>
 
   <!-- Not authorised -->
@@ -53,8 +78,18 @@
         <h2 class="adm-h2">Account</h2>
         <dl class="adm-dl">
           <dt>Signed in as</dt><dd id="acct-email">–</dd>
-          <dt>Administrator</dt><dd id="acct-admin">Verified</dd>
+          <dt>Administrator</dt><dd>Verified</dd>
         </dl>
+      </article>
+
+      <article class="adm-card">
+        <h2 class="adm-h2">Password</h2>
+        <form id="form-set-pw" novalidate>
+          <label class="adm-label" for="inp-set-pw">New password</label>
+          <input class="adm-input" id="inp-set-pw" type="password" autocomplete="new-password" required minlength="12" maxlength="128">
+          <button class="adm-btn" id="btn-set-pw" type="submit">Set password</button>
+        </form>
+        <p class="adm-msg" id="set-pw-msg" role="status" aria-live="polite"></p>
       </article>
 
       <article class="adm-card">
