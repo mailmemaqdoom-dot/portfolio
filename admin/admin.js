@@ -108,6 +108,7 @@ $('form-password').addEventListener('submit', async (e) => {
   const { error } = await sb.auth.signInWithPassword({ email, password });
   busy(button, false, 'Sign in');
   $('inp-password').value = '';
+  setPwVisible('inp-password', false);
   if (error) {
     msg(out, /rate limit|too many/i.test(error.message)
       ? 'Too many attempts. Wait a few minutes before trying again.'
@@ -196,6 +197,8 @@ $('form-recovery').addEventListener('submit', async (e) => {
   }
   $('inp-new-pw').value = '';
   $('inp-new-pw2').value = '';
+  setPwVisible('inp-new-pw', false);
+  setPwVisible('inp-new-pw2', false);
   recoveryMode = false;
   msg(out, '');
   route();
@@ -220,7 +223,28 @@ $('form-set-pw').addEventListener('submit', async (e) => {
     return;
   }
   $('inp-set-pw').value = '';
+  setPwVisible('inp-set-pw', false);
   msg(out, 'Password saved. You can use it to sign in from now on.', 'ok');
+});
+
+// Show or hide a password field, and keep the button label and icon in step.
+function setPwVisible(id, visible) {
+  const input = $(id);
+  input.type = visible ? 'text' : 'password';
+  const btn = document.querySelector(`.adm-eye[data-for="${id}"]`);
+  if (!btn) return;
+  btn.setAttribute('aria-pressed', String(visible));
+  btn.setAttribute('aria-label', visible ? 'Hide password' : 'Show password');
+  btn.querySelector('.eye-on').hidden = visible;
+  btn.querySelector('.eye-off').hidden = !visible;
+}
+
+document.querySelectorAll('.adm-eye').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const id = btn.dataset.for;
+    setPwVisible(id, $(id).type === 'password');
+    $(id).focus();
+  });
 });
 
 $('btn-signout').addEventListener('click', async () => {

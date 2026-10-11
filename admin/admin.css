@@ -100,3 +100,13 @@ body {
 }
 .adm-linkbtn:hover { color: var(--gold); }
 .adm-linkbtn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.adm-pw { position: relative; margin-bottom: 1rem; }
+.adm-pw .adm-input { margin-bottom: 0; padding-right: 3rem; }
+.adm-eye {
+  position: absolute; right: .3rem; top: 50%; transform: translateY(-50%);
+  width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
+  background: none; border: 0; border-radius: 6px; color: var(--tx-3); cursor: pointer;
+}
+.adm-eye:hover { color: var(--gold); }
+.adm-eye:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }

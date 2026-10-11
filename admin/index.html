@@ -30,7 +30,10 @@
       <label class="adm-label" for="inp-email">Email address</label>
       <input class="adm-input" id="inp-email" type="email" autocomplete="username" required maxlength="200">
       <label class="adm-label" for="inp-password">Password</label>
+    <div class="adm-pw">
       <input class="adm-input" id="inp-password" type="password" autocomplete="current-password" required maxlength="128">
+      <button type="button" class="adm-eye" data-for="inp-password" aria-label="Show password" aria-pressed="false"><svg class="eye-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg></button>
+    </div>
       <button class="adm-btn" id="btn-signin" type="submit">Sign in</button>
     </form>
 
@@ -54,9 +57,15 @@
     <p class="adm-lead">Use at least 12 characters. A password manager is recommended.</p>
     <form id="form-recovery" novalidate>
       <label class="adm-label" for="inp-new-pw">New password</label>
+    <div class="adm-pw">
       <input class="adm-input" id="inp-new-pw" type="password" autocomplete="new-password" required minlength="12" maxlength="128">
+      <button type="button" class="adm-eye" data-for="inp-new-pw" aria-label="Show password" aria-pressed="false"><svg class="eye-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg></button>
+    </div>
       <label class="adm-label" for="inp-new-pw2">Confirm new password</label>
+    <div class="adm-pw">
       <input class="adm-input" id="inp-new-pw2" type="password" autocomplete="new-password" required minlength="12" maxlength="128">
+      <button type="button" class="adm-eye" data-for="inp-new-pw2" aria-label="Show password" aria-pressed="false"><svg class="eye-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg></button>
+    </div>
       <button class="adm-btn" id="btn-recovery" type="submit">Save password</button>
     </form>
     <p class="adm-msg" id="recovery-msg" role="status" aria-live="polite"></p>
@@ -86,7 +95,10 @@
         <h2 class="adm-h2">Password</h2>
         <form id="form-set-pw" novalidate>
           <label class="adm-label" for="inp-set-pw">New password</label>
-          <input class="adm-input" id="inp-set-pw" type="password" autocomplete="new-password" required minlength="12" maxlength="128">
+    <div class="adm-pw">
+      <input class="adm-input" id="inp-set-pw" type="password" autocomplete="new-password" required minlength="12" maxlength="128">
+      <button type="button" class="adm-eye" data-for="inp-set-pw" aria-label="Show password" aria-pressed="false"><svg class="eye-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg></button>
+    </div>
           <button class="adm-btn" id="btn-set-pw" type="submit">Set password</button>
         </form>
         <p class="adm-msg" id="set-pw-msg" role="status" aria-live="polite"></p>
