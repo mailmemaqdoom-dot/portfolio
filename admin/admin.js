@@ -89,7 +89,7 @@ async function route() {
       show('signin');
       stopIdle();
       if (takeExpiredNotice()) {
-        msg($('signin-msg'), 'Your session ended after 15 minutes without activity. Sign in again to continue.', 'err');
+        msg($('signin-msg'), 'Your session ended after a period without activity. Sign in again to continue.', 'err');
       }
       return;
     }
@@ -725,13 +725,23 @@ function recordActivity(e) {
   hideWarning();
 }
 
-function showWarning(msLeft, pending) {
+function showWarning(msLeft, mode, hasEdits) {
   const modal = $('idle-modal');
   const wasHidden = modal.hidden;
   modal.hidden = false;
   $('idle-secs').textContent = String(Math.max(0, Math.ceil(msLeft / 1000)));
-  $('idle-pending').hidden = !pending;
-  $('idle-out').textContent = pending ? 'Sign out and discard changes' : 'Sign out now';
+  if (mode === 'discard') {
+    $('idle-msg').textContent = 'Signing out will discard your unsaved Hero edits. Save them, or stay signed in to keep working.';
+    $('idle-lead').textContent = 'You will be signed out automatically in';
+  } else if (hasEdits) {
+    $('idle-msg').textContent = 'You have been inactive for a while, and there are unsaved Hero edits.';
+    $('idle-lead').textContent = 'The discard warning appears in';
+  } else {
+    $('idle-msg').textContent = 'You have been inactive for a while.';
+    $('idle-lead').textContent = 'You will be signed out in';
+  }
+  $('idle-pending').hidden = true;
+  $('idle-out').textContent = hasEdits ? 'Sign out and discard changes' : 'Sign out now';
   if (wasHidden) $('idle-stay').focus();
 }
 
@@ -739,6 +749,8 @@ function hideWarning() {
   $('idle-modal').hidden = true;
 }
 
+// Sequence. Without unsaved edits: warning at 13 minutes, sign-out at 15.
+// With unsaved Hero edits: warning at 13, discard warning at 15, automatic sign-out at 17.
 function checkIdle() {
   if (!idleOn) return;
   // A genuine upload in progress holds the timeout. The hold ends when the upload completes or fails.
@@ -748,24 +760,26 @@ function checkIdle() {
   }
   const last = lastKnownActivity();
   const idle = Date.now() - last;
-  const pending = heroIsDirty();
+  const hasEdits = heroIsDirty();
+  if (idle < IDLE_MS - WARN_MS) {
+    hideWarning();
+    return;
+  }
+  if (!hasEdits) {
+    if (idle < IDLE_MS) showWarning(IDLE_MS - idle, 'idle', false);
+    else expireSession();
+    return;
+  }
   if (idle < IDLE_MS) {
-    if (idle >= IDLE_MS - WARN_MS) showWarning(IDLE_MS - idle, pending);
-    else hideWarning();
+    showWarning(IDLE_MS - idle, 'idle', true);
     return;
   }
-  if (!pending) {
+  const finalAt = last + IDLE_MS + WARN_MS;
+  if (Date.now() >= finalAt) {
     expireSession();
     return;
   }
-  // Unsaved Hero edits do not keep the session open indefinitely. The warning states that signing
-  // out discards them, and it stays up for two further minutes. Then the session ends.
-  const graceEnd = last + IDLE_MS + WARN_MS;
-  if (Date.now() >= graceEnd) {
-    expireSession();
-    return;
-  }
-  showWarning(graceEnd - Date.now(), true);
+  showWarning(finalAt - Date.now(), 'discard', true);
 }
 
 async function expireSession() {
