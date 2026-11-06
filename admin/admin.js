@@ -1,6 +1,9 @@
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from './config.js';
+import * as ops from './ops.js';
+import * as media from './media.js';
+import * as resume from './resume.js';
+import { $ } from './util.js';
 
-const $ = (id) => document.getElementById(id);
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_PASSWORD = 12;
 
@@ -10,12 +13,21 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, 
   auth: { flowType: 'implicit', detectSessionInUrl: true, persistSession: true, autoRefreshToken: true },
 });
 
+ops.init(sb);
+media.init(sb);
+resume.init(sb);
+
 let routing = false;
 let recoveryMode = false;
+let currentPanel = 'overview';
+
+const PANELS = ['overview', 'content', 'hero', 'media', 'resume', 'health', 'activity', 'analytics', 'publishing', 'settings', 'account'];
 
 function show(view) {
   for (const v of ['signin', 'recovery', 'denied', 'dashboard']) $(`view-${v}`).hidden = v !== view;
-  $('btn-signout').hidden = view !== 'dashboard';
+  const inside = view === 'dashboard';
+  for (const id of ['btn-signout', 'btn-menu', 'cmd-search', 'btn-avatar']) $(id).hidden = !inside;
+  if (!inside) closeNav();
 }
 
 function msg(el, text, kind = '') {
@@ -85,8 +97,12 @@ async function route() {
       show('denied');
       return;
     }
-    $('acct-email').textContent = session.user.email ?? '–';
+    const email = session.user.email ?? '–';
+    $('acct-email').textContent = email;
+    $('acct-email-full').textContent = email;
+    $('btn-avatar').textContent = email === '–' ? 'A' : email.charAt(0).toUpperCase();
     show('dashboard');
+    greet();
     setPanel('overview');
     loadDatabaseStatus();
   } finally {
@@ -205,7 +221,7 @@ $('form-recovery').addEventListener('submit', async (e) => {
   route();
 });
 
-// Set or change the password from the dashboard (requires an active administrator session).
+// Set or change the password from the account panel (requires an active administrator session).
 $('form-set-pw').addEventListener('submit', async (e) => {
   e.preventDefault();
   const pw = $('inp-set-pw').value;
@@ -248,9 +264,9 @@ document.querySelectorAll('.adm-eye').forEach((btn) => {
   });
 });
 
-$('btn-signout').addEventListener('click', async () => {
-  await sb.auth.signOut();
-});
+const signOut = async () => { await sb.auth.signOut(); };
+$('btn-signout').addEventListener('click', signOut);
+$('btn-settings-signout').addEventListener('click', signOut);
 
 $('btn-denied-back').addEventListener('click', () => {
   show('signin');
@@ -266,45 +282,94 @@ sb.auth.onAuthStateChange((event) => {
   }
 });
 
-// ---------- Dashboard panels ----------
+// ---------- Dashboard shell: navigation, drawer, search, theme, greeting ----------
+
+function greet() {
+  const h = new Date().getHours();
+  const part = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+  $('dash-title').textContent = `${part}, Mohamed`;
+  $('today').textContent = new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+}
 
 function setPanel(name) {
-  $('panel-overview').hidden = name !== 'overview';
-  $('panel-hero').hidden = name !== 'hero';
-  document.querySelectorAll('.adm-navbtn').forEach((b) => {
+  if (!PANELS.includes(name)) name = 'overview';
+  if (name !== currentPanel && currentPanel === 'hero' && heroIsDirty()
+      && !window.confirm('Leave without saving your hero edits? They are not saved as a draft yet.')) {
+    return;
+  }
+  currentPanel = name;
+  for (const p of PANELS) {
+    const node = $(`panel-${p}`);
+    if (node) node.hidden = p !== name;
+  }
+  document.querySelectorAll('.adm-side .adm-navbtn').forEach((b) => {
     const on = b.dataset.panel === name;
     b.classList.toggle('on', on);
     b.setAttribute('aria-current', on ? 'page' : 'false');
   });
-  if (name === 'overview') loadOverview();
+  closeNav();
+  if (name === 'overview') ops.loadOverview();
   if (name === 'hero') loadHero();
+  if (name === 'media') media.load();
+  if (name === 'resume') resume.load();
+  if (name === 'health') ops.runChecks();
+  if (name === 'activity') ops.loadActivity();
 }
 
-document.querySelectorAll('.adm-navbtn').forEach((b) => {
+// Any element with data-panel navigates (sidebar, overview shortcuts, content list).
+document.querySelectorAll('[data-panel]').forEach((b) => {
   b.addEventListener('click', () => setPanel(b.dataset.panel));
 });
 
-// ---------- Overview: real counts and last change, read from the database ----------
-
-async function loadOverview() {
-  const dl = $('ov-counts');
-  const tables = [['Hero', 'hero'], ['Career roles', 'career_roles'], ['Achievements', 'achievements'],
-    ['Sections', 'sections'], ['Contact and SEO settings', 'site_settings']];
-  const rows = [];
-  let latest = null;
-  for (const [label, table] of tables) {
-    const { count, error } = await sb.from(table).select('*', { count: 'exact', head: true });
-    rows.push([label, error ? 'Unavailable' : String(count ?? 0)]);
-    const { data } = await sb.from(table).select('updated_at').order('updated_at', { ascending: false }).limit(1);
-    if (data && data[0] && (!latest || data[0].updated_at > latest)) latest = data[0].updated_at;
-  }
-  rows.push(['Last change saved to drafts', latest ? new Date(latest).toLocaleString() : 'None yet']);
-  dl.replaceChildren(...rows.flatMap(([k, v]) => {
-    const dt = document.createElement('dt'); dt.textContent = k;
-    const dd = document.createElement('dd'); dd.textContent = v;
-    return [dt, dd];
-  }));
+// Mobile drawer
+const side = $('side-nav');
+const scrim = $('scrim');
+function openNav() {
+  side.classList.add('open');
+  scrim.hidden = false;
+  $('btn-menu').setAttribute('aria-expanded', 'true');
 }
+function closeNav() {
+  side.classList.remove('open');
+  scrim.hidden = true;
+  $('btn-menu').setAttribute('aria-expanded', 'false');
+}
+$('btn-menu').addEventListener('click', () => (side.classList.contains('open') ? closeNav() : openNav()));
+scrim.addEventListener('click', closeNav);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNav(); });
+
+// Page search: Enter opens the first matching page.
+$('cmd-search').addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  const q = e.target.value.trim().toLowerCase();
+  if (!q) return;
+  const match = [...document.querySelectorAll('.adm-side .adm-navbtn')]
+    .find((b) => b.textContent.trim().toLowerCase().includes(q));
+  if (match) {
+    e.target.value = '';
+    setPanel(match.dataset.panel);
+  }
+});
+
+$('btn-avatar').addEventListener('click', () => setPanel('account'));
+
+// Theme: system by default, or a choice remembered on this device only.
+const THEME_KEY = 'adm-theme';
+function applyTheme(value) {
+  const root = document.documentElement;
+  if (value === 'light' || value === 'dark') root.setAttribute('data-theme', value);
+  else root.removeAttribute('data-theme');
+  $('theme-select').value = value;
+}
+function storedTheme() {
+  try { return localStorage.getItem(THEME_KEY) || 'system'; } catch { return 'system'; }
+}
+$('theme-select').addEventListener('change', (e) => {
+  try { localStorage.setItem(THEME_KEY, e.target.value); } catch { /* storage unavailable: choice applies for this visit */ }
+  applyTheme(e.target.value);
+});
+$('theme-select').hidden = false;
+applyTheme(storedTheme());
 
 // ---------- Hero editor (drafts only) ----------
 
@@ -312,7 +377,7 @@ const HERO_MAX = { name: 80, eyebrow: 120, role_line: 200, positioning: 400, pro
 const KIND_TEXT = { anchor: 'Section link', resume: 'Resume viewer', external: 'External link' };
 let heroSaved = null;
 
-function el(tag, props = {}, children = []) {
+function heroEl(tag, props = {}, children = []) {
   const n = document.createElement(tag);
   Object.assign(n, props);
   for (const c of children) n.append(c);
@@ -320,30 +385,30 @@ function el(tag, props = {}, children = []) {
 }
 
 function textField(id, label, value, max, multiline = false) {
-  const input = el(multiline ? 'textarea' : 'input', { id, value: multiline ? '' : value, maxLength: max, className: `adm-input${multiline ? ' adm-textarea' : ''}` });
+  const input = heroEl(multiline ? 'textarea' : 'input', { id, value: multiline ? '' : value, maxLength: max, className: `adm-input${multiline ? ' adm-textarea' : ''}` });
   if (multiline) input.value = value;
   if (!multiline) input.type = 'text';
-  return el('div', { className: 'adm-field' }, [el('label', { className: 'adm-label', htmlFor: id, textContent: label }), input]);
+  return heroEl('div', { className: 'adm-field' }, [heroEl('label', { className: 'adm-label', htmlFor: id, textContent: label }), input]);
 }
 
 function renderHeroRows(p) {
   const cta = $('h-cta');
-  cta.replaceChildren(...p.cta_buttons.map((b, i) => el('div', { className: 'adm-row-card' }, [
-    el('p', { className: 'adm-note', textContent: `Button ${i + 1} · ${KIND_TEXT[b.kind] || b.kind}` }),
-    el('div', { className: 'adm-row' }, [
+  cta.replaceChildren(...p.cta_buttons.map((b, i) => heroEl('div', { className: 'adm-row-card' }, [
+    heroEl('p', { className: 'adm-note', textContent: `Button ${i + 1} · ${KIND_TEXT[b.kind] || b.kind}` }),
+    heroEl('div', { className: 'adm-row' }, [
       textField(`h-cta-${i}-label`, 'Label', b.label, 60),
       b.kind === 'resume'
-        ? el('div', { className: 'adm-field' }, [el('span', { className: 'adm-label', textContent: 'Destination (fixed)' }), el('p', { className: 'adm-readonly', textContent: 'Opens the Resume viewer' })])
+        ? heroEl('div', { className: 'adm-field' }, [heroEl('span', { className: 'adm-label', textContent: 'Destination (fixed)' }), heroEl('p', { className: 'adm-readonly', textContent: 'Opens the Resume viewer' })])
         : textField(`h-cta-${i}-href`, b.kind === 'anchor' ? 'Section (starts with #)' : 'Destination (https://)', b.href, 200),
     ]),
   ])));
 
-  $('h-metrics').replaceChildren(...p.metrics_strip.map((m, i) => el('div', { className: 'adm-row' }, [
+  $('h-metrics').replaceChildren(...p.metrics_strip.map((m, i) => heroEl('div', { className: 'adm-row' }, [
     textField(`h-m-${i}-value`, `Metric ${i + 1} value`, m.value, 40),
     textField(`h-m-${i}-label`, `Metric ${i + 1} label`, m.label, 40),
   ])));
 
-  $('h-stats').replaceChildren(...p.stats.map((s, i) => el('div', { className: 'adm-row' }, [
+  $('h-stats').replaceChildren(...p.stats.map((s, i) => heroEl('div', { className: 'adm-row' }, [
     textField(`h-s-${i}-value`, `Counter ${i + 1} number`, s.value, 6),
     textField(`h-s-${i}-suffix`, 'Suffix', s.suffix, 12),
     textField(`h-s-${i}-label`, 'Label', s.label, 60),

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Administrator sign-in · Mohamed Magdoom</title>
+<title>Administrator · Mohamed Magdoom</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,9 +13,19 @@
 </head>
 <body>
 <header class="adm-header">
+  <button type="button" class="adm-menu-btn" id="btn-menu" aria-controls="side-nav" aria-expanded="false" aria-label="Open navigation" hidden>
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+  </button>
   <div class="adm-brand">M<b>.</b>Magdoom <span>Administration</span></div>
+  <input class="adm-search" id="cmd-search" type="search" placeholder="Go to a page…" aria-label="Search dashboard pages" autocomplete="off" hidden>
   <div class="adm-header-right">
     <span class="adm-conn" id="conn-indicator" aria-live="polite">Checking…</span>
+    <select class="adm-select" id="theme-select" aria-label="Colour theme" hidden>
+      <option value="system">Theme: system</option>
+      <option value="light">Theme: light</option>
+      <option value="dark">Theme: dark</option>
+    </select>
+    <button type="button" class="adm-avatar" id="btn-avatar" aria-label="Account" hidden>A</button>
     <button type="button" id="btn-signout" class="adm-btn ghost" hidden>Sign out</button>
   </div>
 </header>
@@ -77,95 +87,398 @@
     <p class="adm-lead" id="denied-msg">This account is not authorised for administration.</p>
     <button class="adm-btn" id="btn-denied-back" type="button">Back to sign-in</button>
   </section>
-
-  <!-- Dashboard foundation -->
-  <section id="view-dashboard" hidden aria-labelledby="dash-title">
-    <nav class="adm-subnav" aria-label="Dashboard sections">
-      <button type="button" class="adm-navbtn on" data-panel="overview" aria-current="page">Overview</button>
-      <button type="button" class="adm-navbtn" data-panel="hero" aria-current="false">Hero</button>
-    </nav>
-
-    <div id="panel-overview">
-    <h1 id="dash-title" class="adm-title">Overview</h1>
-
-    <div class="adm-grid">
-      <article class="adm-card">
-        <h2 class="adm-h2">Account</h2>
-        <dl class="adm-dl">
-          <dt>Signed in as</dt><dd id="acct-email">–</dd>
-          <dt>Administrator</dt><dd>Verified</dd>
-        </dl>
-      </article>
-
-      <article class="adm-card">
-        <h2 class="adm-h2">Password</h2>
-        <form id="form-set-pw" novalidate>
-          <label class="adm-label" for="inp-set-pw">New password</label>
-    <div class="adm-pw">
-      <input class="adm-input" id="inp-set-pw" type="password" autocomplete="new-password" required minlength="12" maxlength="128">
-      <button type="button" class="adm-eye" data-for="inp-set-pw" aria-label="Show password" aria-pressed="false"><svg class="eye-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg></button>
-    </div>
-          <button class="adm-btn" id="btn-set-pw" type="submit">Set password</button>
-        </form>
-        <p class="adm-msg" id="set-pw-msg" role="status" aria-live="polite"></p>
-      </article>
-
-      <article class="adm-card">
-        <h2 class="adm-h2">Database</h2>
-        <p id="db-status" class="adm-status">Checking connection…</p>
-        <p class="adm-note">Read access is enforced by row-level security.</p>
-      </article>
-
-      <article class="adm-card">
-        <h2 class="adm-h2">Saved draft records</h2>
-        <dl class="adm-dl" id="ov-counts"><dt>Loading</dt><dd>…</dd></dl>
-      </article>
-
-      <article class="adm-card">
-        <h2 class="adm-h2">Publishing</h2>
-        <p class="adm-empty">Not yet published. Drafts do not change the live site.</p>
-      </article>
-
-      <article class="adm-card">
-        <h2 class="adm-h2">Analytics</h2>
-        <p class="adm-empty">Not connected. No visitor figures are shown until measured data is available.</p>
-      </article>
-    </div>
-    </div>
-
-    <div id="panel-hero" hidden>
-      <h1 class="adm-title">Hero</h1>
-      <p class="adm-lead">Draft text for the top of the homepage. Saving updates the draft only. The live website changes only after a future publishing step.</p>
-      <p class="adm-msg" id="h-status" role="status" aria-live="polite"></p>
-      <form id="form-hero" class="adm-form" novalidate>
-        <div class="adm-fields">
-          <div class="adm-field"><label class="adm-label" for="h-name">Name</label><input class="adm-input" id="h-name" maxlength="80" required></div>
-          <div class="adm-field"><label class="adm-label" for="h-eyebrow">Eyebrow line</label><input class="adm-input" id="h-eyebrow" maxlength="120" required></div>
-          <div class="adm-field adm-wide"><label class="adm-label" for="h-role">Role line</label><input class="adm-input" id="h-role" maxlength="200" required></div>
-          <div class="adm-field adm-wide"><label class="adm-label" for="h-positioning">Positioning statement</label><textarea class="adm-input adm-textarea" id="h-positioning" rows="3" maxlength="400" required></textarea></div>
-          <div class="adm-field adm-wide"><label class="adm-label" for="h-proof">Proof line</label><textarea class="adm-input adm-textarea" id="h-proof" rows="2" maxlength="400"></textarea></div>
-          <div class="adm-field adm-wide"><label class="adm-label" for="h-cred">Credibility line</label><input class="adm-input" id="h-cred" maxlength="160" required></div>
-          <div class="adm-field adm-wide"><label class="adm-label" for="h-quote">Pull quote</label><textarea class="adm-input adm-textarea" id="h-quote" rows="2" maxlength="300"></textarea></div>
-        </div>
-
-        <h2 class="adm-h2">Buttons</h2>
-        <div id="h-cta" class="adm-stack"></div>
-
-        <h2 class="adm-h2">Metric strip</h2>
-        <div id="h-metrics" class="adm-stack"></div>
-
-        <h2 class="adm-h2">Animated counters</h2>
-        <div id="h-stats" class="adm-stack"></div>
-
-        <div class="adm-actions">
-          <button class="adm-btn" id="h-save" type="submit">Save draft</button>
-          <button class="adm-btn ghost" id="h-discard" type="button">Discard edits</button>
-        </div>
-        <p class="adm-msg" id="h-msg" role="status" aria-live="polite"></p>
-      </form>
-    </div>
-  </section>
 </main>
+
+<!-- Dashboard shell (signed-in administrator only) -->
+<section id="view-dashboard" hidden aria-labelledby="dash-title">
+  <div class="adm-shell">
+    <aside class="adm-side" id="side-nav" aria-label="Dashboard navigation">
+      <p class="adm-side-label">Workspace</p>
+      <ul class="adm-nav">
+        <li><button type="button" class="adm-navbtn on" data-panel="overview" aria-current="page">Overview</button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="content" aria-current="false">Content management</button></li>
+        <li><button type="button" class="adm-navbtn sub" data-panel="hero" aria-current="false">Hero</button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="media" aria-current="false">Media library</button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="resume" aria-current="false">Résumé manager</button></li>
+      </ul>
+      <p class="adm-side-label">Operations</p>
+      <ul class="adm-nav">
+        <li><button type="button" class="adm-navbtn" data-panel="health" aria-current="false">Website health</button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="activity" aria-current="false">Activity history</button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="analytics" aria-current="false">Analytics <span class="adm-tag plan">Planned</span></button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="publishing" aria-current="false">Publishing <span class="adm-tag plan">Planned</span></button></li>
+      </ul>
+      <p class="adm-side-label">Administration</p>
+      <ul class="adm-nav">
+        <li><button type="button" class="adm-navbtn" data-panel="settings" aria-current="false">Settings</button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="account" aria-current="false">Account</button></li>
+      </ul>
+    </aside>
+
+    <div class="adm-content">
+      <!-- Overview -->
+      <div id="panel-overview">
+        <div class="adm-hello">
+          <div>
+            <p class="adm-crumb">Overview</p>
+            <h1 class="adm-title" id="dash-title" tabindex="-1">Good day</h1>
+            <p id="today"></p>
+          </div>
+          <span class="adm-pill" id="sys-status" role="status">Checking website…</span>
+        </div>
+
+        <section class="adm-section">
+          <h2 class="adm-h2">Content</h2>
+          <div class="adm-grid">
+            <article class="adm-card adm-kpi">
+              <span class="adm-kpi-label">Content records</span>
+              <span class="adm-kpi-value" id="k-content-total">…</span>
+              <span class="adm-kpi-note">Hero, roles, achievements, sections and settings</span>
+            </article>
+            <article class="adm-card adm-kpi">
+              <span class="adm-kpi-label">Last content change</span>
+              <span class="adm-kpi-value small" id="k-last-change">…</span>
+              <span class="adm-kpi-note">Saved draft, not published</span>
+            </article>
+            <article class="adm-card">
+              <h3 class="adm-h2">Content health</h3>
+              <dl class="adm-dl" id="ov-counts"><dt>Loading</dt><dd>…</dd></dl>
+            </article>
+          </div>
+        </section>
+
+        <section class="adm-section">
+          <h2 class="adm-h2">Media and résumé</h2>
+          <div class="adm-grid">
+            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Uploaded assets</span><span class="adm-kpi-value" id="k-media-total">…</span><span class="adm-kpi-note">Tracked uploads in the private library</span></article>
+            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Images</span><span class="adm-kpi-value" id="k-media-images">…</span><span class="adm-kpi-note">JPEG, PNG, WebP or AVIF</span></article>
+            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Résumé files</span><span class="adm-kpi-value" id="k-media-resumes">…</span><span class="adm-kpi-note" id="k-draft-note">Draft status not yet loaded</span></article>
+            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Tracked storage</span><span class="adm-kpi-value" id="k-media-size">…</span><span class="adm-kpi-note">Sum of uploads recorded here</span></article>
+            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Most recent upload</span><span class="adm-kpi-value small" id="k-media-last">…</span></article>
+          </div>
+        </section>
+
+        <section class="adm-section">
+          <h2 class="adm-h2">Website</h2>
+          <div class="adm-grid">
+            <article class="adm-card">
+              <div class="adm-check"><span>Public homepage</span><span class="adm-check-state idle" id="k-home">Not checked</span></div>
+              <div class="adm-check"><span>Résumé PDF (live)</span><span class="adm-check-state idle" id="k-resume-live">Not checked</span></div>
+              <div class="adm-check"><span>Social-sharing image</span><span class="adm-check-state idle" id="k-og">Not checked</span></div>
+              <div class="adm-check"><span>Admin route</span><span class="adm-check-state idle" id="k-admin">Not checked</span></div>
+              <div class="adm-check"><span>Database and storage</span><span class="adm-check-state idle" id="k-backend">Not checked</span></div>
+              <p class="adm-note" id="k-health-time">Last check: not run yet.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="adm-section">
+          <h2 class="adm-h2">Publishing and analytics</h2>
+          <div class="adm-grid">
+            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Draft status</span><span class="adm-kpi-value small">Drafts only</span><span class="adm-kpi-note">Saving never changes the live site</span></article>
+            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Published status</span><span class="adm-kpi-value small">Not connected</span><span class="adm-kpi-note">No publishing step exists yet</span></article>
+            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Analytics</span><span class="adm-kpi-value small">Not connected</span><span class="adm-kpi-note">Visitors, sessions, referrals, résumé views and contact clicks are not measured yet</span></article>
+          </div>
+        </section>
+
+        <section class="adm-section">
+          <h2 class="adm-h2">Recent activity and quick actions</h2>
+          <div class="adm-two">
+            <article class="adm-card">
+              <ul class="adm-list" id="ov-activity"><li><span class="adm-item-main">Loading…</span></li></ul>
+              <p class="adm-note"><button type="button" class="adm-linkbtn" data-panel="activity">View full history</button></p>
+            </article>
+            <article class="adm-card">
+              <div class="adm-actions-row" style="flex-direction:column">
+                <button type="button" class="adm-btn" data-panel="hero">Edit hero draft</button>
+                <button type="button" class="adm-btn ghost" data-panel="media">Open media library</button>
+                <button type="button" class="adm-btn ghost" data-panel="resume">Upload a résumé draft</button>
+                <button type="button" class="adm-btn ghost" data-panel="health">Run website checks</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="adm-section">
+          <div class="adm-grid">
+            <article class="adm-card">
+              <h3 class="adm-h2">Account</h3>
+              <dl class="adm-dl">
+                <dt>Signed in as</dt><dd id="acct-email">–</dd>
+                <dt>Administrator</dt><dd>Verified</dd>
+              </dl>
+            </article>
+            <article class="adm-card">
+              <h3 class="adm-h2">Database</h3>
+              <p id="db-status" class="adm-status">Checking connection…</p>
+              <p class="adm-note">Read access is enforced by row-level security.</p>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <!-- Content management -->
+      <div id="panel-content" hidden>
+        <div class="adm-panel-head">
+          <div>
+            <p class="adm-crumb">Content</p>
+            <h1 class="adm-title">Content management</h1>
+            <p class="adm-lead">Drafts only. Saving does not change the live website. Editors marked “Not built yet” are not available.</p>
+          </div>
+        </div>
+        <ul class="adm-list">
+          <li><span class="adm-item-main"><strong>Hero</strong><br>Name, role, positioning, buttons and counters</span><button type="button" class="adm-btn" style="width:auto;margin:0" data-panel="hero">Open editor</button></li>
+          <li><span class="adm-item-main"><strong>Experience</strong><br>Career roles, timeline and bullets</span><span class="adm-tag plan">Not built yet</span></li>
+          <li><span class="adm-item-main"><strong>Achievements</strong><br>Performance and impact figures</span><span class="adm-tag plan">Not built yet</span></li>
+          <li><span class="adm-item-main"><strong>Capabilities and projects</strong></span><span class="adm-tag plan">Not built yet</span></li>
+          <li><span class="adm-item-main"><strong>Contact</strong><br>Phone numbers, email, links and availability</span><span class="adm-tag plan">Not built yet</span></li>
+          <li><span class="adm-item-main"><strong>Footer and search settings</strong><br>Footer text and sharing metadata</span><span class="adm-tag plan">Not built yet</span></li>
+        </ul>
+      </div>
+
+      <!-- Hero editor (existing, unchanged behaviour) -->
+      <div id="panel-hero" hidden>
+        <p class="adm-crumb">Content</p>
+        <h1 class="adm-title">Hero</h1>
+        <p class="adm-lead">Draft text for the top of the homepage. Saving updates the draft only. The live website changes only after a future publishing step.</p>
+        <p class="adm-msg" id="h-status" role="status" aria-live="polite"></p>
+        <form id="form-hero" class="adm-form" novalidate>
+          <div class="adm-fields">
+            <div class="adm-field"><label class="adm-label" for="h-name">Name</label><input class="adm-input" id="h-name" maxlength="80" required></div>
+            <div class="adm-field"><label class="adm-label" for="h-eyebrow">Eyebrow line</label><input class="adm-input" id="h-eyebrow" maxlength="120" required></div>
+            <div class="adm-field adm-wide"><label class="adm-label" for="h-role">Role line</label><input class="adm-input" id="h-role" maxlength="200" required></div>
+            <div class="adm-field adm-wide"><label class="adm-label" for="h-positioning">Positioning statement</label><textarea class="adm-input adm-textarea" id="h-positioning" rows="3" maxlength="400" required></textarea></div>
+            <div class="adm-field adm-wide"><label class="adm-label" for="h-proof">Proof line</label><textarea class="adm-input adm-textarea" id="h-proof" rows="2" maxlength="400"></textarea></div>
+            <div class="adm-field adm-wide"><label class="adm-label" for="h-cred">Credibility line</label><input class="adm-input" id="h-cred" maxlength="160" required></div>
+            <div class="adm-field adm-wide"><label class="adm-label" for="h-quote">Pull quote</label><textarea class="adm-input adm-textarea" id="h-quote" rows="2" maxlength="300"></textarea></div>
+          </div>
+
+          <h2 class="adm-h2">Buttons</h2>
+          <div id="h-cta" class="adm-stack"></div>
+
+          <h2 class="adm-h2">Metric strip</h2>
+          <div id="h-metrics" class="adm-stack"></div>
+
+          <h2 class="adm-h2">Animated counters</h2>
+          <div id="h-stats" class="adm-stack"></div>
+
+          <div class="adm-actions">
+            <button class="adm-btn" id="h-save" type="submit">Save draft</button>
+            <button class="adm-btn ghost" id="h-discard" type="button">Discard edits</button>
+          </div>
+          <p class="adm-msg" id="h-msg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <!-- Media library -->
+      <div id="panel-media" hidden>
+        <p class="adm-crumb">Media</p>
+        <h1 class="adm-title">Media library</h1>
+        <p class="adm-lead">Private images for draft content. Files are stored in a private bucket and shown through short-lived links. Uploads do not change the live website.</p>
+
+        <div class="adm-drop" id="media-drop">
+          <p><strong>Drop an image here</strong></p>
+          <p class="adm-note" style="margin-top:0">JPEG, PNG, WebP or AVIF · up to 10 MB</p>
+          <button type="button" class="adm-btn ghost" id="media-pick" style="width:auto;margin:.4rem 0 0">Choose an image</button>
+          <input class="adm-file-input" id="media-file" type="file" accept="image/jpeg,image/png,image/webp,image/avif" tabindex="-1">
+        </div>
+
+        <div id="media-staged" class="adm-card" hidden style="margin-top:1rem">
+          <div class="adm-two">
+            <div class="adm-detail-preview" id="media-stage-preview"></div>
+            <div>
+              <dl class="adm-dl" id="media-stage-facts"></dl>
+              <div class="adm-progress" id="media-progress" hidden><span id="media-progress-bar"></span></div>
+              <div class="adm-actions" style="margin-top:1rem">
+                <button type="button" class="adm-btn" id="media-upload" style="width:auto">Upload to library</button>
+                <button type="button" class="adm-btn ghost" id="media-cancel" style="width:auto">Cancel</button>
+              </div>
+              <p class="adm-msg" id="media-msg" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="adm-filter-bar">
+          <input class="adm-search" id="media-search" type="search" placeholder="Search by file name" aria-label="Search media by file name" autocomplete="off">
+          <div class="adm-chips" id="media-chips" role="group" aria-label="Filter by file type">
+            <button type="button" class="adm-chip" data-mime="" aria-pressed="true">All</button>
+            <button type="button" class="adm-chip" data-mime="image/jpeg" aria-pressed="false">JPEG</button>
+            <button type="button" class="adm-chip" data-mime="image/png" aria-pressed="false">PNG</button>
+            <button type="button" class="adm-chip" data-mime="image/webp" aria-pressed="false">WebP</button>
+            <button type="button" class="adm-chip" data-mime="image/avif" aria-pressed="false">AVIF</button>
+          </div>
+        </div>
+        <p class="adm-msg" id="media-list-msg" role="status" aria-live="polite"></p>
+        <div class="adm-tiles" id="media-grid"></div>
+
+        <div class="adm-card adm-detail" id="media-detail" hidden>
+          <div class="adm-detail-preview" id="media-detail-preview"></div>
+          <div>
+            <h2 class="adm-h2" id="media-detail-name">Asset</h2>
+            <dl class="adm-dl" id="media-detail-facts"></dl>
+            <label class="adm-label" for="media-alt" style="margin-top:1rem">Alternative text</label>
+            <input class="adm-input" id="media-alt" maxlength="200" autocomplete="off">
+            <div class="adm-actions">
+              <button type="button" class="adm-btn" id="media-alt-save" style="width:auto">Save description</button>
+              <button type="button" class="adm-btn ghost" id="media-copy" style="width:auto">Copy private path</button>
+              <button type="button" class="adm-btn danger" id="media-delete" style="width:auto">Delete asset</button>
+            </div>
+            <p class="adm-msg" id="media-detail-msg" role="status" aria-live="polite"></p>
+            <div class="adm-confirm" id="media-confirm" hidden>
+              <p>Delete this file permanently? It is removed from storage and cannot be restored. The live website is not affected.</p>
+              <div class="adm-actions">
+                <button type="button" class="adm-btn danger" id="media-confirm-yes" style="width:auto">Yes, delete</button>
+                <button type="button" class="adm-btn ghost" id="media-confirm-no" style="width:auto">Keep it</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Résumé manager -->
+      <div id="panel-resume" hidden>
+        <p class="adm-crumb">Media</p>
+        <h1 class="adm-title">Résumé manager</h1>
+        <p class="adm-lead">The live résumé is the file the website links to. A draft uploaded here is stored privately and does not replace the live file. Replacing the live file is a separate, approved publishing step.</p>
+
+        <div class="adm-two">
+          <article class="adm-card">
+            <div class="adm-check" style="border:0;padding-top:0"><h2 class="adm-h2" style="margin:0">Live on the website</h2><span class="adm-badge live">Live</span></div>
+            <dl class="adm-dl">
+              <dt>File</dt><dd>Resume_Mohamed_Magdoom.pdf</dd>
+              <dt>Public link</dt><dd><a href="/Resume/Resume_Mohamed_Magdoom.pdf" target="_blank" rel="noopener">/Resume/Resume_Mohamed_Magdoom.pdf</a></dd>
+              <dt>Availability</dt><dd id="live-status">Not checked yet</dd>
+              <dt>Size</dt><dd id="live-size">–</dd>
+            </dl>
+            <iframe class="adm-pdf-frame" id="live-frame" title="Live résumé preview" loading="lazy"></iframe>
+          </article>
+
+          <article class="adm-card">
+            <div class="adm-check" style="border:0;padding-top:0"><h2 class="adm-h2" style="margin:0">Draft (not live)</h2><span class="adm-badge draft">Draft</span></div>
+            <div id="draft-empty" class="adm-empty">No draft résumé yet. Upload a PDF to stage a replacement.</div>
+            <dl class="adm-dl" id="draft-facts" hidden>
+              <dt>File</dt><dd id="draft-name">–</dd>
+              <dt>Size</dt><dd id="draft-size">–</dd>
+              <dt>Uploaded</dt><dd id="draft-date">–</dd>
+            </dl>
+            <div class="adm-actions" id="draft-actions" style="margin-top:1rem">
+              <button type="button" class="adm-btn ghost" id="draft-download" style="width:auto" hidden>Download draft</button>
+              <button type="button" class="adm-btn" id="resume-pick" style="width:auto">Upload replacement draft</button>
+              <input class="adm-file-input" id="resume-file" type="file" accept="application/pdf" tabindex="-1">
+            </div>
+            <div class="adm-progress" id="resume-progress" hidden><span id="resume-progress-bar"></span></div>
+            <p class="adm-msg" id="resume-msg" role="status" aria-live="polite"></p>
+            <div class="adm-confirm" id="resume-confirm" hidden>
+              <p>Replace the draft résumé? The current draft becomes an archived version. The live website is not affected.</p>
+              <div class="adm-actions">
+                <button type="button" class="adm-btn" id="resume-confirm-yes" style="width:auto">Replace draft</button>
+                <button type="button" class="adm-btn ghost" id="resume-confirm-no" style="width:auto">Keep current draft</button>
+              </div>
+            </div>
+            <iframe class="adm-pdf-frame" id="draft-frame" title="Draft résumé preview" hidden></iframe>
+          </article>
+        </div>
+
+        <section class="adm-section">
+          <h2 class="adm-h2">Version history</h2>
+          <ul class="adm-list" id="resume-history"><li><span class="adm-item-main">Loading…</span></li></ul>
+        </section>
+      </div>
+
+      <!-- Website health -->
+      <div id="panel-health" hidden>
+        <p class="adm-crumb">Operations</p>
+        <h1 class="adm-title">Website health</h1>
+        <p class="adm-lead">Checks run from this browser when you press the button. A status is shown only after a successful check.</p>
+        <div class="adm-actions-row" style="margin-bottom:1rem"><button type="button" class="adm-btn" id="btn-checks" style="width:auto">Run checks now</button></div>
+        <article class="adm-card">
+          <div id="health-list"></div>
+          <p class="adm-note" id="health-time">Not run yet.</p>
+        </article>
+      </div>
+
+      <!-- Activity history -->
+      <div id="panel-activity" hidden>
+        <p class="adm-crumb">Operations</p>
+        <h1 class="adm-title">Activity history</h1>
+        <p class="adm-lead">Recent changes recorded in the database. Values are not shown, only what changed and when.</p>
+        <div class="adm-actions-row" style="margin-bottom:1rem"><button type="button" class="adm-btn ghost" id="btn-activity" style="width:auto">Refresh</button></div>
+        <p class="adm-msg" id="activity-msg" role="status" aria-live="polite"></p>
+        <article class="adm-card">
+          <ul class="adm-list" id="activity-list"></ul>
+        </article>
+      </div>
+
+      <!-- Analytics (not connected) -->
+      <div id="panel-analytics" hidden>
+        <p class="adm-crumb">Operations</p>
+        <h1 class="adm-title">Analytics</h1>
+        <article class="adm-card">
+          <p class="adm-empty"><strong>Not connected.</strong> No visitor figures are shown until measured data is available.</p>
+          <ul class="adm-list" style="margin-top:1rem">
+            <li><span class="adm-item-main">Visitors</span><span class="adm-item-note">Not connected</span></li>
+            <li><span class="adm-item-main">Sessions</span><span class="adm-item-note">Not connected</span></li>
+            <li><span class="adm-item-main">Referral sources</span><span class="adm-item-note">Not connected</span></li>
+            <li><span class="adm-item-main">Résumé views</span><span class="adm-item-note">Not connected</span></li>
+            <li><span class="adm-item-main">Contact-link clicks</span><span class="adm-item-note">Not connected</span></li>
+          </ul>
+        </article>
+      </div>
+
+      <!-- Publishing (not connected) -->
+      <div id="panel-publishing" hidden>
+        <p class="adm-crumb">Operations</p>
+        <h1 class="adm-title">Publishing</h1>
+        <article class="adm-card">
+          <p class="adm-empty"><strong>Not connected.</strong> There is no publishing step yet. Drafts do not change the live website.</p>
+        </article>
+      </div>
+
+      <!-- Settings -->
+      <div id="panel-settings" hidden>
+        <p class="adm-crumb">Administration</p>
+        <h1 class="adm-title">Settings</h1>
+        <div class="adm-grid">
+          <article class="adm-card">
+            <h2 class="adm-h2">Appearance</h2>
+            <p class="adm-empty">Choose light, dark or the system setting from the Theme control in the header. The choice is remembered on this device only.</p>
+          </article>
+          <article class="adm-card">
+            <h2 class="adm-h2">Session</h2>
+            <p class="adm-empty">Sign out of the administrator dashboard on this device.</p>
+            <button type="button" class="adm-btn ghost" id="btn-settings-signout" style="margin-top:1rem">Sign out</button>
+          </article>
+        </div>
+        <p class="adm-note">No other settings are available yet.</p>
+      </div>
+
+      <!-- Account -->
+      <div id="panel-account" hidden>
+        <p class="adm-crumb">Administration</p>
+        <h1 class="adm-title">Account</h1>
+        <div class="adm-grid">
+          <article class="adm-card">
+            <h2 class="adm-h2">Signed in</h2>
+            <dl class="adm-dl"><dt>Email</dt><dd id="acct-email-full">–</dd><dt>Role</dt><dd>Administrator (verified)</dd></dl>
+          </article>
+          <article class="adm-card">
+            <h2 class="adm-h2">Password</h2>
+            <form id="form-set-pw" novalidate>
+              <label class="adm-label" for="inp-set-pw">New password</label>
+              <div class="adm-pw">
+                <input class="adm-input" id="inp-set-pw" type="password" autocomplete="new-password" required minlength="12" maxlength="128">
+                <button type="button" class="adm-eye" data-for="inp-set-pw" aria-label="Show password" aria-pressed="false"><svg class="eye-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg></button>
+              </div>
+              <button class="adm-btn" id="btn-set-pw" type="submit">Set password</button>
+            </form>
+            <p class="adm-msg" id="set-pw-msg" role="status" aria-live="polite"></p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="adm-scrim" id="scrim" hidden></div>
+</section>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script type="module" src="admin.js"></script>
