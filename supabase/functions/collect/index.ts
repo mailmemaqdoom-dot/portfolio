@@ -82,9 +82,11 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
   if (req.method !== 'POST') return json(405, { error: 'method not allowed' });
 
-  // Browsers send Origin on beacons. Requests from any other website are refused.
+  // Browsers send Origin on these beacons, so a request from another website, or one with no
+  // Origin, is refused. This stops other sites' scripts. It is not a security control on its
+  // own: a non-browser client can set any Origin, so the limits below still apply to it.
   const origin = req.headers.get('origin');
-  if (origin && origin !== ALLOWED_ORIGIN) return new Response(null, { status: 403, headers: cors });
+  if (origin !== ALLOWED_ORIGIN) return new Response(null, { status: 403, headers: cors });
 
   const ua = req.headers.get('user-agent') ?? '';
   if (!ua || BOT_RE.test(ua)) return new Response(null, { status: 204, headers: cors });

@@ -59,6 +59,8 @@ function currentRange() {
 
 export async function load() {
   const { from, to } = currentRange();
+  // Drop the previous report first, so an export cannot download an older range while this one loads.
+  report = null;
   setMsg($('an-msg'), 'Loading…');
   const { data, error } = await sb.rpc('analytics_summary', { p_from: from, p_to: to });
   if (error) {
@@ -148,7 +150,7 @@ function render(r) {
 
   $('an-kpis').replaceChildren(
     kpi('Page views', String(t.page_views), pct(t.page_views, p.page_views)),
-    kpi('Visitors (counted per day)', String(t.visitors), pct(t.visitors, p.visitors)),
+    kpi('Daily visitors, summed', String(t.visitors), pct(t.visitors, p.visitors)),
     kpi('Clicks on tracked links', String(t.clicks), pct(t.clicks, p.clicks)),
     kpi('Résumé downloads', String(downloads), 'Download links clicked'),
     kpi('Contact clicks', String(contact), 'WhatsApp, LinkedIn, email and phone'),
@@ -185,7 +187,7 @@ function render(r) {
   columnChart($('an-hour'), hours, hPeak);
 
   $('an-busy').textContent = [
-    weekdays[wPeak].value ? `Busiest weekday: ${WEEKDAYS[wPeak]}.` : 'No weekday pattern yet.',
+    weekdays[wPeak].value ? `Busiest weekday by total page views: ${WEEKDAYS[wPeak]}. Short ranges contain some weekdays more often than others.` : 'No weekday pattern yet.',
     hours[hPeak].value ? `Peak hour: ${hours[hPeak].label}.` : '',
   ].join(' ');
 
@@ -225,8 +227,16 @@ function exportCsv() {
     setMsg($('an-msg'), 'Load a range with data before exporting.', 'err');
     return;
   }
-  const rows = [['date_utc', 'page_views', 'visitors_per_day', 'clicks']];
-  for (const d of report.daily || []) rows.push([d.d, d.views, d.visitors, d.clicks]);
+  // Each row is one UTC day. daily_visitors counts visitors per day, so it is not unique visitors.
+  const rows = [['date_utc', 'page_views', 'daily_visitors', 'clicks']];
+  // Every day in the selected range appears, including days with no activity (zeros), as in the chart.
+  const byDay = new Map((report.daily || []).map((d) => [d.d, d]));
+  const total = daysBetween(report.range.from, report.range.to);
+  for (let i = 0; i < total; i++) {
+    const key = utcDay(new Date(new Date(report.range.from + 'T00:00:00Z').getTime() + i * 86400000));
+    const d = byDay.get(key);
+    rows.push([key, d ? d.views : 0, d ? d.visitors : 0, d ? d.clicks : 0]);
+  }
   const csv = rows.map((r) => r.map((v) => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);

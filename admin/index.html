@@ -445,7 +445,7 @@
 
         <div id="an-body" hidden>
           <section class="adm-section">
-            <h2 class="adm-h2">Visitors</h2>
+            <h2 class="adm-h2">Page views and visitors</h2>
             <div class="adm-grid" id="an-kpis"></div>
             <p class="adm-note" id="an-compare"></p>
           </section>
@@ -497,6 +497,20 @@
               <article class="adm-card"><h3 class="adm-h2">Browser</h3><div id="an-browsers"></div></article>
               <article class="adm-card"><h3 class="adm-h2">Operating system</h3><div id="an-os"></div></article>
             </div>
+          </section>
+
+          <section class="adm-section">
+            <h2 class="adm-h2">How these numbers are counted</h2>
+            <article class="adm-card">
+              <dl class="adm-dl">
+                <dt>Page views</dt><dd>Each page load recorded in the range (duplicates within 30 seconds are dropped).</dd>
+                <dt>Daily visitors</dt><dd>Distinct visitor markers for one UTC day. The marker changes every day.</dd>
+                <dt>Daily visitors, summed</dt><dd>Daily visitor counts added together across the range. One person on two days is counted twice. This is not a unique-visitor figure.</dd>
+                <dt>Unique visitors</dt><dd>Not reported. Markers change daily, so they cannot be merged across days.</dd>
+                <dt>Sessions</dt><dd>Not reported. No session identifier is stored.</dd>
+                <dt>Peak day</dt><dd>The UTC day with the most page views in the range.</dd>
+              </dl>
+            </article>
           </section>
 
           <section class="adm-section">
