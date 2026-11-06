@@ -588,6 +588,16 @@ async function loadHero() {
   heroSaved = heroToPayload(data);
   fillHero(heroSaved);
   updateHeroStatus();
+  updateHeroCompleteness(heroSaved);
+}
+
+// Completeness counts only: how many fields of the saved draft are filled. No percentage is invented.
+const HERO_REQUIRED = ['name', 'eyebrow', 'role_line', 'positioning', 'credibility_line'];
+const HERO_OPTIONAL = ['proof_line', 'quote'];
+function updateHeroCompleteness(p) {
+  const filled = (keys) => keys.filter((k) => (p[k] ?? '').trim() !== '').length;
+  $('hc-required').textContent = `${filled(HERO_REQUIRED)} of ${HERO_REQUIRED.length}`;
+  $('hc-optional').textContent = `${filled(HERO_OPTIONAL)} of ${HERO_OPTIONAL.length}`;
 }
 
 function saveErrorText(error) {
@@ -617,6 +627,7 @@ $('form-hero').addEventListener('submit', async (e) => {
   }
   heroSaved = heroToPayload(data);
   fillHero(heroSaved);
+  updateHeroCompleteness(heroSaved);
   msg($('h-msg'), 'Draft saved. The live website has not changed.', 'ok');
   updateHeroStatus();
 });

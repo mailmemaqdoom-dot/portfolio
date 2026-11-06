@@ -65,8 +65,59 @@ export async function load() {
   await signThumbs();
   if (selected) selected = assets.find((a) => a.id === selected.id) || null;
   renderGrid();
+  drawUploadCharts();
   if (selected) showDetail(selected);
   else $('media-detail').hidden = true;
+}
+
+// Upload activity, built only from rows recorded in this library. No figures are estimated.
+function drawUploadCharts() {
+  const now = new Date();
+  const months = [];
+  for (let i = 11; i >= 0; i--) {
+    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
+    months.push({ key: d.toISOString().slice(0, 7), label: d.toLocaleString(undefined, { month: 'short', timeZone: 'UTC' }) });
+  }
+  const counts = new Map(months.map((m) => [m.key, 0]));
+  let older = 0;
+  for (const a of assets) {
+    const key = new Date(a.created_at).toISOString().slice(0, 7);
+    if (counts.has(key)) counts.set(key, counts.get(key) + 1);
+    else older += 1;
+  }
+  const monthMax = Math.max(1, ...counts.values());
+  $('mv-month').replaceChildren(...months.map((m) => {
+    const value = counts.get(m.key);
+    return el('div', { className: 'adm-col', title: `${m.label}: ${value}` }, [
+      el('span', { className: 'adm-col-bar', style: `height:${Math.round((value / monthMax) * 100)}%` }),
+      el('span', { className: 'adm-col-label', textContent: m.label.slice(0, 3) }),
+    ]);
+  }));
+  const inWindow = [...counts.values()].reduce((s, v) => s + v, 0);
+  $('mv-month-note').textContent = assets.length
+    ? `${inWindow} upload${inWindow === 1 ? '' : 's'} in the last 12 months.${older ? ` ${older} earlier upload${older === 1 ? '' : 's'} not shown.` : ''}`
+    : 'No uploads recorded yet.';
+
+  const byFormat = new Map();
+  for (const a of assets) {
+    const cur = byFormat.get(a.mime_type) ?? { count: 0, bytes: 0 };
+    cur.count += 1;
+    cur.bytes += Number(a.size_bytes);
+    byFormat.set(a.mime_type, cur);
+  }
+  const rows = [...byFormat].sort((x, y) => y[1].bytes - x[1].bytes);
+  if (!rows.length) {
+    $('mv-format').replaceChildren(el('p', { className: 'adm-empty', textContent: 'No uploads recorded yet.' }));
+    $('mv-format-note').textContent = '';
+    return;
+  }
+  const top = rows[0][1].bytes || 1;
+  $('mv-format').replaceChildren(...rows.map(([mime, v]) => el('div', { className: 'adm-hbar' }, [
+    el('span', { className: 'adm-hbar-label', textContent: `${MIME_LABEL[mime] || mime} · ${v.count} file${v.count === 1 ? '' : 's'}` }),
+    el('span', { className: 'adm-track' }, [el('span', { className: 'adm-fill', style: `width:${Math.round((v.bytes / top) * 100)}%` })]),
+    el('span', { className: 'adm-hbar-value', textContent: fmtBytes(v.bytes) }),
+  ])));
+  $('mv-format-note').textContent = 'Bar length compares stored size with the largest format.';
 }
 
 async function signThumbs() {

@@ -86,8 +86,20 @@ function pct(cur, prev) {
   return `${sign}${change.toFixed(0)}% vs previous period`;
 }
 
-function kpi(label, value, note) {
+// Decorative icons for the KPI cards. The figures come from the report, not from these icons.
+const KPI_ICONS = {
+  views: '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',
+  visitors: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  clicks: '<path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/>',
+  download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+  contact: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.8 12.8 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.8 12.8 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+};
+
+function kpi(label, value, note, icon) {
+  const iconNode = el('span', { className: 'adm-kpi-icon', innerHTML: `<svg viewBox="0 0 24 24">${KPI_ICONS[icon] ?? ''}</svg>` });
+  iconNode.setAttribute('aria-hidden', 'true');
   return el('article', { className: 'adm-card adm-kpi' }, [
+    iconNode,
     el('span', { className: 'adm-kpi-label', textContent: label }),
     el('span', { className: 'adm-kpi-value', textContent: value }),
     el('span', { className: 'adm-kpi-note', textContent: note }),
@@ -149,11 +161,11 @@ function render(r) {
   const downloads = (r.clicks || []).find((c) => c.target === 'resume_download')?.clicks ?? 0;
 
   $('an-kpis').replaceChildren(
-    kpi('Page views', String(t.page_views), pct(t.page_views, p.page_views)),
-    kpi('Daily visitors, summed', String(t.visitors), pct(t.visitors, p.visitors)),
-    kpi('Clicks on tracked links', String(t.clicks), pct(t.clicks, p.clicks)),
-    kpi('Résumé downloads', String(downloads), 'Download links clicked'),
-    kpi('Contact clicks', String(contact), 'WhatsApp, LinkedIn, email and phone'),
+    kpi('Page views', String(t.page_views), pct(t.page_views, p.page_views), 'views'),
+    kpi('Daily visitors, summed', String(t.visitors), pct(t.visitors, p.visitors), 'visitors'),
+    kpi('Clicks on tracked links', String(t.clicks), pct(t.clicks, p.clicks), 'clicks'),
+    kpi('Résumé downloads', String(downloads), 'Download links clicked', 'download'),
+    kpi('Contact clicks', String(contact), 'WhatsApp, LinkedIn, email and phone', 'contact'),
   );
 
   // One bar per day, including zero days, so gaps are visible.

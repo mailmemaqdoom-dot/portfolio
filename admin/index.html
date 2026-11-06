@@ -264,7 +264,15 @@
             <p class="adm-lead">Drafts only. Saving does not change the live website. Editors marked “Not built yet” are not available.</p>
           </div>
         </div>
-        <ul class="adm-list">
+                <article class="adm-card" style="margin-bottom:1rem">
+          <h2 class="adm-h2">Hero completeness</h2>
+          <dl class="adm-dl">
+            <dt>Required fields</dt><dd id="hc-required">Not loaded</dd>
+            <dt>Optional fields</dt><dd id="hc-optional">Not loaded</dd>
+          </dl>
+          <p class="adm-note">Required: name, eyebrow line, role line, positioning statement, credibility line. Optional: proof line, pull quote. Counted from the saved draft, not unsaved edits. Other editors are not built yet, so they are not measured.</p>
+        </article>
+<ul class="adm-list">
           <li><span class="adm-item-main"><strong>Hero</strong><br>Name, role, positioning, buttons and counters</span><button type="button" class="adm-btn" style="width:auto;margin:0" data-panel="hero">Open editor</button></li>
           <li><span class="adm-item-main"><strong>Experience</strong><br>Career roles, timeline and bullets</span><span class="adm-tag plan">Not built yet</span></li>
           <li><span class="adm-item-main"><strong>Achievements</strong><br>Performance and impact figures</span><span class="adm-tag plan">Not built yet</span></li>
@@ -349,6 +357,21 @@
         <p class="adm-msg" id="media-list-msg" role="status" aria-live="polite"></p>
         <div class="adm-tiles" id="media-grid"></div>
 
+        <section class="adm-section">
+          <h2 class="adm-h2">Upload activity</h2>
+          <div class="adm-two">
+            <article class="adm-card">
+              <h3 class="adm-h2">Uploads per month (last 12 months)</h3>
+              <div class="adm-col-chart short" id="mv-month" role="img" aria-label="Uploads per month recorded in this library"></div>
+              <p class="adm-note" id="mv-month-note"></p>
+            </article>
+            <article class="adm-card">
+              <h3 class="adm-h2">Stored size by format</h3>
+              <div id="mv-format"></div>
+              <p class="adm-note" id="mv-format-note"></p>
+            </article>
+          </div>
+        </section>
         <div class="adm-card adm-detail" id="media-detail" hidden>
           <div class="adm-detail-preview" id="media-detail-preview"></div>
           <div>
