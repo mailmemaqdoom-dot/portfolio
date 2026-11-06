@@ -2,6 +2,7 @@ import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from './config.js';
 import * as ops from './ops.js';
 import * as media from './media.js';
 import * as resume from './resume.js';
+import * as insights from './insights.js';
 import { $ } from './util.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -16,6 +17,7 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, 
 ops.init(sb);
 media.init(sb);
 resume.init(sb);
+insights.init(sb);
 
 let routing = false;
 let recoveryMode = false;
@@ -314,6 +316,7 @@ function setPanel(name) {
   if (name === 'resume') resume.load();
   if (name === 'health') ops.runChecks();
   if (name === 'activity') ops.loadActivity();
+  if (name === 'analytics') insights.load();
 }
 
 // Any element with data-panel navigates (sidebar, overview shortcuts, content list).

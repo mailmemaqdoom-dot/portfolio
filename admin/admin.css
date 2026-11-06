@@ -348,6 +348,28 @@ body {
 .adm-badge.live { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 40%, transparent); }
 .adm-badge.draft { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
 
+/* ---------- Analytics charts (plain CSS, theme-aware) ---------- */
+.adm-col-chart {
+  display: flex; align-items: stretch; gap: 2px; height: 200px; padding: .5rem 0 1.6rem;
+  border-bottom: 1px solid var(--border); position: relative;
+}
+.adm-col-chart.short { height: 160px; }
+.adm-col { flex: 1 1 0; min-width: 3px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; position: relative; }
+.adm-col-bar {
+  display: block; width: 100%; min-height: 2px; border-radius: 3px 3px 0 0;
+  background: var(--gold-dim); border-top: 2px solid var(--gold);
+}
+.adm-col.peak .adm-col-bar { background: var(--gold); }
+.adm-col-label {
+  position: absolute; bottom: -1.5rem; left: 50%; transform: translateX(-50%);
+  font-family: 'DM Mono', monospace; font-size: .6rem; color: var(--tx-3); white-space: nowrap;
+}
+.adm-hbar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(60px, 40%) auto; gap: .6rem; align-items: center; margin-bottom: .6rem; font-size: .88rem; }
+.adm-hbar-label { overflow-wrap: anywhere; min-width: 0; }
+.adm-hbar-value { font-family: 'DM Mono', monospace; color: var(--tx-2); font-size: .8rem; }
+.adm-track { height: 8px; border-radius: 999px; background: var(--card-h); overflow: hidden; }
+.adm-fill { display: block; height: 100%; background: var(--gold); border-radius: 999px; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1023px) {
   .adm-menu-btn { display: inline-flex; }

@@ -105,7 +105,7 @@
       <ul class="adm-nav">
         <li><button type="button" class="adm-navbtn" data-panel="health" aria-current="false">Website health</button></li>
         <li><button type="button" class="adm-navbtn" data-panel="activity" aria-current="false">Activity history</button></li>
-        <li><button type="button" class="adm-navbtn" data-panel="analytics" aria-current="false">Analytics <span class="adm-tag plan">Planned</span></button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="analytics" aria-current="false">Analytics</button></li>
         <li><button type="button" class="adm-navbtn" data-panel="publishing" aria-current="false">Publishing <span class="adm-tag plan">Planned</span></button></li>
       </ul>
       <p class="adm-side-label">Administration</p>
@@ -409,20 +409,98 @@
         </article>
       </div>
 
-      <!-- Analytics (not connected) -->
+      <!-- Analytics (first-party, privacy-limited) -->
       <div id="panel-analytics" hidden>
         <p class="adm-crumb">Operations</p>
         <h1 class="adm-title">Analytics</h1>
-        <article class="adm-card">
-          <p class="adm-empty"><strong>Not connected.</strong> No visitor figures are shown until measured data is available.</p>
-          <ul class="adm-list" style="margin-top:1rem">
-            <li><span class="adm-item-main">Visitors</span><span class="adm-item-note">Not connected</span></li>
-            <li><span class="adm-item-main">Sessions</span><span class="adm-item-note">Not connected</span></li>
-            <li><span class="adm-item-main">Referral sources</span><span class="adm-item-note">Not connected</span></li>
-            <li><span class="adm-item-main">Résumé views</span><span class="adm-item-note">Not connected</span></li>
-            <li><span class="adm-item-main">Contact-link clicks</span><span class="adm-item-note">Not connected</span></li>
-          </ul>
-        </article>
+        <p class="adm-lead">Counts from this website, collected without cookies and without storing IP addresses or personal identity. Dates and hours are UTC. Figures start from the day collection began.</p>
+        <div class="adm-filter-bar">
+          <div class="adm-chips" id="an-range" role="group" aria-label="Date range">
+            <button type="button" class="adm-chip" data-range="7" aria-pressed="false">7 days</button>
+            <button type="button" class="adm-chip" data-range="30" aria-pressed="true">30 days</button>
+            <button type="button" class="adm-chip" data-range="90" aria-pressed="false">90 days</button>
+            <button type="button" class="adm-chip" data-range="ytd" aria-pressed="false">Year to date</button>
+            <button type="button" class="adm-chip" data-range="custom" aria-pressed="false">Custom</button>
+          </div>
+          <button type="button" class="adm-btn ghost" id="an-export" style="width:auto;margin:0">Export CSV</button>
+        </div>
+        <div class="adm-filter-bar" id="an-custom" hidden>
+          <label class="adm-label" for="an-from" style="margin:0">From (UTC)</label>
+          <input class="adm-input" id="an-from" type="date" style="width:auto;margin:0">
+          <label class="adm-label" for="an-to" style="margin:0">To (UTC)</label>
+          <input class="adm-input" id="an-to" type="date" style="width:auto;margin:0">
+          <button type="button" class="adm-btn" id="an-apply" style="width:auto;margin:0">Apply</button>
+        </div>
+        <p class="adm-msg" id="an-msg" role="status" aria-live="polite"></p>
+        <p class="adm-note" id="an-since"></p>
+
+        <article class="adm-card" id="an-empty" hidden></article>
+
+        <div id="an-body" hidden>
+          <section class="adm-section">
+            <h2 class="adm-h2">Visitors</h2>
+            <div class="adm-grid" id="an-kpis"></div>
+            <p class="adm-note" id="an-compare"></p>
+          </section>
+
+          <section class="adm-section">
+            <h2 class="adm-h2">Daily page views</h2>
+            <article class="adm-card">
+              <div class="adm-col-chart" id="an-daily" role="img" aria-label="Daily page views for the selected range"></div>
+              <p class="adm-note" id="an-peak-day"></p>
+            </article>
+          </section>
+
+          <section class="adm-section">
+            <h2 class="adm-h2">Busiest days and hours</h2>
+            <div class="adm-two">
+              <article class="adm-card">
+                <h3 class="adm-h2">Page views by weekday</h3>
+                <div class="adm-col-chart short" id="an-weekday" role="img" aria-label="Page views by weekday"></div>
+              </article>
+              <article class="adm-card">
+                <h3 class="adm-h2">Page views by hour (UTC)</h3>
+                <div class="adm-col-chart short" id="an-hour" role="img" aria-label="Page views by hour in UTC"></div>
+                <p class="adm-note" id="an-busy"></p>
+              </article>
+            </div>
+          </section>
+
+          <section class="adm-section">
+            <h2 class="adm-h2">Traffic sources</h2>
+            <div class="adm-grid">
+              <article class="adm-card"><h3 class="adm-h2">Channels</h3><div id="an-channels"></div></article>
+              <article class="adm-card"><h3 class="adm-h2">Top referring websites</h3><div id="an-referrers"></div></article>
+              <article class="adm-card"><h3 class="adm-h2">Campaign links (UTM)</h3><div id="an-campaigns"></div></article>
+            </div>
+          </section>
+
+          <section class="adm-section">
+            <h2 class="adm-h2">Content engagement</h2>
+            <div class="adm-two">
+              <article class="adm-card"><h3 class="adm-h2">Most viewed pages</h3><div id="an-pages"></div></article>
+              <article class="adm-card"><h3 class="adm-h2">Clicks on tracked links</h3><div id="an-clicks"></div></article>
+            </div>
+          </section>
+
+          <section class="adm-section">
+            <h2 class="adm-h2">Devices and browsers</h2>
+            <div class="adm-grid">
+              <article class="adm-card"><h3 class="adm-h2">Device type</h3><div id="an-devices"></div></article>
+              <article class="adm-card"><h3 class="adm-h2">Browser</h3><div id="an-browsers"></div></article>
+              <article class="adm-card"><h3 class="adm-h2">Operating system</h3><div id="an-os"></div></article>
+            </div>
+          </section>
+
+          <section class="adm-section">
+            <h2 class="adm-h2">Not measured</h2>
+            <div class="adm-grid">
+              <article class="adm-card"><h3 class="adm-h2">Countries and cities</h3><p class="adm-empty">Not collected. This setup does not receive a visitor country, so no map is shown.</p></article>
+              <article class="adm-card"><h3 class="adm-h2">Returning visitors</h3><p class="adm-empty">Not measured. Without cookies, visits cannot be linked across days.</p></article>
+              <article class="adm-card"><h3 class="adm-h2">Session length and bounce rate</h3><p class="adm-empty">Not measured. Only page loads are counted, not time on page.</p></article>
+            </div>
+          </section>
+        </div>
       </div>
 
       <!-- Publishing (not connected) -->
