@@ -27,13 +27,26 @@
   <input class="adm-search" id="cmd-search" type="search" placeholder="Go to a page…" aria-label="Search dashboard pages" autocomplete="off" hidden>
   <div class="adm-header-right">
     <span class="adm-conn" id="conn-indicator" aria-live="polite">Checking…</span>
-    <select class="adm-select" id="theme-select" aria-label="Colour theme" hidden>
-      <option value="system">Theme: system</option>
-      <option value="light">Theme: light</option>
-      <option value="dark">Theme: dark</option>
-    </select>
-    <button type="button" class="adm-avatar" id="btn-avatar" aria-label="Account" hidden>A</button>
-    <button type="button" id="btn-signout" class="adm-btn ghost" hidden>Sign out</button>
+    <div class="adm-theme" id="thm" role="button" tabindex="0" aria-label="Switch to light theme"></div>
+    <div class="adm-acct" id="acct-wrap" hidden>
+      <button type="button" class="adm-avatar" id="btn-avatar" aria-haspopup="menu" aria-expanded="false" aria-controls="acct-menu" aria-label="Account menu">A</button>
+      <div class="adm-acct-menu" id="acct-menu" role="menu" hidden>
+        <div class="adm-acct-info">
+          <strong id="menu-email">–</strong>
+          <span>Administrator · verified</span>
+        </div>
+        <button type="button" class="adm-acct-item" role="menuitem" id="menu-account">Account settings</button>
+        <div class="adm-acct-sep" role="separator"></div>
+        <button type="button" class="adm-acct-item danger" role="menuitem" id="btn-signout">Sign out</button>
+        <div class="adm-acct-confirm" id="signout-confirm" hidden>
+          <p>Sign out of the administrator dashboard on this device?</p>
+          <div class="adm-actions">
+            <button type="button" class="adm-btn danger" id="signout-yes" style="width:auto;margin:0">Sign out</button>
+            <button type="button" class="adm-btn ghost" id="signout-no" style="width:auto;margin:0">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -102,24 +115,27 @@
     <aside class="adm-side" id="side-nav" aria-label="Dashboard navigation">
       <p class="adm-side-label">Workspace</p>
       <ul class="adm-nav">
-        <li><button type="button" class="adm-navbtn on" data-panel="overview" aria-current="page">Overview</button></li>
-        <li><button type="button" class="adm-navbtn" data-panel="content" aria-current="false">Content management</button></li>
-        <li><button type="button" class="adm-navbtn sub" data-panel="hero" aria-current="false">Hero</button></li>
-        <li><button type="button" class="adm-navbtn" data-panel="media" aria-current="false">Media library</button></li>
-        <li><button type="button" class="adm-navbtn" data-panel="resume" aria-current="false">Résumé manager</button></li>
+        <li><button type="button" class="adm-navbtn on" data-panel="overview" data-icon="overview" aria-current="page" title="Overview"><span class="adm-navlabel">Overview</span></button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="content" data-icon="content" aria-current="false" title="Content management"><span class="adm-navlabel">Content management</span></button></li>
+        <li><button type="button" class="adm-navbtn sub" data-panel="hero" data-icon="hero" aria-current="false" title="Hero"><span class="adm-navlabel">Hero</span></button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="media" data-icon="media" aria-current="false" title="Media library"><span class="adm-navlabel">Media library</span></button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="resume" data-icon="resume" aria-current="false" title="Résumé manager"><span class="adm-navlabel">Résumé manager</span></button></li>
       </ul>
       <p class="adm-side-label">Operations</p>
       <ul class="adm-nav">
-        <li><button type="button" class="adm-navbtn" data-panel="health" aria-current="false">Website health</button></li>
-        <li><button type="button" class="adm-navbtn" data-panel="activity" aria-current="false">Activity history</button></li>
-        <li><button type="button" class="adm-navbtn" data-panel="analytics" aria-current="false">Analytics</button></li>
-        <li><button type="button" class="adm-navbtn" data-panel="publishing" aria-current="false">Publishing <span class="adm-tag plan">Planned</span></button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="health" data-icon="health" aria-current="false" title="Website health"><span class="adm-navlabel">Website health</span></button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="activity" data-icon="activity" aria-current="false" title="Activity history"><span class="adm-navlabel">Activity history</span></button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="analytics" data-icon="analytics" aria-current="false" title="Analytics"><span class="adm-navlabel">Analytics</span></button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="publishing" data-icon="publishing" aria-current="false" title="Publishing"><span class="adm-navlabel">Publishing <span class="adm-tag plan">Planned</span></span></button></li>
       </ul>
       <p class="adm-side-label">Administration</p>
       <ul class="adm-nav">
-        <li><button type="button" class="adm-navbtn" data-panel="settings" aria-current="false">Settings</button></li>
-        <li><button type="button" class="adm-navbtn" data-panel="account" aria-current="false">Account</button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="settings" data-icon="settings" aria-current="false" title="Settings"><span class="adm-navlabel">Settings</span></button></li>
+        <li><button type="button" class="adm-navbtn" data-panel="account" data-icon="account" aria-current="false" title="Account"><span class="adm-navlabel">Account</span></button></li>
       </ul>
+      <div class="adm-side-foot">
+        <button type="button" class="adm-navbtn" id="side-pin" data-icon="pin" aria-pressed="false" title="Keep the sidebar open"><span class="adm-navlabel">Keep sidebar open</span></button>
+      </div>
     </aside>
 
     <div class="adm-content">
@@ -578,6 +594,19 @@
   </div>
   <div class="adm-scrim" id="scrim" hidden></div>
 </section>
+
+<!-- Inactivity warning (shown about 2 minutes before automatic sign-out) -->
+<div class="adm-modal" id="idle-modal" role="alertdialog" aria-modal="true" aria-labelledby="idle-title" aria-describedby="idle-desc" hidden>
+  <div class="adm-modal-card">
+    <h2 id="idle-title" class="adm-title" style="font-size:1.6rem">Still there?</h2>
+    <p class="adm-lead" id="idle-desc">You have been inactive for a while. For your security you will be signed out in <strong id="idle-secs">120</strong> seconds.</p>
+    <p class="adm-note" id="idle-pending" hidden>Your uploads or unsaved edits are not finished, so you will not be signed out until they are complete or saved.</p>
+    <div class="adm-actions">
+      <button type="button" class="adm-btn" id="idle-stay" style="width:auto">Stay signed in</button>
+      <button type="button" class="adm-btn ghost" id="idle-out" style="width:auto">Sign out now</button>
+    </div>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script type="module" src="admin.js"></script>

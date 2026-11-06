@@ -17,6 +17,11 @@ let selected = null;
 let staged = null;
 let busy = false;
 
+// True while a file is uploading. The inactivity timer does not sign out during an upload.
+export function isBusy() {
+  return busy;
+}
+
 function wire() {
   const drop = $('media-drop');
   const input = $('media-file');

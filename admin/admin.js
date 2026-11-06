@@ -28,8 +28,11 @@ const PANELS = ['overview', 'content', 'hero', 'media', 'resume', 'health', 'act
 function show(view) {
   for (const v of ['signin', 'recovery', 'denied', 'dashboard']) $(`view-${v}`).hidden = v !== view;
   const inside = view === 'dashboard';
-  for (const id of ['btn-signout', 'btn-menu', 'cmd-search', 'btn-avatar']) $(id).hidden = !inside;
-  if (!inside) closeNav();
+  for (const id of ['btn-menu', 'cmd-search', 'acct-wrap']) $(id).hidden = !inside;
+  if (!inside) {
+    closeNav();
+    closeAcctMenu();
+  }
 }
 
 function msg(el, text, kind = '') {
@@ -84,6 +87,10 @@ async function route() {
     if (!session) {
       recoveryMode = false;
       show('signin');
+      stopIdle();
+      if (takeExpiredNotice()) {
+        msg($('signin-msg'), 'Your session ended after 15 minutes without activity. Sign in again to continue.', 'err');
+      }
       return;
     }
     if (recoveryMode) {
@@ -103,10 +110,12 @@ async function route() {
     $('acct-email').textContent = email;
     $('acct-email-full').textContent = email;
     $('btn-avatar').textContent = email === '–' ? 'A' : email.charAt(0).toUpperCase();
+    $('menu-email').textContent = email;
     show('dashboard');
     greet();
     setPanel('overview');
     loadDatabaseStatus();
+    startIdle();
   } finally {
     routing = false;
   }
@@ -267,7 +276,6 @@ document.querySelectorAll('.adm-eye').forEach((btn) => {
 });
 
 const signOut = async () => { await sb.auth.signOut(); };
-$('btn-signout').addEventListener('click', signOut);
 $('btn-settings-signout').addEventListener('click', signOut);
 
 $('btn-denied-back').addEventListener('click', () => {
@@ -354,25 +362,43 @@ $('cmd-search').addEventListener('keydown', (e) => {
   }
 });
 
-$('btn-avatar').addEventListener('click', () => setPanel('account'));
 
-// Theme: system by default, or a choice remembered on this device only.
+// Theme: follows the system until the administrator chooses. Stored on this device only,
+// under its own key, so it is independent of the public site's theme.
 const THEME_KEY = 'adm-theme';
-function applyTheme(value) {
-  const root = document.documentElement;
-  if (value === 'light' || value === 'dark') root.setAttribute('data-theme', value);
-  else root.removeAttribute('data-theme');
-  $('theme-select').value = value;
+const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() {
+  try {
+    const v = localStorage.getItem(THEME_KEY);
+    return v === 'light' || v === 'dark' ? v : null;
+  } catch { return null; }
 }
-function storedTheme() {
-  try { return localStorage.getItem(THEME_KEY) || 'system'; } catch { return 'system'; }
+function effectiveTheme() {
+  return savedTheme() ?? (systemDark.matches ? 'dark' : 'light');
 }
-$('theme-select').addEventListener('change', (e) => {
-  try { localStorage.setItem(THEME_KEY, e.target.value); } catch { /* storage unavailable: choice applies for this visit */ }
-  applyTheme(e.target.value);
+function renderTheme() {
+  const saved = savedTheme();
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  else document.documentElement.removeAttribute('data-theme');
+  const pill = $('thm');
+  const current = effectiveTheme();
+  pill.classList.toggle('is-light', current === 'light');
+  pill.setAttribute('aria-label', current === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+}
+function toggleTheme() {
+  const next = effectiveTheme() === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem(THEME_KEY, next); } catch { /* storage unavailable: applies for this visit */ }
+  renderTheme();
+}
+$('thm').addEventListener('click', toggleTheme);
+$('thm').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    toggleTheme();
+  }
 });
-$('theme-select').hidden = false;
-applyTheme(storedTheme());
+systemDark.addEventListener('change', () => { if (!savedTheme()) renderTheme(); });
+renderTheme();
 
 // ---------- Hero editor (drafts only) ----------
 
@@ -559,6 +585,210 @@ window.addEventListener('beforeunload', (e) => {
     e.returnValue = '';
   }
 });
+
+// ---------- Account menu (avatar): account info, account settings, sign out at the bottom ----------
+
+const avatar = $('btn-avatar');
+const acctMenu = $('acct-menu');
+
+function openAcctMenu() {
+  acctMenu.hidden = false;
+  avatar.setAttribute('aria-expanded', 'true');
+  $('menu-account').focus();
+}
+
+function closeAcctMenu() {
+  acctMenu.hidden = true;
+  avatar.setAttribute('aria-expanded', 'false');
+  $('signout-confirm').hidden = true;
+}
+
+avatar.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (acctMenu.hidden) openAcctMenu();
+  else closeAcctMenu();
+});
+document.addEventListener('click', (e) => {
+  if (!acctMenu.hidden && !$('acct-wrap').contains(e.target)) closeAcctMenu();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !acctMenu.hidden) {
+    closeAcctMenu();
+    avatar.focus();
+  }
+});
+$('menu-account').addEventListener('click', () => {
+  closeAcctMenu();
+  setPanel('account');
+});
+// Sign out is a two-step action: the menu asks for confirmation before ending the session.
+$('btn-signout').addEventListener('click', () => {
+  $('signout-confirm').hidden = false;
+  $('signout-yes').focus();
+});
+$('signout-no').addEventListener('click', () => {
+  $('signout-confirm').hidden = true;
+  $('btn-signout').focus();
+});
+$('signout-yes').addEventListener('click', () => {
+  closeAcctMenu();
+  signOut();
+});
+
+// ---------- Inactivity: sign out after 15 minutes without genuine activity; warn at 13 minutes ----------
+
+const IDLE_MS = 15 * 60 * 1000;
+const WARN_MS = 2 * 60 * 1000;
+const ACTIVITY_KEY = 'adm-last-activity';   // shared by every tab of this browser
+const EXPIRED_KEY = 'adm-expired';          // one-time notice on the sign-in screen
+let lastActivity = Date.now();
+let lastWrite = 0;
+let idleTimer = null;
+let idleOn = false;
+
+function lastKnownActivity() {
+  let shared = 0;
+  try { shared = Number(localStorage.getItem(ACTIVITY_KEY)) || 0; } catch { /* storage unavailable */ }
+  return Math.max(lastActivity, shared);
+}
+
+// Only genuine input calls this. Timers and polling never do.
+function recordActivity(e) {
+  if (!idleOn) return;
+  // Input inside the warning is handled by its own buttons and must not dismiss it by accident.
+  if (e && $('idle-modal').contains(e.target)) return;
+  const now = Date.now();
+  lastActivity = now;
+  if (now - lastWrite > 5000) {
+    lastWrite = now;
+    try { localStorage.setItem(ACTIVITY_KEY, String(now)); } catch { /* ignore */ }
+  }
+  hideWarning();
+}
+
+function showWarning(msLeft, pending) {
+  const modal = $('idle-modal');
+  const wasHidden = modal.hidden;
+  modal.hidden = false;
+  $('idle-secs').textContent = String(Math.max(0, Math.ceil(msLeft / 1000)));
+  $('idle-pending').hidden = !pending;
+  if (wasHidden) $('idle-stay').focus();
+}
+
+function hideWarning() {
+  $('idle-modal').hidden = true;
+}
+
+function checkIdle() {
+  if (!idleOn) return;
+  // An upload in progress, or edits not yet saved, is never signed out from under the user.
+  const pending = heroIsDirty();
+  if (media.isBusy() || resume.isBusy()) {
+    recordActivity();
+    return;
+  }
+  const idle = Date.now() - lastKnownActivity();
+  if (idle >= IDLE_MS) {
+    if (pending) {
+      showWarning(0, true);   // hold the session until the edits are saved or the user chooses
+      return;
+    }
+    expireSession();
+    return;
+  }
+  if (idle >= IDLE_MS - WARN_MS) showWarning(IDLE_MS - idle, pending);
+  else hideWarning();
+}
+
+async function expireSession() {
+  stopIdle();
+  try { sessionStorage.setItem(EXPIRED_KEY, '1'); } catch { /* ignore */ }
+  // Clears the local Supabase session. The SIGNED_OUT event then returns to the sign-in screen.
+  await sb.auth.signOut();
+}
+
+function takeExpiredNotice() {
+  try {
+    const flagged = sessionStorage.getItem(EXPIRED_KEY) === '1';
+    sessionStorage.removeItem(EXPIRED_KEY);
+    return flagged;
+  } catch { return false; }
+}
+
+function startIdle() {
+  if (idleOn) return;
+  idleOn = true;
+  recordActivity();
+  idleTimer = setInterval(checkIdle, 1000);   // reads timestamps only; it does not count as activity
+}
+
+function stopIdle() {
+  idleOn = false;
+  if (idleTimer) clearInterval(idleTimer);
+  idleTimer = null;
+  hideWarning();
+}
+
+['pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'].forEach((type) => {
+  window.addEventListener(type, recordActivity, { capture: true, passive: true });
+});
+// Activity in another tab extends this tab's session too.
+window.addEventListener('storage', (e) => { if (e.key === ACTIVITY_KEY) checkIdle(); });
+
+$('idle-stay').addEventListener('click', () => {
+  recordActivity();
+  hideWarning();
+});
+$('idle-out').addEventListener('click', () => {
+  stopIdle();
+  signOut();
+});
+
+// ---------- Sidebar: icons, keyboard focus and optional pin ----------
+
+const ICON_PATHS = {
+  overview: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',
+  content: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>',
+  hero: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+  media: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>',
+  resume: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+  health: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+  activity: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/>',
+  analytics: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+  publishing: '<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
+  settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  account: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  pin: '<line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24z"/>',
+};
+
+document.querySelectorAll('.adm-navbtn[data-icon]').forEach((b) => {
+  const icon = document.createElement('span');
+  icon.className = 'adm-navicon';
+  icon.setAttribute('aria-hidden', 'true');
+  icon.innerHTML = `<svg viewBox="0 0 24 24">${ICON_PATHS[b.dataset.icon] ?? ''}</svg>`;
+  b.prepend(icon);
+});
+
+const PIN_KEY = 'adm-sidebar-pinned';
+let pinned = false;
+try { pinned = localStorage.getItem(PIN_KEY) === '1'; } catch { /* storage unavailable */ }
+
+function renderPin(on) {
+  const pin = $('side-pin');
+  pin.classList.toggle('on', on);
+  pin.setAttribute('aria-pressed', String(on));
+  pin.title = on ? 'Let the sidebar collapse' : 'Keep the sidebar open';
+  pin.querySelector('.adm-navlabel').textContent = on ? 'Sidebar kept open' : 'Keep sidebar open';
+  $('side-nav').classList.toggle('pinned', on);
+  document.querySelector('.adm-shell').classList.toggle('pinned', on);
+}
+
+$('side-pin').addEventListener('click', () => {
+  pinned = !pinned;
+  try { localStorage.setItem(PIN_KEY, pinned ? '1' : '0'); } catch { /* ignore */ }
+  renderPin(pinned);
+});
+renderPin(pinned);
 
 const linkError = linkErrorFromUrl();
 if (linkError) msg($('signin-msg'), linkError, 'err');

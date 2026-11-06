@@ -10,6 +10,11 @@ let rows = [];
 let pending = null;
 let busy = false;
 
+// True while a file is uploading. The inactivity timer does not sign out during an upload.
+export function isBusy() {
+  return busy;
+}
+
 export function init(client) {
   sb = client;
   wire();
