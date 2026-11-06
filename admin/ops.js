@@ -50,6 +50,9 @@ async function loadMediaNumbers() {
   if (error) {
     ['k-media-total', 'k-media-images', 'k-media-resumes', 'k-media-size', 'k-media-last'].forEach((id) => { $(id).textContent = 'Unavailable'; });
     $('k-draft-note').textContent = 'Could not load';
+    $('gauge-text').textContent = 'Unavailable: the library could not be read.';
+    $('rs-draft').textContent = 'Unavailable';
+    $('rs-archived').textContent = 'Unavailable';
     return;
   }
   const images = data.filter((r) => r.kind === 'photo');
@@ -62,7 +65,23 @@ async function loadMediaNumbers() {
   $('k-media-size').textContent = fmtBytes(bytes);
   $('k-media-last').textContent = data[0] ? fmtDate(data[0].created_at) : 'None yet';
   $('k-draft-note').textContent = draft ? `Draft: ${draft.original_name}` : 'No draft résumé';
+
+  // Storage gauge: recorded uploads against the plan's file-storage allowance.
+  // The allowance is the Supabase Free plan figure (1 GB). Uploads outside this library are not counted.
+  const pct = Math.min(100, (bytes / PLAN_STORAGE_BYTES) * 100);
+  $('gauge-fill').style.width = `${pct.toFixed(2)}%`;
+  $('gauge').setAttribute('aria-valuenow', String(Math.round(pct)));
+  $('gauge-text').textContent = data.length
+    ? `${fmtBytes(bytes)} of ${fmtBytes(PLAN_STORAGE_BYTES)} plan storage (${pct < 0.1 ? '<0.1' : pct.toFixed(1)}%). Covers uploads recorded in this library.`
+    : `No uploads recorded yet. Plan allowance: ${fmtBytes(PLAN_STORAGE_BYTES)}.`;
+
+  // Résumé status from the database. "On the website" comes from the live file check.
+  const archived = resumes.filter((r) => r.status === 'archived').length;
+  $('rs-draft').textContent = draft ? `${draft.original_name} · ${fmtDate(draft.created_at)}` : 'None uploaded';
+  $('rs-archived').textContent = String(archived);
 }
+
+const PLAN_STORAGE_BYTES = 1024 * 1024 * 1024;
 
 // ---------- Website health (run from this browser) ----------
 
@@ -148,6 +167,7 @@ function render() {
   const setKpi = (id, s) => { const n = $(id); n.className = `adm-check-state ${stateClass(s.state)}`; n.textContent = STATE_TEXT[s.state]; };
   setKpi('k-home', r.home);
   setKpi('k-resume-live', r.resume);
+  $('rs-live').textContent = { ok: 'Available (PDF)', warn: 'Reachable, unexpected file type', err: 'Unavailable' }[r.resume.state];
   setKpi('k-og', r.og);
   setKpi('k-admin', r.admin);
   const backendOk = r.db.state === 'ok' && r.storage.state === 'ok';

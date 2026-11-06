@@ -153,12 +153,12 @@
         <section class="adm-section">
           <h2 class="adm-h2">Content</h2>
           <div class="adm-grid">
-            <article class="adm-card adm-kpi">
+            <article class="adm-card adm-kpi" data-icon="content">
               <span class="adm-kpi-label">Content records</span>
               <span class="adm-kpi-value" id="k-content-total">…</span>
               <span class="adm-kpi-note">Hero, roles, achievements, sections and settings</span>
             </article>
-            <article class="adm-card adm-kpi">
+            <article class="adm-card adm-kpi" data-icon="clock">
               <span class="adm-kpi-label">Last content change</span>
               <span class="adm-kpi-value small" id="k-last-change">…</span>
               <span class="adm-kpi-note">Saved draft, not published</span>
@@ -173,11 +173,26 @@
         <section class="adm-section">
           <h2 class="adm-h2">Media and résumé</h2>
           <div class="adm-grid">
-            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Uploaded assets</span><span class="adm-kpi-value" id="k-media-total">…</span><span class="adm-kpi-note">Tracked uploads in the private library</span></article>
-            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Images</span><span class="adm-kpi-value" id="k-media-images">…</span><span class="adm-kpi-note">JPEG, PNG, WebP or AVIF</span></article>
-            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Résumé files</span><span class="adm-kpi-value" id="k-media-resumes">…</span><span class="adm-kpi-note" id="k-draft-note">Draft status not yet loaded</span></article>
-            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Tracked storage</span><span class="adm-kpi-value" id="k-media-size">…</span><span class="adm-kpi-note">Sum of uploads recorded here</span></article>
-            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Most recent upload</span><span class="adm-kpi-value small" id="k-media-last">…</span></article>
+            <article class="adm-card adm-kpi" data-icon="media"><span class="adm-kpi-label">Uploaded assets</span><span class="adm-kpi-value" id="k-media-total">…</span><span class="adm-kpi-note">Tracked uploads in the private library</span></article>
+            <article class="adm-card adm-kpi" data-icon="media"><span class="adm-kpi-label">Images</span><span class="adm-kpi-value" id="k-media-images">…</span><span class="adm-kpi-note">JPEG, PNG, WebP or AVIF</span></article>
+            <article class="adm-card adm-kpi" data-icon="resume"><span class="adm-kpi-label">Résumé files</span><span class="adm-kpi-value" id="k-media-resumes">…</span><span class="adm-kpi-note" id="k-draft-note">Draft status not yet loaded</span></article>
+            <article class="adm-card adm-kpi" data-icon="media"><span class="adm-kpi-label">Tracked storage</span><span class="adm-kpi-value" id="k-media-size">…</span><span class="adm-kpi-note">Sum of uploads recorded here</span></article>
+            <article class="adm-card adm-kpi" data-icon="clock"><span class="adm-kpi-label">Most recent upload</span><span class="adm-kpi-value small" id="k-media-last">…</span></article>
+          </div>
+          <div class="adm-two" style="margin-top:1rem">
+            <article class="adm-card">
+              <h3 class="adm-h2">Storage used by tracked uploads</h3>
+              <div class="adm-track gauge" role="progressbar" aria-label="Tracked uploads as a share of plan storage" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="gauge"><span class="adm-fill" id="gauge-fill" style="width:0%"></span></div>
+              <p class="adm-note" id="gauge-text">Loading…</p>
+            </article>
+            <article class="adm-card">
+              <h3 class="adm-h2">Résumé status</h3>
+              <dl class="adm-dl">
+                <dt>On the website</dt><dd id="rs-live">Not checked yet</dd>
+                <dt>Draft</dt><dd id="rs-draft">Not loaded</dd>
+                <dt>Archived versions</dt><dd id="rs-archived">Not loaded</dd>
+              </dl>
+            </article>
           </div>
         </section>
 
@@ -198,9 +213,9 @@
         <section class="adm-section">
           <h2 class="adm-h2">Publishing and analytics</h2>
           <div class="adm-grid">
-            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Draft status</span><span class="adm-kpi-value small">Drafts only</span><span class="adm-kpi-note">Saving never changes the live site</span></article>
-            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Published status</span><span class="adm-kpi-value small">Not connected</span><span class="adm-kpi-note">No publishing step exists yet</span></article>
-            <article class="adm-card adm-kpi"><span class="adm-kpi-label">Analytics</span><span class="adm-kpi-value small">Not connected</span><span class="adm-kpi-note">Visitors, sessions, referrals, résumé views and contact clicks are not measured yet</span></article>
+            <article class="adm-card adm-kpi" data-icon="publishing"><span class="adm-kpi-label">Draft status</span><span class="adm-kpi-value small">Drafts only</span><span class="adm-kpi-note">Saving never changes the live site</span></article>
+            <article class="adm-card adm-kpi" data-icon="publishing"><span class="adm-kpi-label">Published status</span><span class="adm-kpi-value small">Not connected</span><span class="adm-kpi-note">No publishing step exists yet</span></article>
+            <article class="adm-card adm-kpi" data-icon="analytics"><span class="adm-kpi-label">Analytics</span><span class="adm-kpi-value small">Not connected</span><span class="adm-kpi-note">Visitors, sessions, referrals, résumé views and contact clicks are not measured yet</span></article>
           </div>
         </section>
 

@@ -458,6 +458,16 @@ body {
   .adm-shell, .adm-side, .adm-navlabel, .adm-theme, .adm-theme::after { transition: none !important; }
 }
 
+/* ---------- KPI icons and storage gauge ---------- */
+.adm-kpi { position: relative; }
+.adm-kpi-icon {
+  width: 34px; height: 34px; border-radius: 10px; margin-bottom: .45rem;
+  background: var(--gold-dim); color: var(--gold);
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+}
+.adm-kpi-icon svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.adm-track.gauge { height: 10px; margin: .4rem 0 .7rem; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1023px) {
   .adm-menu-btn { display: inline-flex; }
