@@ -592,14 +592,26 @@
             <dl class="adm-dl"><dt>Email</dt><dd id="acct-email-full">–</dd><dt>Role</dt><dd>Administrator (verified)</dd></dl>
           </article>
           <article class="adm-card">
-            <h2 class="adm-h2">Password</h2>
+                        <h2 class="adm-h2">Change password</h2>
             <form id="form-set-pw" novalidate>
+              <label class="adm-label" for="inp-cur-pw">Current password</label>
+              <div class="adm-pw">
+                <input class="adm-input" id="inp-cur-pw" type="password" autocomplete="current-password" maxlength="128" required>
+                <button type="button" class="adm-eye" data-for="inp-cur-pw" aria-label="Show password" aria-pressed="false"><svg class="eye-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg></button>
+              </div>
               <label class="adm-label" for="inp-set-pw">New password</label>
               <div class="adm-pw">
-                <input class="adm-input" id="inp-set-pw" type="password" autocomplete="new-password" required minlength="12" maxlength="128">
+                <input class="adm-input" id="inp-set-pw" type="password" autocomplete="new-password" maxlength="128" required>
                 <button type="button" class="adm-eye" data-for="inp-set-pw" aria-label="Show password" aria-pressed="false"><svg class="eye-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg></button>
               </div>
-              <button class="adm-btn" id="btn-set-pw" type="submit">Set password</button>
+              <p class="adm-note" id="set-pw-rule" style="margin-top:-.4rem">At least 12 characters, with a letter and a number.</p>
+              <label class="adm-label" for="inp-set-pw2">Confirm new password</label>
+              <div class="adm-pw">
+                <input class="adm-input" id="inp-set-pw2" type="password" autocomplete="new-password" maxlength="128" required>
+                <button type="button" class="adm-eye" data-for="inp-set-pw2" aria-label="Show password" aria-pressed="false"><svg class="eye-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg></button>
+              </div>
+              <p class="adm-msg err" id="set-pw-match" role="alert" hidden>The two new passwords do not match.</p>
+              <button class="adm-btn" id="btn-set-pw" type="submit" disabled>Save password</button>
             </form>
             <p class="adm-msg" id="set-pw-msg" role="status" aria-live="polite"></p>
           </article>
@@ -615,7 +627,7 @@
   <div class="adm-modal-card">
     <h2 id="idle-title" class="adm-title" style="font-size:1.6rem">Still there?</h2>
     <p class="adm-lead" id="idle-desc">You have been inactive for a while. For your security you will be signed out in <strong id="idle-secs">120</strong> seconds.</p>
-    <p class="adm-note" id="idle-pending" hidden>Your uploads or unsaved edits are not finished, so you will not be signed out until they are complete or saved.</p>
+    <p class="adm-note" id="idle-pending" hidden>You have unsaved Hero edits. Signing out will discard them. Stay signed in to keep working, or sign out and discard them.</p>
     <div class="adm-actions">
       <button type="button" class="adm-btn" id="idle-stay" style="width:auto">Stay signed in</button>
       <button type="button" class="adm-btn ghost" id="idle-out" style="width:auto">Sign out now</button>

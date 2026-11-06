@@ -107,6 +107,7 @@ async function route() {
       return;
     }
     const email = session.user.email ?? '–';
+    currentEmail = session.user.email ?? '';
     $('acct-email').textContent = email;
     $('acct-email-full').textContent = email;
     $('btn-avatar').textContent = email === '–' ? 'A' : email.charAt(0).toUpperCase();
@@ -232,28 +233,74 @@ $('form-recovery').addEventListener('submit', async (e) => {
   route();
 });
 
-// Set or change the password from the account panel (requires an active administrator session).
+// Password change. The current password is verified first. The new password is saved only when
+// Save password is clicked, and it is never stored in browser storage, a table or a log.
+const PW_MIN = 12;
+let currentEmail = '';
+let suppressAuthRoute = false;   // the password check signs in again; that must not re-route the dashboard
+
+function passwordRule(pw, current) {
+  if (pw.length < PW_MIN) return `Use at least ${PW_MIN} characters.`;
+  if (pw.length > 128) return 'Use 128 characters or fewer.';
+  if (!/[A-Za-z]/.test(pw) || !/[0-9]/.test(pw)) return 'Use at least one letter and one number.';
+  if (pw === current) return 'The new password must be different from the current password.';
+  return '';
+}
+
+function syncPwForm() {
+  const cur = $('inp-cur-pw').value;
+  const pw = $('inp-set-pw').value;
+  const pw2 = $('inp-set-pw2').value;
+  const mismatch = pw2.length > 0 && pw !== pw2;
+  $('set-pw-match').hidden = !mismatch;
+  const rule = pw.length ? passwordRule(pw, cur) : '';
+  $('set-pw-rule').textContent = rule || 'At least 12 characters, with a letter and a number.';
+  $('btn-set-pw').disabled = !(cur && pw && pw2 && !mismatch && !rule) || suppressAuthRoute;
+}
+
+function clearPwForm() {
+  for (const id of ['inp-cur-pw', 'inp-set-pw', 'inp-set-pw2']) {
+    $(id).value = '';
+    setPwVisible(id, false);
+  }
+  syncPwForm();
+}
+
+$('form-set-pw').addEventListener('input', syncPwForm);
+
 $('form-set-pw').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const pw = $('inp-set-pw').value;
   const out = $('set-pw-msg');
-  const problem = passwordProblem(pw);
-  if (problem) {
-    msg(out, problem, 'err');
-    return;
-  }
+  const cur = $('inp-cur-pw').value;
+  const pw = $('inp-set-pw').value;
+  const pw2 = $('inp-set-pw2').value;
+  if (!cur) { msg(out, 'Enter your current password.', 'err'); return; }
+  const rule = passwordRule(pw, cur);
+  if (rule) { msg(out, rule, 'err'); return; }
+  if (pw !== pw2) { msg(out, 'The two new passwords do not match.', 'err'); return; }
   const button = $('btn-set-pw');
-  busy(button, true, 'Set password');
-  const { error } = await sb.auth.updateUser({ password: pw });
-  busy(button, false, 'Set password');
-  if (error) {
-    msg(out, 'Could not save the password. Please sign in again and retry.', 'err');
-    return;
+  busy(button, true, 'Save password');
+  suppressAuthRoute = true;
+  try {
+    const { error: verifyError } = await sb.auth.signInWithPassword({ email: currentEmail, password: cur });
+    if (verifyError) {
+      msg(out, 'Could not verify the current password. Check it and try again.', 'err');
+      return;
+    }
+    const { error } = await sb.auth.updateUser({ password: pw });
+    if (error) {
+      msg(out, 'The password was not changed. Try again.', 'err');
+      return;
+    }
+    clearPwForm();
+    msg(out, 'Password changed. Use the new password the next time you sign in.', 'ok');
+  } finally {
+    suppressAuthRoute = false;
+    busy(button, false, 'Save password');
+    syncPwForm();
   }
-  $('inp-set-pw').value = '';
-  setPwVisible('inp-set-pw', false);
-  msg(out, 'Password saved. You can use it to sign in from now on.', 'ok');
 });
+
 
 // Show or hide a password field, and keep the button label and icon in step.
 function setPwVisible(id, visible) {
@@ -284,6 +331,7 @@ $('btn-denied-back').addEventListener('click', () => {
 });
 
 sb.auth.onAuthStateChange((event) => {
+  if (suppressAuthRoute) return;
   if (event === 'PASSWORD_RECOVERY') {
     recoveryMode = true;
     route();
@@ -672,6 +720,7 @@ function showWarning(msLeft, pending) {
   modal.hidden = false;
   $('idle-secs').textContent = String(Math.max(0, Math.ceil(msLeft / 1000)));
   $('idle-pending').hidden = !pending;
+  $('idle-out').textContent = pending ? 'Sign out and discard changes' : 'Sign out now';
   if (wasHidden) $('idle-stay').focus();
 }
 
@@ -681,23 +730,31 @@ function hideWarning() {
 
 function checkIdle() {
   if (!idleOn) return;
-  // An upload in progress, or edits not yet saved, is never signed out from under the user.
-  const pending = heroIsDirty();
+  // A genuine upload in progress holds the timeout. The hold ends when the upload completes or fails.
   if (media.isBusy() || resume.isBusy()) {
     recordActivity();
     return;
   }
-  const idle = Date.now() - lastKnownActivity();
-  if (idle >= IDLE_MS) {
-    if (pending) {
-      showWarning(0, true);   // hold the session until the edits are saved or the user chooses
-      return;
-    }
+  const last = lastKnownActivity();
+  const idle = Date.now() - last;
+  const pending = heroIsDirty();
+  if (idle < IDLE_MS) {
+    if (idle >= IDLE_MS - WARN_MS) showWarning(IDLE_MS - idle, pending);
+    else hideWarning();
+    return;
+  }
+  if (!pending) {
     expireSession();
     return;
   }
-  if (idle >= IDLE_MS - WARN_MS) showWarning(IDLE_MS - idle, pending);
-  else hideWarning();
+  // Unsaved Hero edits do not keep the session open indefinitely. The warning states that signing
+  // out discards them, and it stays up for two further minutes. Then the session ends.
+  const graceEnd = last + IDLE_MS + WARN_MS;
+  if (Date.now() >= graceEnd) {
+    expireSession();
+    return;
+  }
+  showWarning(graceEnd - Date.now(), true);
 }
 
 async function expireSession() {
